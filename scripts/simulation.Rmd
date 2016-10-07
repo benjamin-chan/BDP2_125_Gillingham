@@ -1,0 +1,116 @@
+# Simulation
+
+Load packages.
+
+```{r}
+library(data.table)
+library(magrittr)
+library(nlme)
+library(ggplot2)
+```
+
+Source functions.
+
+```{r}
+source("../lib/R/library.R")
+```
+
+
+## Build simulation data
+
+Set simulation parameters.
+
+* `genotype` is wild type `WT` or knockout `KO`
+* `activity` is `rest` or `exhaustive`
+* `n` is the number of mice per (`genotype`, `activity`)
+* `m` is the number of metabolites
+* `j` is number of metabolite types
+* `k` is number of metabolites per type
+* `rho1` is the within-metabolite correlation
+* `rho2` is the between-metabolite correlation
+
+```{r}
+genotype <- factor(c("KO", "WT"), levels = c("WT", "KO"))
+activity <- factor(c("Exercise", "Rest"), levels = c("Rest", "Exercise"))
+n <- 10
+m <- 300
+j <- 15
+k <- m / j
+rho1 <- 0.5
+rho2 <- 0.2
+```
+
+Build correlated metabolite measurements.
+Impose a symmetric correlation structure on them.
+Assume metabolites are correlated within metabolite type with $\rho_1 = $ `r rho1`.
+
+```{r}
+id <- factor(seq(1, n * length(genotype) * length(activity)))
+R <- diag(k)
+R[R == 0] <- rho1
+X <- list()
+for (i in 1:j) {
+  X[[i]] <- simulateCorrData(R, n, prefix = LETTERS[i])$data.table
+}
+D <-
+  data.table(id, genotype = rep(genotype, each = n)) %>%
+  setorder(genotype, id) %>%
+  .[, activity := rep(activity, each = n)] %>%
+  setorder(id) %>%
+  cbind(X[[1]], X[[2]], X[[3]], X[[4]], X[[5]],
+        X[[6]], X[[7]], X[[8]], X[[9]], X[[10]],
+        X[[11]], X[[12]], X[[13]], X[[14]], X[[15]]) %>%
+  melt(id.vars = c("id", "genotype", "activity"),
+       variable.name = "metabolite",
+       value.name = "y") %>%
+  .[, metaboliteType := factor(substr(metabolite, 1, 1))] %>%
+  .[genotype == "KO" & metaboliteType == "B", y := y + 1.0 + rnorm(length(id))] %>%
+  .[activity == "Exercise" & metaboliteType == "C", y := y - 1.0 + rnorm(length(id))] %>%
+  setorder(id, genotype, activity, metaboliteType, metabolite)
+str(D)
+```
+
+Build the `r print(m)` $\times$ `r print(m)` correlation structure.
+Assume metabolties of different types are correlated with $\rho_2 = $ `r rho2`.
+
+```{r}
+R
+bigR <- matrix(rep(rho2, m * m), nrow = m)
+dim(bigR)
+for (i in 1:j) {
+  x <- (i - 1) * k + 1:k
+  bigR[x, x] <- R
+}
+random <- formula(~ 1 | id)
+cs <-
+  corSymm(value = pdSymm(bigR)[lower.tri(bigR)], form = random, fixed = TRUE) %>%
+  Initialize(data = D)
+Dim(cs)
+# summary(cs)
+```
+
+Define the fixed effects part of the model.
+
+```{r}
+fixed <- formula(y ~ genotype +
+                       activity +
+                       metaboliteType +
+                       genotype * metaboliteType +
+                       activity * metaboliteType)
+```
+
+Estimate model.
+Default to `correlation = NULL`, corresponding to no within-group correlations.
+
+```{r}
+M <- lme(fixed, data = D, random = random, correlation = NULL)
+summary(M)
+```
+
+Estimate model.
+Specify the correlation structure.
+
+```{r}
+M <- lme(fixed, data = D, random = random, correlation = cs)
+summary(M)
+```
