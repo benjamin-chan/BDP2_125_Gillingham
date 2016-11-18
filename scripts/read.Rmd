@@ -4,7 +4,7 @@ Import the data.
 Data files are locally stored.
 
 ```{r}
-D1 <- importData("data/raw/Sample stats formatting - Gillingham.xlsx")
+D1 <- importData("../data/raw/Sample stats formatting - Gillingham.xlsx")
 ```
 
 Check the data.
