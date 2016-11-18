@@ -23,14 +23,15 @@ importData <- function (f) {
   D <- read_excel(f)
   names(D) <- D %>% names() %>% tolower() %>% gsub("\\s", "_", .)
   D <- filter(D, !is.na(id))
-  show(list(file = f,
+  L <- list(file = f,
             file.size = file.size(f),
             file.mtime = file.mtime(f),
             excel_sheets = excel_sheets(f),
             nrow = nrow(D),
             ncol = ncol(D),
             names = names(D),
-            head = head(D)))
+            head = head(D))
+  # show(L)
   D
 }
 

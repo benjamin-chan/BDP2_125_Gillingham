@@ -10,6 +10,6 @@ D1 <- importData("../data/raw/Sample stats formatting - Gillingham.xlsx")
 Check the data.
 
 ```{r}
-tableChr(D1)
+# tableChr(D1)
 summary(D1$value)
 ```

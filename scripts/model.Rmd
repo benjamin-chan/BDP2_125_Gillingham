@@ -32,7 +32,7 @@ cs <-
   corCompSymm(form = random, fixed = FALSE) %>%
   Initialize(data = D1)
 Dim(cs)
-summary(cs)
+# summary(cs)
 ```
 
 Estimate model.
@@ -47,6 +47,7 @@ Estimate model.
 Specify the correlation structure.
 
 ```{r}
-M <- lme(fixed, data = D1, random = random, correlation = cs)
+ctrl <- lmeControl(maxIter = 500)
+M <- lme(fixed, data = D1, random = random, correlation = cs, control = ctrl)
 summary(M)
 ```
