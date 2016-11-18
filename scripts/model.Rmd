@@ -1,0 +1,52 @@
+# Model
+
+Parameters.
+
+* `genotype` is wild type `WT` or knockout `KO`
+* `activity` is `rest` or `exhaustive`
+* `n` is the number of mice per (`genotype`, `activity`)
+* `m` is the number of metabolites
+* `j` is number of metabolite types
+* `k` is number of metabolites per type
+* `rho1` is the within-metabolite correlation
+* `rho2` is the between-metabolite correlation
+
+Define the fixed effects part of the model.
+
+```{r}
+# fixed <- formula(value ~
+#                    genotype +
+#                    activity +
+#                    metabolite_type +
+#                    genotype * metabolite_type +
+#                    activity * metabolite_type)
+fixed <- formula(value ~ activity)
+```
+
+Define the random effects part of the model.
+Use `corCompSymm`, *compound symmetry structure corresponding to a constant correlation*.
+
+```{r}
+random <- formula(~ 1 | id)
+cs <-
+  corCompSymm(form = random, fixed = FALSE) %>%
+  Initialize(data = D1)
+Dim(cs)
+summary(cs)
+```
+
+Estimate model.
+Default to `correlation = NULL`, corresponding to no within-group correlations.
+
+```{r}
+M <- lme(fixed, data = D1, random = random, correlation = NULL)
+summary(M)
+```
+
+Estimate model.
+Specify the correlation structure.
+
+```{r}
+M <- lme(fixed, data = D1, random = random, correlation = cs)
+summary(M)
+```
