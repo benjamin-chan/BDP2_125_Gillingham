@@ -3,10 +3,30 @@
 Import the data.
 Data files are locally stored.
 
+Import Aim 1: Exercise data
+
 ```{r}
-D1 <- importData("../data/raw/Ultragenyx Aim 1 combined.xlsx")
-D2 <- importData("../data/raw/Ultragenyx Aim 2 combined.xlsx")
+L1 <- importDataToList("../data/raw/Ultragenyx Aim 1 combined.xlsx")
+L1[["file"]]
+L1[["nrow"]]
+L1[["ncol"]]
+L1[["names"]]
+L1[["head"]]
+D1 <- L1[["data"]]
 ```
+
+```{r}
+L2 <- importDataToList("../data/raw/Ultragenyx Aim 2 combined.xlsx")
+L2[["file"]]
+L2[["nrow"]]
+L2[["ncol"]]
+L2[["names"]]
+L2[["head"]]
+D2 <- L2[["data"]]
+```
+
+
+## Check data
 
 Check the data.
 
