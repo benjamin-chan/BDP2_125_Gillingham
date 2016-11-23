@@ -8,10 +8,13 @@ importDataToList <- function (f) {
   D <-
     D %>%
     filter(!is.na(id)) %>%
-    mutate(activity = factor(activity, levels = c("rest", "rest/fasted", "ex"))) %>%   # Reorder factor
     mutate(genotype = factor(genotype,
                              levels = c("-/-", "+/+"),
                              labels = c("Neg/Neg", "Pos/Pos"))) %>%   # Reorder factor
+    mutate(activity = factor(activity,
+                             levels = c("rest", "rest/fasted", "ex"),
+                             labels = c("Rest", "Rest", "Exercise"))) %>%   # Reorder factor
+    mutate(activity = droplevels(activity)) %>%
     mutate(chow = factor(chow,
                          levels = c("reg", "White (C7)", "yellow (C8)"),
                          labels = c("Regular", "White (C7)", "Yellow (C8)"))) %>%   # Reorder factor
