@@ -30,3 +30,6 @@ The primary challenge of the analysis will be to reduce the data (using principl
 2. Analysis of experiment B
   * Same as above
 3. Text describing the statistical methods used, suitable for a manuscript
+
+
+Link to analysis: [`docs/index.md`](docs/index.md)
