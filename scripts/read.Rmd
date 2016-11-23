@@ -8,8 +8,7 @@ Import Aim 1: Exercise data
 ```{r}
 L1 <- importDataToList("../data/raw/Ultragenyx Aim 1 combined.xlsx")
 L1[["file"]]
-L1[["nrow"]]
-L1[["ncol"]]
+L1[["dim"]]
 L1[["names"]]
 L1[["head"]]
 D1 <- L1[["data"]]
@@ -18,8 +17,7 @@ D1 <- L1[["data"]]
 ```{r}
 L2 <- importDataToList("../data/raw/Ultragenyx Aim 2 combined.xlsx")
 L2[["file"]]
-L2[["nrow"]]
-L2[["ncol"]]
+L2[["dim"]]
 L2[["names"]]
 L2[["head"]]
 D2 <- L2[["data"]]
@@ -30,37 +28,30 @@ D2 <- L2[["data"]]
 
 Check the `value` and `logValue`.
 
-```{r densitiesAim1, fig.height = 6, fig.width = 12}
-summary(D1$value)
-summary(D1$logValue)
+```{r densitiesAim1, results = "asis", fig.height = 6, fig.width = 12}
+kable(summarizeOutcome(D1))
 ggplot(D1) +
-  aes(x = logValue, color = genotype, fill = genotype) +
-  geom_density(alpha = 1/2) +
+  aes(x = value) +
+  geom_density(alpha = 1/2, fill = "blue") +
+  scale_x_log10("log10 scale") +
   facet_grid(genotype ~ activity) +
   theme_bw()
 ```
 
-```{r densitiesAim2, fig.height = 6, fig.width = 9}
-summary(D2$value)
-summary(D2$logValue)
+```{r densitiesAim2, results = "asis", fig.height = 6, fig.width = 9}
+kable(summarizeOutcome(D2))
 ggplot(D2) +
-  aes(x = logValue, color = genotype, fill = genotype) +
-  geom_density(alpha = 1/2) +
+  aes(x = value) +
+  geom_density(alpha = 1/2, fill = "blue") +
+  scale_x_log10("log10 scale") +
   facet_grid(genotype ~ chow) +
   theme_bw()
 ```
 
 
-Check experimental design.
+Check fixed effects factors.
 
 ```{r}
-table(D1$genotype, D1$metabolite_type)
-table(D1$activity, D1$metabolite_type)
-table(D1$chow, D1$metabolite_type)
-```
-
-```{r}
-table(D2$genotype, D2$metabolite_type)
-table(D2$activity, D2$metabolite_type)
-table(D2$chow, D2$metabolite_type)
+tableFixed(D1)
+tableFixed(D2)
 ```

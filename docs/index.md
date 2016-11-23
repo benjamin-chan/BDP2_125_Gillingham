@@ -1,6 +1,6 @@
 ---
 title: "Metabolomics of very long-chain aclCoA dehydrogenase knockout mice"
-date: "2016-11-23 10:26:32"
+date: "2016-11-23 14:22:29"
 author: Benjamin Chan (chanb@ohsu.edu)
 output:
   html_document:
@@ -62,6 +62,7 @@ library(nlme)
 
 ```r
 library(ggplot2)
+library(knitr)
 ```
 
 Reproducibility steps.
@@ -128,6 +129,17 @@ Import Aim 1: Exercise data
 
 ```r
 L1 <- importDataToList("../data/raw/Ultragenyx Aim 1 combined.xlsx")
+```
+
+```
+## Warning in `levels<-`(`*tmp*`, value = if (nl == nL) as.character(labels)
+## else paste0(labels, : duplicated levels in factors are deprecated
+
+## Warning in `levels<-`(`*tmp*`, value = if (nl == nL) as.character(labels)
+## else paste0(labels, : duplicated levels in factors are deprecated
+```
+
+```r
 L1[["file"]]
 ```
 
@@ -136,19 +148,11 @@ L1[["file"]]
 ```
 
 ```r
-L1[["nrow"]]
+L1[["dim"]]
 ```
 
 ```
-## [1] 6854
-```
-
-```r
-L1[["ncol"]]
-```
-
-```
-## [1] 8
+## [1] 6854    8
 ```
 
 ```r
@@ -166,15 +170,15 @@ L1[["head"]]
 
 ```
 ## # A tibble: 6 × 8
-##       id genotype activity  chow metabolite_type               metabolite
-##    <chr>    <chr>   <fctr> <chr>           <chr>                    <chr>
-## 1 1208B       +/+       ex   reg  acylcarnitines                carnitine
-## 2 1208B       +/+       ex   reg  acylcarnitines          acetylcarnitine
-## 3 1208B       +/+       ex   reg  acylcarnitines       propionylcarnitine
-## 4 1208B       +/+       ex   reg  acylcarnitines      isobutyrylcarnitine
-## 5 1208B       +/+       ex   reg  acylcarnitines         butyrylcarnitine
-## 6 1208B       +/+       ex   reg  acylcarnitines 2-methylbutyrylcarnitine
-## # ... with 2 more variables: value <dbl>, logValue <dbl>
+##       id genotype activity    chow metabolite_type
+##    <chr>   <fctr>   <fctr>  <fctr>           <chr>
+## 1 1208B   Pos/Pos Exercise Regular  acylcarnitines
+## 2 1208B   Pos/Pos Exercise Regular  acylcarnitines
+## 3 1208B   Pos/Pos Exercise Regular  acylcarnitines
+## 4 1208B   Pos/Pos Exercise Regular  acylcarnitines
+## 5 1208B   Pos/Pos Exercise Regular  acylcarnitines
+## 6 1208B   Pos/Pos Exercise Regular  acylcarnitines
+## # ... with 3 more variables: metabolite <chr>, value <dbl>, logValue <dbl>
 ```
 
 ```r
@@ -184,6 +188,17 @@ D1 <- L1[["data"]]
 
 ```r
 L2 <- importDataToList("../data/raw/Ultragenyx Aim 2 combined.xlsx")
+```
+
+```
+## Warning in `levels<-`(`*tmp*`, value = if (nl == nL) as.character(labels)
+## else paste0(labels, : duplicated levels in factors are deprecated
+
+## Warning in `levels<-`(`*tmp*`, value = if (nl == nL) as.character(labels)
+## else paste0(labels, : duplicated levels in factors are deprecated
+```
+
+```r
 L2[["file"]]
 ```
 
@@ -192,19 +207,11 @@ L2[["file"]]
 ```
 
 ```r
-L2[["nrow"]]
+L2[["dim"]]
 ```
 
 ```
-## [1] 7436
-```
-
-```r
-L2[["ncol"]]
-```
-
-```
-## [1] 8
+## [1] 7436    8
 ```
 
 ```r
@@ -223,13 +230,13 @@ L2[["head"]]
 ```
 ## # A tibble: 6 × 8
 ##      id genotype activity       chow metabolite_type
-##   <chr>    <chr>   <fctr>      <chr>           <chr>
-## 1  1120      -/-       ex White (C7)  acylcarnitines
-## 2  1120      -/-       ex White (C7)  acylcarnitines
-## 3  1120      -/-       ex White (C7)  acylcarnitines
-## 4  1120      -/-       ex White (C7)  acylcarnitines
-## 5  1120      -/-       ex White (C7)  acylcarnitines
-## 6  1120      -/-       ex White (C7)  acylcarnitines
+##   <chr>   <fctr>   <fctr>     <fctr>           <chr>
+## 1  1120  Neg/Neg Exercise White (C7)  acylcarnitines
+## 2  1120  Neg/Neg Exercise White (C7)  acylcarnitines
+## 3  1120  Neg/Neg Exercise White (C7)  acylcarnitines
+## 4  1120  Neg/Neg Exercise White (C7)  acylcarnitines
+## 5  1120  Neg/Neg Exercise White (C7)  acylcarnitines
+## 6  1120  Neg/Neg Exercise White (C7)  acylcarnitines
 ## # ... with 3 more variables: metabolite <chr>, value <dbl>, logValue <dbl>
 ```
 
@@ -244,27 +251,21 @@ Check the `value` and `logValue`.
 
 
 ```r
-summary(D1$value)
+kable(summarizeOutcome(D1))
 ```
 
-```
-##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
-##     0.00     0.03     0.12    87.51     1.34 81090.00
-```
 
-```r
-summary(D1$logValue)
-```
 
-```
-##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-## -6.9550 -1.5010 -0.9060 -0.7525  0.1281  4.9090
-```
+|              |       Min.| X1st.Qu.|  Median|    Mean| X3rd.Qu.|      Max.|
+|:-------------|----------:|--------:|-------:|-------:|--------:|---------:|
+|nominal       |  0.0000001|  0.03156|  0.1242| 87.5100|   1.3430| 81090.000|
+|log-transform | -6.9550000| -1.50100| -0.9060| -0.7525|   0.1281|     4.909|
 
 ```r
 ggplot(D1) +
-  aes(x = logValue, color = genotype, fill = genotype) +
-  geom_density(alpha = 1/2) +
+  aes(x = value) +
+  geom_density(alpha = 1/2, fill = "blue") +
+  scale_x_log10("log10 scale") +
   facet_grid(genotype ~ activity) +
   theme_bw()
 ```
@@ -273,27 +274,21 @@ ggplot(D1) +
 
 
 ```r
-summary(D2$value)
+kable(summarizeOutcome(D2))
 ```
 
-```
-##     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
-##      0.0      0.0      0.1    276.5      1.3 494900.0
-```
 
-```r
-summary(D2$logValue)
-```
 
-```
-##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-## -6.9550 -1.5100 -0.8891 -0.7612  0.1025  5.6950
-```
+|              |       Min.| X1st.Qu.|  Median|     Mean| X3rd.Qu.|      Max.|
+|:-------------|----------:|--------:|-------:|--------:|--------:|---------:|
+|nominal       |  0.0000001|   0.0309|  0.1291| 276.5000|   1.2660| 4.949e+05|
+|log-transform | -6.9550000|  -1.5100| -0.8891|  -0.7612|   0.1025| 5.695e+00|
 
 ```r
 ggplot(D2) +
-  aes(x = logValue, color = genotype, fill = genotype) +
-  geom_density(alpha = 1/2) +
+  aes(x = value) +
+  geom_density(alpha = 1/2, fill = "blue") +
+  scale_x_log10("log10 scale") +
   facet_grid(genotype ~ chow) +
   theme_bw()
 ```
@@ -301,75 +296,23 @@ ggplot(D2) +
 ![plot of chunk densitiesAim2](../figures/densitiesAim2-1.png)
 
 
-Check experimental design.
+Check fixed effects factors.
 
 
 ```r
-table(D1$genotype, D1$metabolite_type)
+tableFixed(D1)
 ```
 
 ```
-##      
-##       acylcarnitines amino acids organic acids
-##   -/-           1659        1071           714
-##   +/+           1659        1071           680
+## Error in tableFixed(D1): could not find function "show"
 ```
 
 ```r
-table(D1$activity, D1$metabolite_type)
+tableFixed(D2)
 ```
 
 ```
-##              
-##               acylcarnitines amino acids organic acids
-##   rest                     0           0           646
-##   rest/fasted              0        1020             0
-##   ex                    3318        1122           748
-```
-
-```r
-table(D1$chow, D1$metabolite_type)
-```
-
-```
-##      
-##       acylcarnitines amino acids organic acids
-##   reg           3318        2142          1394
-```
-
-
-```r
-table(D2$genotype, D2$metabolite_type)
-```
-
-```
-##      
-##       acylcarnitines Amino Acids organic acids
-##   -/-           1848        1100           770
-##   +/+           1848        1100           770
-```
-
-```r
-table(D2$activity, D2$metabolite_type)
-```
-
-```
-##              
-##               acylcarnitines Amino Acids organic acids
-##   rest                     0           0             0
-##   rest/fasted              0           0             0
-##   ex                    3696        2200          1540
-```
-
-```r
-table(D2$chow, D2$metabolite_type)
-```
-
-```
-##              
-##               acylcarnitines Amino Acids organic acids
-##   White (C7)            1848        1100           770
-##   yellow (C8)           1848        1100           770
+## Error in tableFixed(D2): could not find function "show"
 ```
 
 ---
@@ -401,71 +344,61 @@ summary(M)
 ## Linear mixed-effects model fit by REML
 ##  Data: D1 
 ##        AIC      BIC    logLik
-##   23856.84 23938.81 -11916.42
+##   23849.06 23917.37 -11914.53
 ## 
 ## Random effects:
 ##  Formula: ~1 | id
 ##          (Intercept) Residual
-## StdDev: 5.141345e-05   1.3738
+## StdDev: 5.140006e-05 1.373658
 ## 
 ## Fixed effects: list(fixed) 
-##                                               Value  Std.Error   DF
-## (Intercept)                              -1.5307847 0.10832785 6799
-## genotype+/+                               0.1201729 0.15519865   45
-## activityrest/fasted                       0.0991141 0.13289904 6799
-## activityex                                0.0531783 0.10294316 6799
-## metabolite_typeamino acids                1.4831683 0.06709583 6799
-## metabolite_typeorganic acids              1.1334153 0.07863816 6799
-## genotype+/+:activityrest/fasted          -0.0770885 0.18958134 6799
-## genotype+/+:activityex                   -0.0324641 0.14768670 6799
-## genotype+/+:metabolite_typeamino acids   -0.0704755 0.09488783 6799
-## genotype+/+:metabolite_typeorganic acids -0.0155407 0.11121115 6799
-##                                             t-value p-value
-## (Intercept)                              -14.131035  0.0000
-## genotype+/+                                0.774316  0.4428
-## activityrest/fasted                        0.745785  0.4558
-## activityex                                 0.516579  0.6055
-## metabolite_typeamino acids                22.105224  0.0000
-## metabolite_typeorganic acids              14.413045  0.0000
-## genotype+/+:activityrest/fasted           -0.406625  0.6843
-## genotype+/+:activityex                    -0.219818  0.8260
-## genotype+/+:metabolite_typeamino acids    -0.742724  0.4577
-## genotype+/+:metabolite_typeorganic acids  -0.139741  0.8889
+##                                                   Value  Std.Error   DF
+## (Intercept)                                  -1.4713162 0.07331735 6801
+## genotypePos/Pos                               0.0742170 0.10414511   45
+## activityExercise                             -0.0062902 0.06510023 6801
+## metabolite_typeamino acids                    1.5020471 0.06213088 6801
+## metabolite_typeorganic acids                  1.1050970 0.06885615 6801
+## genotypePos/Pos:activityExercise              0.0134917 0.09258194 6801
+## genotypePos/Pos:metabolite_typeamino acids   -0.0853005 0.08798927 6801
+## genotypePos/Pos:metabolite_typeorganic acids  0.0066969 0.09762673 6801
+##                                                 t-value p-value
+## (Intercept)                                  -20.067775  0.0000
+## genotypePos/Pos                                0.712631  0.4798
+## activityExercise                              -0.096623  0.9230
+## metabolite_typeamino acids                    24.175532  0.0000
+## metabolite_typeorganic acids                  16.049358  0.0000
+## genotypePos/Pos:activityExercise               0.145727  0.8841
+## genotypePos/Pos:metabolite_typeamino acids    -0.969443  0.3324
+## genotypePos/Pos:metabolite_typeorganic acids   0.068597  0.9453
 ##  Correlation: 
-##                                          (Intr) gnt+/+ actvt/ actvty
-## genotype+/+                              -0.698                     
-## activityrest/fasted                      -0.736  0.514              
-## activityex                               -0.950  0.663  0.775       
-## metabolite_typeamino acids               -0.157  0.109 -0.377  0.000
-## metabolite_typeorganic acids             -0.726  0.507  0.483  0.623
-## genotype+/+:activityrest/fasted           0.516 -0.741 -0.701 -0.543
-## genotype+/+:activityex                    0.662 -0.952 -0.540 -0.697
-## genotype+/+:metabolite_typeamino acids    0.111 -0.155  0.267  0.000
-## genotype+/+:metabolite_typeorganic acids  0.513 -0.717 -0.341 -0.441
-##                                          mtblt_typma mtblt_typra g+/+:/
-## genotype+/+                                                            
-## activityrest/fasted                                                    
-## activityex                                                             
-## metabolite_typeamino acids                                             
-## metabolite_typeorganic acids              0.216                        
-## genotype+/+:activityrest/fasted           0.264      -0.338            
-## genotype+/+:activityex                    0.000      -0.435       0.779
-## genotype+/+:metabolite_typeamino acids   -0.707      -0.152      -0.374
-## genotype+/+:metabolite_typeorganic acids -0.152      -0.707       0.479
-##                                          gn+/+: gntyp+/+:mtblt_typma
-## genotype+/+                                                         
-## activityrest/fasted                                                 
-## activityex                                                          
+##                                              (Intr) gntP/P actvtE
+## genotypePos/Pos                              -0.704              
+## activityExercise                             -0.888  0.625       
+## metabolite_typeamino acids                   -0.693  0.488  0.499
+## metabolite_typeorganic acids                 -0.625  0.440  0.450
+## genotypePos/Pos:activityExercise              0.624 -0.889 -0.703
+## genotypePos/Pos:metabolite_typeamino acids    0.489 -0.694 -0.352
+## genotypePos/Pos:metabolite_typeorganic acids  0.441 -0.614 -0.318
+##                                              mtblt_typma mtblt_typra
+## genotypePos/Pos                                                     
+## activityExercise                                                    
 ## metabolite_typeamino acids                                          
-## metabolite_typeorganic acids                                        
-## genotype+/+:activityrest/fasted                                     
-## genotype+/+:activityex                                              
-## genotype+/+:metabolite_typeamino acids    0.000                     
-## genotype+/+:metabolite_typeorganic acids  0.614  0.216              
+## metabolite_typeorganic acids                  0.490                 
+## genotypePos/Pos:activityExercise             -0.351      -0.317     
+## genotypePos/Pos:metabolite_typeamino acids   -0.706      -0.346     
+## genotypePos/Pos:metabolite_typeorganic acids -0.346      -0.705     
+##                                              gP/P:E gntypPs/Ps:mtblt_typma
+## genotypePos/Pos                                                           
+## activityExercise                                                          
+## metabolite_typeamino acids                                                
+## metabolite_typeorganic acids                                              
+## genotypePos/Pos:activityExercise                                          
+## genotypePos/Pos:metabolite_typeamino acids    0.501                       
+## genotypePos/Pos:metabolite_typeorganic acids  0.439  0.485                
 ## 
 ## Standardized Within-Group Residuals:
-##         Min          Q1         Med          Q3         Max 
-## -5.09984914 -0.51306654  0.06401784  0.49368065  3.86250922 
+##        Min         Q1        Med         Q3        Max 
+## -5.0852593 -0.5139823  0.0642195  0.4939858  3.8402323 
 ## 
 ## Number of Observations: 6854
 ## Number of Groups: 47
@@ -525,12 +458,12 @@ summary(M)
 ## Linear mixed-effects model fit by REML
 ##  Data: D1 
 ##        AIC      BIC    logLik
-##   23856.84 23938.81 -11916.42
+##   23849.06 23917.37 -11914.53
 ## 
 ## Random effects:
 ##  Formula: ~1 | id
-##         (Intercept) Residual
-## StdDev: 5.14175e-05   1.3738
+##          (Intercept) Residual
+## StdDev: 5.140488e-05 1.373658
 ## 
 ## Correlation Structure: General
 ##  Formula: ~1 | id 
@@ -1849,63 +1782,53 @@ summary(M)
 ## 163 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0      
 ## 164 0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0  
 ## Fixed effects: list(fixed) 
-##                                               Value  Std.Error   DF
-## (Intercept)                              -1.5307847 0.10832785 6799
-## genotype+/+                               0.1201729 0.15519865   45
-## activityrest/fasted                       0.0991141 0.13289904 6799
-## activityex                                0.0531783 0.10294316 6799
-## metabolite_typeamino acids                1.4831683 0.06709583 6799
-## metabolite_typeorganic acids              1.1334153 0.07863816 6799
-## genotype+/+:activityrest/fasted          -0.0770885 0.18958134 6799
-## genotype+/+:activityex                   -0.0324641 0.14768670 6799
-## genotype+/+:metabolite_typeamino acids   -0.0704755 0.09488783 6799
-## genotype+/+:metabolite_typeorganic acids -0.0155407 0.11121115 6799
-##                                             t-value p-value
-## (Intercept)                              -14.131035  0.0000
-## genotype+/+                                0.774316  0.4428
-## activityrest/fasted                        0.745785  0.4558
-## activityex                                 0.516579  0.6055
-## metabolite_typeamino acids                22.105224  0.0000
-## metabolite_typeorganic acids              14.413045  0.0000
-## genotype+/+:activityrest/fasted           -0.406625  0.6843
-## genotype+/+:activityex                    -0.219818  0.8260
-## genotype+/+:metabolite_typeamino acids    -0.742724  0.4577
-## genotype+/+:metabolite_typeorganic acids  -0.139741  0.8889
+##                                                   Value  Std.Error   DF
+## (Intercept)                                  -1.4713162 0.07331735 6801
+## genotypePos/Pos                               0.0742170 0.10414511   45
+## activityExercise                             -0.0062902 0.06510023 6801
+## metabolite_typeamino acids                    1.5020471 0.06213088 6801
+## metabolite_typeorganic acids                  1.1050970 0.06885615 6801
+## genotypePos/Pos:activityExercise              0.0134917 0.09258194 6801
+## genotypePos/Pos:metabolite_typeamino acids   -0.0853005 0.08798927 6801
+## genotypePos/Pos:metabolite_typeorganic acids  0.0066969 0.09762673 6801
+##                                                 t-value p-value
+## (Intercept)                                  -20.067775  0.0000
+## genotypePos/Pos                                0.712631  0.4798
+## activityExercise                              -0.096623  0.9230
+## metabolite_typeamino acids                    24.175532  0.0000
+## metabolite_typeorganic acids                  16.049358  0.0000
+## genotypePos/Pos:activityExercise               0.145727  0.8841
+## genotypePos/Pos:metabolite_typeamino acids    -0.969443  0.3324
+## genotypePos/Pos:metabolite_typeorganic acids   0.068597  0.9453
 ##  Correlation: 
-##                                          (Intr) gnt+/+ actvt/ actvty
-## genotype+/+                              -0.698                     
-## activityrest/fasted                      -0.736  0.514              
-## activityex                               -0.950  0.663  0.775       
-## metabolite_typeamino acids               -0.157  0.109 -0.377  0.000
-## metabolite_typeorganic acids             -0.726  0.507  0.483  0.623
-## genotype+/+:activityrest/fasted           0.516 -0.741 -0.701 -0.543
-## genotype+/+:activityex                    0.662 -0.952 -0.540 -0.697
-## genotype+/+:metabolite_typeamino acids    0.111 -0.155  0.267  0.000
-## genotype+/+:metabolite_typeorganic acids  0.513 -0.717 -0.341 -0.441
-##                                          mtblt_typma mtblt_typra g+/+:/
-## genotype+/+                                                            
-## activityrest/fasted                                                    
-## activityex                                                             
-## metabolite_typeamino acids                                             
-## metabolite_typeorganic acids              0.216                        
-## genotype+/+:activityrest/fasted           0.264      -0.338            
-## genotype+/+:activityex                    0.000      -0.435       0.779
-## genotype+/+:metabolite_typeamino acids   -0.707      -0.152      -0.374
-## genotype+/+:metabolite_typeorganic acids -0.152      -0.707       0.479
-##                                          gn+/+: gntyp+/+:mtblt_typma
-## genotype+/+                                                         
-## activityrest/fasted                                                 
-## activityex                                                          
+##                                              (Intr) gntP/P actvtE
+## genotypePos/Pos                              -0.704              
+## activityExercise                             -0.888  0.625       
+## metabolite_typeamino acids                   -0.693  0.488  0.499
+## metabolite_typeorganic acids                 -0.625  0.440  0.450
+## genotypePos/Pos:activityExercise              0.624 -0.889 -0.703
+## genotypePos/Pos:metabolite_typeamino acids    0.489 -0.694 -0.352
+## genotypePos/Pos:metabolite_typeorganic acids  0.441 -0.614 -0.318
+##                                              mtblt_typma mtblt_typra
+## genotypePos/Pos                                                     
+## activityExercise                                                    
 ## metabolite_typeamino acids                                          
-## metabolite_typeorganic acids                                        
-## genotype+/+:activityrest/fasted                                     
-## genotype+/+:activityex                                              
-## genotype+/+:metabolite_typeamino acids    0.000                     
-## genotype+/+:metabolite_typeorganic acids  0.614  0.216              
+## metabolite_typeorganic acids                  0.490                 
+## genotypePos/Pos:activityExercise             -0.351      -0.317     
+## genotypePos/Pos:metabolite_typeamino acids   -0.706      -0.346     
+## genotypePos/Pos:metabolite_typeorganic acids -0.346      -0.705     
+##                                              gP/P:E gntypPs/Ps:mtblt_typma
+## genotypePos/Pos                                                           
+## activityExercise                                                          
+## metabolite_typeamino acids                                                
+## metabolite_typeorganic acids                                              
+## genotypePos/Pos:activityExercise                                          
+## genotypePos/Pos:metabolite_typeamino acids    0.501                       
+## genotypePos/Pos:metabolite_typeorganic acids  0.439  0.485                
 ## 
 ## Standardized Within-Group Residuals:
-##         Min          Q1         Med          Q3         Max 
-## -5.09984914 -0.51306654  0.06401784  0.49368065  3.86250922 
+##        Min         Q1        Med         Q3        Max 
+## -5.0852593 -0.5139823  0.0642195  0.4939858  3.8402323 
 ## 
 ## Number of Observations: 6854
 ## Number of Groups: 47
@@ -1944,41 +1867,41 @@ summary(M)
 ## StdDev: 9.091544e-05 1.407474
 ## 
 ## Fixed effects: list(fixed) 
-##                                               Value  Std.Error   DF
-## (Intercept)                              -1.3072088 0.04005958 7388
-## genotype+/+                              -0.1382761 0.05665281   40
-## chowyellow (C8)                          -0.1224580 0.04616532   40
-## metabolite_typeAmino Acids                1.4396406 0.05359902 7388
-## metabolite_typeorganic acids              1.0233612 0.06037107 7388
-## genotype+/+:chowyellow (C8)               0.0580403 0.06528762   40
-## genotype+/+:metabolite_typeAmino Acids    0.0753990 0.07580046 7388
-## genotype+/+:metabolite_typeorganic acids  0.1235755 0.08537759 7388
-##                                            t-value p-value
-## (Intercept)                              -32.63161  0.0000
-## genotype+/+                               -2.44076  0.0192
-## chowyellow (C8)                           -2.65260  0.0114
-## metabolite_typeAmino Acids                26.85946  0.0000
-## metabolite_typeorganic acids              16.95118  0.0000
-## genotype+/+:chowyellow (C8)                0.88899  0.3793
-## genotype+/+:metabolite_typeAmino Acids     0.99470  0.3199
-## genotype+/+:metabolite_typeorganic acids   1.44740  0.1478
+##                                                   Value  Std.Error   DF
+## (Intercept)                                  -1.3072088 0.04005958 7388
+## genotypePos/Pos                              -0.1382761 0.05665281   40
+## chowYellow (C8)                              -0.1224580 0.04616532   40
+## metabolite_typeAmino Acids                    1.4396406 0.05359902 7388
+## metabolite_typeorganic acids                  1.0233612 0.06037107 7388
+## genotypePos/Pos:chowYellow (C8)               0.0580403 0.06528762   40
+## genotypePos/Pos:metabolite_typeAmino Acids    0.0753990 0.07580046 7388
+## genotypePos/Pos:metabolite_typeorganic acids  0.1235755 0.08537759 7388
+##                                                t-value p-value
+## (Intercept)                                  -32.63161  0.0000
+## genotypePos/Pos                               -2.44076  0.0192
+## chowYellow (C8)                               -2.65260  0.0114
+## metabolite_typeAmino Acids                    26.85946  0.0000
+## metabolite_typeorganic acids                  16.95118  0.0000
+## genotypePos/Pos:chowYellow (C8)                0.88899  0.3793
+## genotypePos/Pos:metabolite_typeAmino Acids     0.99470  0.3199
+## genotypePos/Pos:metabolite_typeorganic acids   1.44740  0.1478
 ##  Correlation: 
-##                                          (Intr) gnt+/+ ch(C8) mtb_AA
-## genotype+/+                              -0.707                     
-## chowyellow (C8)                          -0.576  0.407              
-## metabolite_typeAmino Acids               -0.499  0.353  0.000       
-## metabolite_typeorganic acids             -0.443  0.313  0.000  0.331
-## genotype+/+:chowyellow (C8)               0.407 -0.576 -0.707  0.000
-## genotype+/+:metabolite_typeAmino Acids    0.353 -0.499  0.000 -0.707
-## genotype+/+:metabolite_typeorganic acids  0.313 -0.443  0.000 -0.234
-##                                          mtbl_a g+/+:( g+/+:A
-## genotype+/+                                                  
-## chowyellow (C8)                                              
-## metabolite_typeAmino Acids                                   
-## metabolite_typeorganic acids                                 
-## genotype+/+:chowyellow (C8)               0.000              
-## genotype+/+:metabolite_typeAmino Acids   -0.234  0.000       
-## genotype+/+:metabolite_typeorganic acids -0.707  0.000  0.331
+##                                              (Intr) gntP/P cY(C8) mtb_AA
+## genotypePos/Pos                              -0.707                     
+## chowYellow (C8)                              -0.576  0.407              
+## metabolite_typeAmino Acids                   -0.499  0.353  0.000       
+## metabolite_typeorganic acids                 -0.443  0.313  0.000  0.331
+## genotypePos/Pos:chowYellow (C8)               0.407 -0.576 -0.707  0.000
+## genotypePos/Pos:metabolite_typeAmino Acids    0.353 -0.499  0.000 -0.707
+## genotypePos/Pos:metabolite_typeorganic acids  0.313 -0.443  0.000 -0.234
+##                                              mtbl_a gP/P:( gP/P:A
+## genotypePos/Pos                                                  
+## chowYellow (C8)                                                  
+## metabolite_typeAmino Acids                                       
+## metabolite_typeorganic acids                                     
+## genotypePos/Pos:chowYellow (C8)               0.000              
+## genotypePos/Pos:metabolite_typeAmino Acids   -0.234  0.000       
+## genotypePos/Pos:metabolite_typeorganic acids -0.707  0.000  0.331
 ## 
 ## Standardized Within-Group Residuals:
 ##         Min          Q1         Med          Q3         Max 
@@ -3581,41 +3504,41 @@ summary(M)
 ## 168 0   0   0      
 ## 169 0   0   0   0  
 ## Fixed effects: list(fixed) 
-##                                               Value  Std.Error   DF
-## (Intercept)                              -1.3072088 0.04005958 7388
-## genotype+/+                              -0.1382761 0.05665281   40
-## chowyellow (C8)                          -0.1224580 0.04616532   40
-## metabolite_typeAmino Acids                1.4396406 0.05359902 7388
-## metabolite_typeorganic acids              1.0233612 0.06037107 7388
-## genotype+/+:chowyellow (C8)               0.0580403 0.06528762   40
-## genotype+/+:metabolite_typeAmino Acids    0.0753990 0.07580046 7388
-## genotype+/+:metabolite_typeorganic acids  0.1235755 0.08537759 7388
-##                                            t-value p-value
-## (Intercept)                              -32.63161  0.0000
-## genotype+/+                               -2.44076  0.0192
-## chowyellow (C8)                           -2.65260  0.0114
-## metabolite_typeAmino Acids                26.85946  0.0000
-## metabolite_typeorganic acids              16.95118  0.0000
-## genotype+/+:chowyellow (C8)                0.88899  0.3793
-## genotype+/+:metabolite_typeAmino Acids     0.99470  0.3199
-## genotype+/+:metabolite_typeorganic acids   1.44740  0.1478
+##                                                   Value  Std.Error   DF
+## (Intercept)                                  -1.3072088 0.04005958 7388
+## genotypePos/Pos                              -0.1382761 0.05665281   40
+## chowYellow (C8)                              -0.1224580 0.04616532   40
+## metabolite_typeAmino Acids                    1.4396406 0.05359902 7388
+## metabolite_typeorganic acids                  1.0233612 0.06037107 7388
+## genotypePos/Pos:chowYellow (C8)               0.0580403 0.06528762   40
+## genotypePos/Pos:metabolite_typeAmino Acids    0.0753990 0.07580046 7388
+## genotypePos/Pos:metabolite_typeorganic acids  0.1235755 0.08537759 7388
+##                                                t-value p-value
+## (Intercept)                                  -32.63161  0.0000
+## genotypePos/Pos                               -2.44076  0.0192
+## chowYellow (C8)                               -2.65260  0.0114
+## metabolite_typeAmino Acids                    26.85946  0.0000
+## metabolite_typeorganic acids                  16.95118  0.0000
+## genotypePos/Pos:chowYellow (C8)                0.88899  0.3793
+## genotypePos/Pos:metabolite_typeAmino Acids     0.99470  0.3199
+## genotypePos/Pos:metabolite_typeorganic acids   1.44740  0.1478
 ##  Correlation: 
-##                                          (Intr) gnt+/+ ch(C8) mtb_AA
-## genotype+/+                              -0.707                     
-## chowyellow (C8)                          -0.576  0.407              
-## metabolite_typeAmino Acids               -0.499  0.353  0.000       
-## metabolite_typeorganic acids             -0.443  0.313  0.000  0.331
-## genotype+/+:chowyellow (C8)               0.407 -0.576 -0.707  0.000
-## genotype+/+:metabolite_typeAmino Acids    0.353 -0.499  0.000 -0.707
-## genotype+/+:metabolite_typeorganic acids  0.313 -0.443  0.000 -0.234
-##                                          mtbl_a g+/+:( g+/+:A
-## genotype+/+                                                  
-## chowyellow (C8)                                              
-## metabolite_typeAmino Acids                                   
-## metabolite_typeorganic acids                                 
-## genotype+/+:chowyellow (C8)               0.000              
-## genotype+/+:metabolite_typeAmino Acids   -0.234  0.000       
-## genotype+/+:metabolite_typeorganic acids -0.707  0.000  0.331
+##                                              (Intr) gntP/P cY(C8) mtb_AA
+## genotypePos/Pos                              -0.707                     
+## chowYellow (C8)                              -0.576  0.407              
+## metabolite_typeAmino Acids                   -0.499  0.353  0.000       
+## metabolite_typeorganic acids                 -0.443  0.313  0.000  0.331
+## genotypePos/Pos:chowYellow (C8)               0.407 -0.576 -0.707  0.000
+## genotypePos/Pos:metabolite_typeAmino Acids    0.353 -0.499  0.000 -0.707
+## genotypePos/Pos:metabolite_typeorganic acids  0.313 -0.443  0.000 -0.234
+##                                              mtbl_a gP/P:( gP/P:A
+## genotypePos/Pos                                                  
+## chowYellow (C8)                                                  
+## metabolite_typeAmino Acids                                       
+## metabolite_typeorganic acids                                     
+## genotypePos/Pos:chowYellow (C8)               0.000              
+## genotypePos/Pos:metabolite_typeAmino Acids   -0.234  0.000       
+## genotypePos/Pos:metabolite_typeorganic acids -0.707  0.000  0.331
 ## 
 ## Standardized Within-Group Residuals:
 ##         Min          Q1         Med          Q3         Max 

@@ -1,21 +1,3 @@
-simulateCorrData <- function (R, n, prefix = "x", seed = NULL) {
-  require(magrittr)
-  require(data.table)
-  U <- t(chol(R))
-  ncol <- dim(U)[1]
-  set.seed(seed)
-  Z <- matrix(rnorm(ncol * n, 0, 1), nrow = ncol, ncol = n)
-  X <- t(U %*% Z)
-  D <-
-    data.table(X) %>%
-    setnames(names(.), gsub("^V", prefix, names(.))) %>%
-    round(2)
-  list(nominalCorr = R,
-       empericalCorr = cor(X),
-       data.table = D)
-}
-
-
 importDataToList <- function (f) {
   require(readxl)
   require(magrittr)
@@ -26,14 +8,23 @@ importDataToList <- function (f) {
   D <-
     D %>%
     filter(!is.na(id)) %>%
-    mutate(activity = factor(activity, levels = c("rest", "rest/fasted", "ex"))) %>%   # Reorder factor
+    mutate(genotype = factor(genotype,
+                             levels = c("-/-", "+/+"),
+                             labels = c("Neg/Neg", "Pos/Pos"))) %>%   # Reorder factor
+    mutate(activity = factor(activity,
+                             levels = c("rest", "rest/fasted", "ex"),
+                             labels = c("Rest", "Rest", "Exercise"))) %>%   # Reorder factor
+    mutate(activity = droplevels(activity)) %>%
+    mutate(chow = factor(chow,
+                         levels = c("reg", "White (C7)", "yellow (C8)"),
+                         labels = c("Regular", "White (C7)", "Yellow (C8)"))) %>%   # Reorder factor
+    mutate(chow = droplevels(chow)) %>%
     mutate(logValue = log10(value))  # log transform
   L <- list(file = f,
             file.size = file.size(f),
             file.mtime = file.mtime(f),
             excel_sheets = excel_sheets(f),
-            nrow = nrow(D),
-            ncol = ncol(D),
+            dim = dim(D),
             names = names(D),
             head = head(D),
             data = D)
@@ -41,13 +32,17 @@ importDataToList <- function (f) {
 }
 
 
-tableChr <- function (D) {
-  table(D$id)
-  isChr <- sapply(D, class) == "character"
-  for (i in 1:sum(isChr)) {
-    j <- which(isChr)[i]
-    L <- list(variable = names(j),
-              table = table(D[, j]))
-    show(L)
-  }
+summarizeOutcome <- function (D) {
+  x1 <- summary(D$value)
+  x2 <- summary(D$logValue)
+  L <- data.frame(rbind(x1, x2))
+  rownames(L) <- c("nominal", "log-transform")
+  L
+}
+
+
+tableFixed <- function (D) {
+  show(table(D$genotype, D$metabolite_type))
+  show(table(D$activity, D$metabolite_type))
+  show(table(D$chow, D$metabolite_type))
 }
