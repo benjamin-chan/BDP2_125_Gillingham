@@ -30,7 +30,7 @@ D2 <- L2[["data"]]
 
 Check the `value` and `logValue`.
 
-```{r}
+```{r densitiesAim1}
 summary(D1$value)
 summary(D1$logValue)
 ggplot(D1) +
@@ -40,7 +40,7 @@ ggplot(D1) +
   theme_bw()
 ```
 
-```{r}
+```{r densitiesAim2}
 summary(D2$value)
 summary(D2$logValue)
 ggplot(D2) +

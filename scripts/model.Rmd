@@ -36,7 +36,7 @@ summary(M)
 
 ## Aim 2: Chow
 
-**MCT chow versus experimental chow with truheptanoin**
+**MCT chow versus experimental chow with triheptanoin**
 
 Estimate model.
 Default to `correlation = NULL`, corresponding to no within-group correlations.
