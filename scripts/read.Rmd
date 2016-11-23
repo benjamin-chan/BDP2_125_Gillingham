@@ -4,7 +4,8 @@ Import the data.
 Data files are locally stored.
 
 ```{r}
-D1 <- importData("../data/raw/Sample stats formatting - Gillingham.xlsx")
+D1 <- importData("../data/raw/Ultragenyx Aim 1 combined.xlsx")
+D2 <- importData("../data/raw/Ultragenyx Aim 2 combined.xlsx")
 ```
 
 Check the data.
@@ -12,4 +13,5 @@ Check the data.
 ```{r}
 # tableChr(D1)
 summary(D1$value)
+summary(D2$value)
 ```

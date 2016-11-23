@@ -20,7 +20,8 @@ importData <- function (f) {
   require(readxl)
   require(magrittr)
   require(dplyr)
-  D <- read_excel(f)
+  col_types <- c(rep("text", 6), "numeric")
+  D <- read_excel(f, col_types = col_types)
   names(D) <- D %>% names() %>% tolower() %>% gsub("\\s", "_", .)
   D <- filter(D, !is.na(id))
   L <- list(file = f,
