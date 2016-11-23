@@ -22,11 +22,11 @@ summary(M)
 
 Estimate model.
 Specify the correlation structure using `cs`.
-Use `corCompSymm`, *compound symmetry structure corresponding to a constant correlation*.
+Use `corSymm`, *general correlation matrix, with no additional structure*.
 
 ```{r}
 cs <-
-  corCompSymm(form = random, fixed = FALSE) %>%
+  corSymm(form = random, fixed = TRUE) %>%
   Initialize(data = D1)
 Dim(cs)
 M <- lme(fixed, data = D1, random = random, correlation = cs)
@@ -55,11 +55,11 @@ summary(M)
 
 Estimate model.
 Specify the correlation structure using `cs`.
-Use `corCompSymm`, *compound symmetry structure corresponding to a constant correlation*.
+Use `corSymm`, *general correlation matrix, with no additional structure*.
 
 ```{r}
 cs <-
-  corCompSymm(form = random, fixed = FALSE) %>%
+  corSymm(form = random, fixed = TRUE) %>%
   Initialize(data = D2)
 Dim(cs)
 M <- lme(fixed, data = D2, random = random, correlation = cs)
