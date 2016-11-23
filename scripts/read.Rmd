@@ -35,3 +35,17 @@ Check the data.
 summary(D1$value)
 summary(D2$value)
 ```
+
+Check experimental design.
+
+```{r}
+table(D1$genotype, D1$metabolite_type)
+table(D1$activity, D1$metabolite_type)
+table(D1$chow, D1$metabolite_type)
+```
+
+```{r}
+table(D2$genotype, D2$metabolite_type)
+table(D2$activity, D2$metabolite_type)
+table(D2$chow, D2$metabolite_type)
+```
