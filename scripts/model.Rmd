@@ -1,16 +1,5 @@
 # Model
 
-Parameters.
-
-* `genotype` is wild type `WT` or knockout `KO`
-* `activity` is `rest` or `exhaustive`
-* `n` is the number of mice per (`genotype`, `activity`)
-* `m` is the number of metabolites
-* `j` is number of metabolite types
-* `k` is number of metabolites per type
-* `rho1` is the within-metabolite correlation
-* `rho2` is the between-metabolite correlation
-
 
 ## Aim 1: Exercise
 
@@ -20,7 +9,7 @@ Estimate model.
 Default to `correlation = NULL`, corresponding to no within-group correlations.
 
 ```{r}
-fixed <- formula(value ~
+fixed <- formula(logValue ~
                    genotype +
                    activity +
                    metabolite_type +
@@ -53,7 +42,7 @@ Estimate model.
 Default to `correlation = NULL`, corresponding to no within-group correlations.
 
 ```{r}
-fixed <- formula(value ~
+fixed <- formula(logValue ~
                    genotype +
                    chow +
                    metabolite_type +

@@ -23,8 +23,11 @@ importDataToList <- function (f) {
   col_types <- c(rep("text", 6), "numeric")
   D <- read_excel(f, col_types = col_types)
   names(D) <- D %>% names() %>% tolower() %>% gsub("\\s", "_", .)
-  D <- filter(D, !is.na(id))
-  D$activity <- factor(D$activity, levels = c("rest", "rest/fasted", "ex"))  # Reorder factor
+  D <-
+    D %>%
+    filter(!is.na(id)) %>%
+    mutate(activity = factor(activity, levels = c("rest", "rest/fasted", "ex"))) %>%   # Reorder factor
+    mutate(logValue = log10(value))  # log transform
   L <- list(file = f,
             file.size = file.size(f),
             file.mtime = file.mtime(f),

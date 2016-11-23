@@ -28,13 +28,28 @@ D2 <- L2[["data"]]
 
 ## Check data
 
-Check the data.
+Check the `value` and `logValue`.
 
 ```{r}
-# tableChr(D1)
 summary(D1$value)
-summary(D2$value)
+summary(D1$logValue)
+ggplot(D1) +
+  aes(x = logValue, color = genotype, fill = genotype) +
+  geom_density(alpha = 1/2) +
+  facet_grid(genotype ~ activity) +
+  theme_bw()
 ```
+
+```{r}
+summary(D2$value)
+summary(D2$logValue)
+ggplot(D2) +
+  aes(x = logValue, color = genotype, fill = genotype) +
+  geom_density(alpha = 1/2) +
+  facet_grid(genotype ~ chow) +
+  theme_bw()
+```
+
 
 Check experimental design.
 
