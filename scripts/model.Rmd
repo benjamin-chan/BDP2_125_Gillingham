@@ -11,43 +11,68 @@ Parameters.
 * `rho1` is the within-metabolite correlation
 * `rho2` is the between-metabolite correlation
 
-Define the fixed effects part of the model.
 
-```{r}
-# fixed <- formula(value ~
-#                    genotype +
-#                    activity +
-#                    metabolite_type +
-#                    genotype * metabolite_type +
-#                    activity * metabolite_type)
-fixed <- formula(value ~ activity)
-```
+## Aim 1: Exercise
 
-Define the random effects part of the model.
-Use `corCompSymm`, *compound symmetry structure corresponding to a constant correlation*.
-
-```{r}
-random <- formula(~ 1 | id)
-cs <-
-  corCompSymm(form = random, fixed = FALSE) %>%
-  Initialize(data = D1)
-Dim(cs)
-# summary(cs)
-```
+**Rest versus exhaustive exercise**
 
 Estimate model.
 Default to `correlation = NULL`, corresponding to no within-group correlations.
 
 ```{r}
+fixed <- formula(value ~
+                   genotype +
+                   activity +
+                   metabolite_type +
+                   genotype * activity +
+                   genotype * metabolite_type)
+random <- formula(~ 1 | id)
 M <- lme(fixed, data = D1, random = random, correlation = NULL)
 summary(M)
 ```
 
 Estimate model.
-Specify the correlation structure.
+Specify the correlation structure using `cs`.
+Use `corCompSymm`, *compound symmetry structure corresponding to a constant correlation*.
 
 ```{r}
-ctrl <- lmeControl(maxIter = 500)
-M <- lme(fixed, data = D1, random = random, correlation = cs, control = ctrl)
+cs <-
+  corCompSymm(form = random, fixed = FALSE) %>%
+  Initialize(data = D1)
+Dim(cs)
+M <- lme(fixed, data = D1, random = random, correlation = cs)
+summary(M)
+```
+
+
+## Aim 2: Chow
+
+**MCT chow versus experimental chow with truheptanoin**
+
+Estimate model.
+Default to `correlation = NULL`, corresponding to no within-group correlations.
+
+```{r}
+fixed <- formula(value ~
+                   genotype +
+                   chow +
+                   metabolite_type +
+                   genotype * chow +
+                   genotype * metabolite_type)
+random <- formula(~ 1 | id)
+M <- lme(fixed, data = D2, random = random, correlation = NULL)
+summary(M)
+```
+
+Estimate model.
+Specify the correlation structure using `cs`.
+Use `corCompSymm`, *compound symmetry structure corresponding to a constant correlation*.
+
+```{r}
+cs <-
+  corCompSymm(form = random, fixed = FALSE) %>%
+  Initialize(data = D2)
+Dim(cs)
+M <- lme(fixed, data = D2, random = random, correlation = cs)
 summary(M)
 ```
