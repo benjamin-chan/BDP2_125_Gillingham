@@ -16,7 +16,7 @@ simulateCorrData <- function (R, n, prefix = "x", seed = NULL) {
 }
 
 
-importData <- function (f) {
+importDataToList <- function (f) {
   require(readxl)
   require(magrittr)
   require(dplyr)
@@ -24,6 +24,7 @@ importData <- function (f) {
   D <- read_excel(f, col_types = col_types)
   names(D) <- D %>% names() %>% tolower() %>% gsub("\\s", "_", .)
   D <- filter(D, !is.na(id))
+  D$activity <- factor(D$activity, levels = c("rest", "rest/fasted", "ex"))  # Reorder factor
   L <- list(file = f,
             file.size = file.size(f),
             file.mtime = file.mtime(f),
@@ -31,9 +32,9 @@ importData <- function (f) {
             nrow = nrow(D),
             ncol = ncol(D),
             names = names(D),
-            head = head(D))
-  # show(L)
-  D
+            head = head(D),
+            data = D)
+  L
 }
 
 
