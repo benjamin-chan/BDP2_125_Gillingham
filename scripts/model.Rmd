@@ -25,6 +25,7 @@ Specify the correlation structure using `cs`.
 Use `corSymm`, *general correlation matrix, with no additional structure*.
 
 ```{r}
+rm(M)
 cs <-
   corSymm(form = random, fixed = FALSE) %>%
   Initialize(data = D1)
@@ -58,6 +59,7 @@ Specify the correlation structure using `cs`.
 Use `corSymm`, *general correlation matrix, with no additional structure*.
 
 ```{r}
+rm(M)
 cs <-
   corSymm(form = random, fixed = FALSE) %>%
   Initialize(data = D2)
