@@ -19,6 +19,10 @@ importDataToList <- function (f) {
                          levels = c("reg", "White (C7)", "yellow (C8)"),
                          labels = c("Regular", "White (C7)", "Yellow (C8)"))) %>%   # Reorder factor
     mutate(chow = droplevels(chow)) %>%
+    mutate(metabolite_type = factor(metabolite_type,
+                                    levels = c("acylcarnitines", "amino acids", "Amino Acids", "organic acids"),
+                                    labels = c("Acylcarnitines", "Amino acids", "Amino acids", "Organic acids"))) %>%   # Reorder factor
+    mutate(metabolite_type = droplevels(metabolite_type)) %>%
     mutate(logValue = log10(value))  # log transform
   L <- list(file = f,
             file.size = file.size(f),
