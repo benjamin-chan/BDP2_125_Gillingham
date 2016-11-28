@@ -39,10 +39,3 @@ summarizeOutcome <- function (D) {
   rownames(L) <- c("nominal", "log-transform")
   L
 }
-
-
-tableFixed <- function (D) {
-  show(table(D$genotype, D$metabolite_type))
-  show(table(D$activity, D$metabolite_type))
-  show(table(D$chow, D$metabolite_type))
-}
