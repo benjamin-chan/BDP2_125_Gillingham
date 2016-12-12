@@ -1,6 +1,6 @@
 ---
 title: "Metabolomics of very long-chain aclCoA dehydrogenase knockout mice"
-date: "2016-12-12 15:06:58"
+date: "2016-12-12 15:28:01"
 author: Benjamin Chan (chanb@ohsu.edu)
 output:
   html_document:
@@ -348,8 +348,8 @@ table(D1$genotype, D1$metabolite_type)
 ```
 ##     
 ##      Acylcarnitines Amino acids Organic acids
-##   KO             42         105           168
 ##   WT             42         105           160
+##   KO             42         105           168
 ```
 
 ```r
@@ -405,8 +405,8 @@ table(D2$genotype, D2$metabolite_type)
 ```
 ##     
 ##      Acylcarnitines Amino acids Organic acids
-##   KO             84         105           147
 ##   WT             88         110           154
+##   KO             84         105           147
 ```
 
 ```r
@@ -505,44 +505,44 @@ summary(M)
 ## Random effects:
 ##  Formula: ~1 | id
 ##          (Intercept) Residual
-## StdDev: 4.239725e-05 1.341349
+## StdDev: 4.239754e-05 1.341349
 ## 
 ## Fixed effects: list(fixed) 
 ##                                              Value Std.Error  DF
-## (Intercept)                              0.2866230 0.2216337 576
-## genotypeWT                              -0.0975869 0.3137401  38
-## activityExercise                        -0.0327790 0.1513246  38
-## metabolite_typeAmino acids               0.3469524 0.2448957 576
-## metabolite_typeOrganic acids            -0.1101030 0.2314047 576
-## genotypeWT:activityExercise             -0.0500204 0.2156160  38
-## genotypeWT:metabolite_typeAmino acids    0.1732246 0.3463348 576
-## genotypeWT:metabolite_typeOrganic acids  0.4103840 0.3280974 576
+## (Intercept)                              0.1890360 0.2220616 576
+## genotypeKO                               0.0975869 0.3137401  38
+## activityExercise                        -0.0827994 0.1535940  38
+## metabolite_typeAmino acids               0.5201771 0.2448957 576
+## metabolite_typeOrganic acids             0.3002810 0.2325936 576
+## genotypeKO:activityExercise              0.0500204 0.2156160  38
+## genotypeKO:metabolite_typeAmino acids   -0.1732246 0.3463348 576
+## genotypeKO:metabolite_typeOrganic acids -0.4103840 0.3280974 576
 ##                                            t-value p-value
-## (Intercept)                              1.2932287  0.1965
-## genotypeWT                              -0.3110439  0.7575
-## activityExercise                        -0.2166142  0.8297
-## metabolite_typeAmino acids               1.4167357  0.1571
-## metabolite_typeOrganic acids            -0.4758028  0.6344
-## genotypeWT:activityExercise             -0.2319883  0.8178
-## genotypeWT:metabolite_typeAmino acids    0.5001652  0.6171
-## genotypeWT:metabolite_typeOrganic acids  1.2507994  0.2115
+## (Intercept)                              0.8512776  0.3950
+## genotypeKO                               0.3110439  0.7575
+## activityExercise                        -0.5390798  0.5930
+## metabolite_typeAmino acids               2.1240761  0.0341
+## metabolite_typeOrganic acids             1.2910116  0.1972
+## genotypeKO:activityExercise              0.2319883  0.8178
+## genotypeKO:metabolite_typeAmino acids   -0.5001652  0.6171
+## genotypeKO:metabolite_typeOrganic acids -1.2507994  0.2115
 ##  Correlation: 
-##                                         (Intr) gntyWT actvtE mtb_Aa mtb_Oa
-## genotypeWT                              -0.706                            
-## activityExercise                        -0.358  0.253                     
-## metabolite_typeAmino acids              -0.789  0.558  0.000              
-## metabolite_typeOrganic acids            -0.835  0.590  0.000  0.756       
-## genotypeWT:activityExercise              0.251 -0.360 -0.702  0.000  0.000
-## genotypeWT:metabolite_typeAmino acids    0.558 -0.788  0.000 -0.707 -0.535
-## genotypeWT:metabolite_typeOrganic acids  0.589 -0.829  0.000 -0.533 -0.705
-##                                         gnWT:E gWT:_Aa
-## genotypeWT                                            
+##                                         (Intr) gntyKO actvtE mtb_Aa mtb_Oa
+## genotypeKO                              -0.708                            
+## activityExercise                        -0.362  0.256                     
+## metabolite_typeAmino acids              -0.788  0.558  0.000              
+## metabolite_typeOrganic acids            -0.823  0.583 -0.017  0.752       
+## genotypeKO:activityExercise              0.258 -0.360 -0.712  0.000  0.012
+## genotypeKO:metabolite_typeAmino acids    0.557 -0.788  0.000 -0.707 -0.532
+## genotypeKO:metabolite_typeOrganic acids  0.584 -0.829  0.012 -0.533 -0.709
+##                                         gnKO:E gKO:_Aa
+## genotypeKO                                            
 ## activityExercise                                      
 ## metabolite_typeAmino acids                            
 ## metabolite_typeOrganic acids                          
-## genotypeWT:activityExercise                           
-## genotypeWT:metabolite_typeAmino acids    0.000        
-## genotypeWT:metabolite_typeOrganic acids -0.009  0.754 
+## genotypeKO:activityExercise                           
+## genotypeKO:metabolite_typeAmino acids    0.000        
+## genotypeKO:metabolite_typeOrganic acids -0.009  0.754 
 ## 
 ## Standardized Within-Group Residuals:
 ##         Min          Q1         Med          Q3         Max 
@@ -611,7 +611,7 @@ summary(M)
 ## Random effects:
 ##  Formula: ~1 | id
 ##         (Intercept) Residual
-## StdDev: 0.004510821 1.341347
+## StdDev: 0.004510822 1.341347
 ## 
 ## Correlation Structure: General
 ##  Formula: ~1 | id 
@@ -634,40 +634,40 @@ summary(M)
 ## 15 0 0 0 0 0 0 0 0 0 0  0  0  0  0 
 ## Fixed effects: list(fixed) 
 ##                                              Value Std.Error  DF
-## (Intercept)                              0.2866230 0.2216379 576
-## genotypeWT                              -0.0975868 0.3137461  38
-## activityExercise                        -0.0327790 0.1513372  38
-## metabolite_typeAmino acids               0.3469524 0.2448953 576
-## metabolite_typeOrganic acids            -0.1101030 0.2314043 576
-## genotypeWT:activityExercise             -0.0500206 0.2156338  38
-## genotypeWT:metabolite_typeAmino acids    0.1732246 0.3463343 576
-## genotypeWT:metabolite_typeOrganic acids  0.4103842 0.3280970 576
+## (Intercept)                              0.1890362 0.2220659 576
+## genotypeKO                               0.0975868 0.3137461  38
+## activityExercise                        -0.0827997 0.1536066  38
+## metabolite_typeAmino acids               0.5201771 0.2448953 576
+## metabolite_typeOrganic acids             0.3002812 0.2325933 576
+## genotypeKO:activityExercise              0.0500206 0.2156338  38
+## genotypeKO:metabolite_typeAmino acids   -0.1732246 0.3463343 576
+## genotypeKO:metabolite_typeOrganic acids -0.4103842 0.3280970 576
 ##                                            t-value p-value
-## (Intercept)                              1.2932039  0.1965
-## genotypeWT                              -0.3110376  0.7575
-## activityExercise                        -0.2165961  0.8297
-## metabolite_typeAmino acids               1.4167379  0.1571
-## metabolite_typeOrganic acids            -0.4758035  0.6344
-## genotypeWT:activityExercise             -0.2319702  0.8178
-## genotypeWT:metabolite_typeAmino acids    0.5001660  0.6171
-## genotypeWT:metabolite_typeOrganic acids  1.2508017  0.2115
+## (Intercept)                              0.8512618  0.3950
+## genotypeKO                               0.3110376  0.7575
+## activityExercise                        -0.5390370  0.5930
+## metabolite_typeAmino acids               2.1240794  0.0341
+## metabolite_typeOrganic acids             1.2910139  0.1972
+## genotypeKO:activityExercise              0.2319702  0.8178
+## genotypeKO:metabolite_typeAmino acids   -0.5001660  0.6171
+## genotypeKO:metabolite_typeOrganic acids -1.2508017  0.2115
 ##  Correlation: 
-##                                         (Intr) gntyWT actvtE mtb_Aa mtb_Oa
-## genotypeWT                              -0.706                            
-## activityExercise                        -0.358  0.253                     
-## metabolite_typeAmino acids              -0.789  0.558  0.000              
-## metabolite_typeOrganic acids            -0.835  0.590  0.000  0.756       
-## genotypeWT:activityExercise              0.251 -0.360 -0.702  0.000  0.000
-## genotypeWT:metabolite_typeAmino acids    0.558 -0.788  0.000 -0.707 -0.535
-## genotypeWT:metabolite_typeOrganic acids  0.589 -0.829  0.000 -0.533 -0.705
-##                                         gnWT:E gWT:_Aa
-## genotypeWT                                            
+##                                         (Intr) gntyKO actvtE mtb_Aa mtb_Oa
+## genotypeKO                              -0.708                            
+## activityExercise                        -0.362  0.256                     
+## metabolite_typeAmino acids              -0.788  0.558  0.000              
+## metabolite_typeOrganic acids            -0.823  0.583 -0.017  0.752       
+## genotypeKO:activityExercise              0.258 -0.360 -0.712  0.000  0.012
+## genotypeKO:metabolite_typeAmino acids    0.557 -0.788  0.000 -0.707 -0.532
+## genotypeKO:metabolite_typeOrganic acids  0.584 -0.829  0.012 -0.533 -0.709
+##                                         gnKO:E gKO:_Aa
+## genotypeKO                                            
 ## activityExercise                                      
 ## metabolite_typeAmino acids                            
 ## metabolite_typeOrganic acids                          
-## genotypeWT:activityExercise                           
-## genotypeWT:metabolite_typeAmino acids    0.000        
-## genotypeWT:metabolite_typeOrganic acids -0.009  0.754 
+## genotypeKO:activityExercise                           
+## genotypeKO:metabolite_typeAmino acids    0.000        
+## genotypeKO:metabolite_typeOrganic acids -0.009  0.754 
 ## 
 ## Standardized Within-Group Residuals:
 ##         Min          Q1         Med          Q3         Max 
@@ -707,44 +707,44 @@ summary(M)
 ## Random effects:
 ##  Formula: ~1 | id
 ##          (Intercept) Residual
-## StdDev: 3.091437e-05 1.039132
+## StdDev: 3.091411e-05 1.039132
 ## 
 ## Fixed effects: list(fixed) 
 ##                                              Value Std.Error  DF   t-value
-## (Intercept)                              0.5684638 0.1256035 641  4.525861
-## genotypeWT                              -0.4765655 0.1763923  39 -2.701737
-## chowYellow (C8)                          0.0055242 0.1135074  39  0.048668
-## metabolite_typeAmino acids               0.0702769 0.1521133 641  0.462003
-## metabolite_typeOrganic acids            -0.0232650 0.1421276 641 -0.163691
-## genotypeWT:chowYellow (C8)               0.0389779 0.1586011  39  0.245760
-## genotypeWT:metabolite_typeAmino acids    0.4936399 0.2126621 641  2.321240
-## genotypeWT:metabolite_typeOrganic acids  0.4376502 0.1987016 641  2.202550
+## (Intercept)                              0.0918984 0.1238467 641  0.742033
+## genotypeKO                               0.4765655 0.1763923  39  2.701737
+## chowYellow (C8)                          0.0445021 0.1107718  39  0.401745
+## metabolite_typeAmino acids               0.5639168 0.1486160 641  3.794455
+## metabolite_typeOrganic acids             0.4143852 0.1388599 641  2.984198
+## genotypeKO:chowYellow (C8)              -0.0389779 0.1586011  39 -0.245760
+## genotypeKO:metabolite_typeAmino acids   -0.4936399 0.2126621 641 -2.321240
+## genotypeKO:metabolite_typeOrganic acids -0.4376502 0.1987016 641 -2.202550
 ##                                         p-value
-## (Intercept)                              0.0000
-## genotypeWT                               0.0102
-## chowYellow (C8)                          0.9614
-## metabolite_typeAmino acids               0.6442
-## metabolite_typeOrganic acids             0.8700
-## genotypeWT:chowYellow (C8)               0.8072
-## genotypeWT:metabolite_typeAmino acids    0.0206
-## genotypeWT:metabolite_typeOrganic acids  0.0280
+## (Intercept)                              0.4583
+## genotypeKO                               0.0102
+## chowYellow (C8)                          0.6901
+## metabolite_typeAmino acids               0.0002
+## metabolite_typeOrganic acids             0.0030
+## genotypeKO:chowYellow (C8)               0.8072
+## genotypeKO:metabolite_typeAmino acids    0.0206
+## genotypeKO:metabolite_typeOrganic acids  0.0280
 ##  Correlation: 
-##                                         (Intr) gntyWT cY(C8) mtb_Aa mtb_Oa
-## genotypeWT                              -0.712                            
-## chowYellow (C8)                         -0.430  0.306                     
-## metabolite_typeAmino acids              -0.673  0.479  0.000              
-## metabolite_typeOrganic acids            -0.720  0.513  0.000  0.595       
-## genotypeWT:chowYellow (C8)               0.308 -0.439 -0.716  0.000  0.000
-## genotypeWT:metabolite_typeAmino acids    0.481 -0.670  0.000 -0.715 -0.425
-## genotypeWT:metabolite_typeOrganic acids  0.515 -0.717  0.000 -0.425 -0.715
-##                                         gWT:Y( gWT:_Aa
-## genotypeWT                                            
+##                                         (Intr) gntyKO cY(C8) mtb_Aa mtb_Oa
+## genotypeKO                              -0.702                            
+## chowYellow (C8)                         -0.447  0.314                     
+## metabolite_typeAmino acids              -0.667  0.468  0.000              
+## metabolite_typeOrganic acids            -0.714  0.501  0.000  0.595       
+## genotypeKO:chowYellow (C8)               0.312 -0.439 -0.698  0.000  0.000
+## genotypeKO:metabolite_typeAmino acids    0.466 -0.670  0.000 -0.699 -0.416
+## genotypeKO:metabolite_typeOrganic acids  0.499 -0.717  0.000 -0.416 -0.699
+##                                         gKO:Y( gKO:_Aa
+## genotypeKO                                            
 ## chowYellow (C8)                                       
 ## metabolite_typeAmino acids                            
 ## metabolite_typeOrganic acids                          
-## genotypeWT:chowYellow (C8)                            
-## genotypeWT:metabolite_typeAmino acids    0.000        
-## genotypeWT:metabolite_typeOrganic acids  0.000  0.595 
+## genotypeKO:chowYellow (C8)                            
+## genotypeKO:metabolite_typeAmino acids    0.000        
+## genotypeKO:metabolite_typeOrganic acids  0.000  0.595 
 ## 
 ## Standardized Within-Group Residuals:
 ##        Min         Q1        Med         Q3        Max 
@@ -842,40 +842,40 @@ summary(M)
 ## 16 0 0 0 0 0 0 0 0 0 0  0  0  0  0  0 
 ## Fixed effects: list(fixed) 
 ##                                              Value Std.Error  DF   t-value
-## (Intercept)                              0.5684638 0.1256069 641  4.525736
-## genotypeWT                              -0.4765655 0.1763972  39 -2.701661
-## chowYellow (C8)                          0.0055242 0.1135156  39  0.048665
-## metabolite_typeAmino acids               0.0702769 0.1521132 641  0.462004
-## metabolite_typeOrganic acids            -0.0232650 0.1421274 641 -0.163691
-## genotypeWT:chowYellow (C8)               0.0389779 0.1586127  39  0.245742
-## genotypeWT:metabolite_typeAmino acids    0.4936399 0.2126619 641  2.321243
-## genotypeWT:metabolite_typeOrganic acids  0.4376502 0.1987013 641  2.202553
+## (Intercept)                              0.0918984 0.1238502 641  0.742012
+## genotypeKO                               0.4765655 0.1763972  39  2.701661
+## chowYellow (C8)                          0.0445021 0.1107799  39  0.401716
+## metabolite_typeAmino acids               0.5639168 0.1486158 641  3.794459
+## metabolite_typeOrganic acids             0.4143852 0.1388597 641  2.984201
+## genotypeKO:chowYellow (C8)              -0.0389779 0.1586127  39 -0.245742
+## genotypeKO:metabolite_typeAmino acids   -0.4936399 0.2126619 641 -2.321243
+## genotypeKO:metabolite_typeOrganic acids -0.4376502 0.1987013 641 -2.202553
 ##                                         p-value
-## (Intercept)                              0.0000
-## genotypeWT                               0.0102
-## chowYellow (C8)                          0.9614
-## metabolite_typeAmino acids               0.6442
-## metabolite_typeOrganic acids             0.8700
-## genotypeWT:chowYellow (C8)               0.8072
-## genotypeWT:metabolite_typeAmino acids    0.0206
-## genotypeWT:metabolite_typeOrganic acids  0.0280
+## (Intercept)                              0.4584
+## genotypeKO                               0.0102
+## chowYellow (C8)                          0.6901
+## metabolite_typeAmino acids               0.0002
+## metabolite_typeOrganic acids             0.0030
+## genotypeKO:chowYellow (C8)               0.8072
+## genotypeKO:metabolite_typeAmino acids    0.0206
+## genotypeKO:metabolite_typeOrganic acids  0.0280
 ##  Correlation: 
-##                                         (Intr) gntyWT cY(C8) mtb_Aa mtb_Oa
-## genotypeWT                              -0.712                            
-## chowYellow (C8)                         -0.430  0.306                     
-## metabolite_typeAmino acids              -0.673  0.479  0.000              
-## metabolite_typeOrganic acids            -0.720  0.513  0.000  0.595       
-## genotypeWT:chowYellow (C8)               0.308 -0.439 -0.716  0.000  0.000
-## genotypeWT:metabolite_typeAmino acids    0.481 -0.670  0.000 -0.715 -0.425
-## genotypeWT:metabolite_typeOrganic acids  0.515 -0.717  0.000 -0.425 -0.715
-##                                         gWT:Y( gWT:_Aa
-## genotypeWT                                            
+##                                         (Intr) gntyKO cY(C8) mtb_Aa mtb_Oa
+## genotypeKO                              -0.702                            
+## chowYellow (C8)                         -0.447  0.314                     
+## metabolite_typeAmino acids              -0.667  0.468  0.000              
+## metabolite_typeOrganic acids            -0.713  0.501  0.000  0.595       
+## genotypeKO:chowYellow (C8)               0.312 -0.439 -0.698  0.000  0.000
+## genotypeKO:metabolite_typeAmino acids    0.466 -0.670  0.000 -0.699 -0.416
+## genotypeKO:metabolite_typeOrganic acids  0.499 -0.717  0.000 -0.416 -0.699
+##                                         gKO:Y( gKO:_Aa
+## genotypeKO                                            
 ## chowYellow (C8)                                       
 ## metabolite_typeAmino acids                            
 ## metabolite_typeOrganic acids                          
-## genotypeWT:chowYellow (C8)                            
-## genotypeWT:metabolite_typeAmino acids    0.000        
-## genotypeWT:metabolite_typeOrganic acids  0.000  0.595 
+## genotypeKO:chowYellow (C8)                            
+## genotypeKO:metabolite_typeAmino acids    0.000        
+## genotypeKO:metabolite_typeOrganic acids  0.000  0.595 
 ## 
 ## Standardized Within-Group Residuals:
 ##         Min          Q1         Med          Q3         Max 
