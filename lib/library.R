@@ -2,15 +2,32 @@ importDataToList <- function (f) {
   require(readxl)
   require(magrittr)
   require(dplyr)
-  col_types <- c(rep("text", 6), "numeric")
-  D <- read_excel(f, col_types = col_types)
+  D <- read_excel(f, sheet = 1) %>% .[, 2:22]
   names(D) <- D %>% names() %>% tolower() %>% gsub("\\s", "_", .)
+  vars <- c("id",
+            "genotype",
+            "activity",
+            "chow",
+            "metabolite_type",
+            "metabolite",
+            "value",
+            "logValue",
+            "zValue",
+            "zLogValue",
+            "important")
   D <-
-    D %>%
+    D[, !is.na(names(D))] %>%
+    select(which(!is.na(names(.)))) %>%
+    rename(logValue = log) %>%
+    rename(zValue = z_of_normalize_values) %>%
+    rename(zLogValue = z_of_log_values) %>%
+    mutate(important = as.logical(`important_metabolite_(1_for_important)`)) %>%
+    select(one_of(vars)) %>%
     filter(!is.na(id)) %>%
+    filter(important == TRUE) %>%
     mutate(genotype = factor(genotype,
                              levels = c("-/-", "+/+"),
-                             labels = c("Neg/Neg", "Pos/Pos"))) %>%   # Reorder factor
+                             labels = c("KO", "WT"))) %>%   # Reorder factor
     mutate(activity = factor(activity,
                              levels = c("rest", "rest/fasted", "ex"),
                              labels = c("Rest", "Rest", "Exercise"))) %>%   # Reorder factor
@@ -22,8 +39,7 @@ importDataToList <- function (f) {
     mutate(metabolite_type = factor(metabolite_type,
                                     levels = c("acylcarnitines", "amino acids", "Amino Acids", "organic acids"),
                                     labels = c("Acylcarnitines", "Amino acids", "Amino acids", "Organic acids"))) %>%   # Reorder factor
-    mutate(metabolite_type = droplevels(metabolite_type)) %>%
-    mutate(logValue = log10(value))  # log transform
+    mutate(metabolite_type = droplevels(metabolite_type))
   L <- list(file = f,
             file.size = file.size(f),
             file.mtime = file.mtime(f),
