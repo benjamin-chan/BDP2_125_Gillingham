@@ -26,9 +26,10 @@ Use `corSymm`, *general correlation matrix, with no additional structure*.
 
 ```{r}
 rm(M)
-ctrl <- lmeControl(opt = "optim")
+ctrl <- lmeControl(opt = "optim",
+                   maxIter = 500, msMaxIter = 500, tolerance = 1e-3, msTol = 1e-3)
 cs <-
-  corSymm(form = random, fixed = TRUE) %>%
+  corSymm(form = random, fixed = FALSE) %>%
   Initialize(data = D1)
 Dim(cs)
 M <- lme(fixed, data = D1, random = random, correlation = cs, control = ctrl)
@@ -62,7 +63,7 @@ Use `corSymm`, *general correlation matrix, with no additional structure*.
 ```{r}
 rm(M)
 cs <-
-  corSymm(form = random, fixed = TRUE) %>%
+  corSymm(form = random, fixed = FALSE) %>%
   Initialize(data = D2)
 Dim(cs)
 M <- lme(fixed, data = D2, random = random, correlation = cs, control = ctrl)
