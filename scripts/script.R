@@ -1,7 +1,7 @@
 setwd("~/Projects/GillinghamMetabolomics/scripts")
 
 library(checkpoint)
-checkpoint("2016-10-01", use.knitr = TRUE)
+checkpoint("2016-12-01", use.knitr = TRUE)
 
 Sys.time0 <- Sys.time()
 
