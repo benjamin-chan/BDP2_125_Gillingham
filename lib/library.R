@@ -26,8 +26,8 @@ importDataToList <- function (f) {
     filter(!is.na(id)) %>%
     filter(important == TRUE) %>%
     mutate(genotype = factor(genotype,
-                             levels = c("-/-", "+/+"),
-                             labels = c("KO", "WT"))) %>%   # Reorder factor
+                             levels = c("+/+", "-/-"),
+                             labels = c("WT", "KO"))) %>%   # Reorder factor
     mutate(activity = factor(activity,
                              levels = c("rest", "rest/fasted", "ex"),
                              labels = c("Rest", "Rest", "Exercise"))) %>%   # Reorder factor
