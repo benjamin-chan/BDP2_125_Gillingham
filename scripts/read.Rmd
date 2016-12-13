@@ -56,16 +56,13 @@ ggplot(D2) +
 Check fixed effects factors.
 
 ```{r}
-table(D1$genotype, D1$metabolite_type)
-table(D1$activity, D1$metabolite_type)
-table(D1$chow, D1$metabolite_type)
-table(D1$metabolite, D1$metabolite_type)
+D1 %>% group_by(genotype, activity) %>% tally
+D1 %>% group_by(genotype, metabolite) %>% tally
+D1 %>% group_by(activity, metabolite) %>% tally
 ```
 
 ```{r}
-table(D2$genotype, D2$metabolite_type)
-table(D2$activity, D2$metabolite_type)
-table(D2$chow, D2$metabolite_type)
-table(D2$metabolite)
-table(D2$metabolite, D2$metabolite_type)
+D2 %>% group_by(genotype, chow) %>% tally
+D2 %>% group_by(genotype, metabolite) %>% tally
+D2 %>% group_by(chow, metabolite) %>% tally
 ```
