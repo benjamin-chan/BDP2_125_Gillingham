@@ -1,6 +1,6 @@
 ---
 title: "Metabolomics of very long-chain aclCoA dehydrogenase knockout mice"
-date: "2016-12-13 12:25:46"
+date: "2016-12-13 15:19:51"
 author: Benjamin Chan (chanb@ohsu.edu)
 output:
   html_document:
@@ -304,16 +304,21 @@ kable(summarizeOutcome(D1))
 
 ```r
 ggplot(D1) +
-  aes(x = logValue, color = metabolite_type, fill = metabolite_type) +
-  geom_density(alpha = 1/3) +
+  aes(x = logValue, y = metabolite, color = activity, fill = activity) +
+  geom_jitter(alpha = 1/2) +
+  facet_wrap(~ genotype) +
   scale_x_continuous("log10 scale") +
-  facet_grid(genotype ~ activity) +
-  scale_color_brewer("Metabolite type", palette = "Set1") +
-  scale_fill_brewer("Metabolite type", palette = "Set1") +
+  scale_y_discrete("Metabolite") +
+  scale_color_brewer("Activity", palette = "Set1") +
+  scale_fill_brewer("Activity", palette = "Set1") +
   theme_bw()
 ```
 
-![plot of chunk densitiesAim1](../figures/densitiesAim1-1.png)
+![plot of chunk plotDataAim1](../figures/plotDataAim1-1.png)
+
+```r
+ggsave("../figures/plotDataAim1.png", width = 10, height = 8, units = "in")
+```
 
 
 ```r
@@ -329,16 +334,21 @@ kable(summarizeOutcome(D2))
 
 ```r
 ggplot(D2) +
-  aes(x = logValue, color = metabolite_type, fill = metabolite_type) +
-  geom_density(alpha = 1/3) +
+  aes(x = logValue, y = metabolite, color = chow, fill = chow) +
+  geom_jitter(alpha = 1/2) +
+  facet_wrap(~ genotype) +
   scale_x_continuous("log10 scale") +
-  facet_grid(genotype ~ chow) +
-  scale_color_brewer("Metabolite type", palette = "Set1") +
-  scale_fill_brewer("Metabolite type", palette = "Set1") +
+  scale_y_discrete("Metabolite") +
+  scale_color_brewer("Chow", palette = "Set1") +
+  scale_fill_brewer("Chow", palette = "Set1") +
   theme_bw()
 ```
 
-![plot of chunk densitiesAim2](../figures/densitiesAim2-1.png)
+![plot of chunk plotDataAim2](../figures/plotDataAim2-1.png)
+
+```r
+ggsave("../figures/plotDataAim2.png", width = 10, height = 8, units = "in")
+```
 
 
 Check fixed effects factors.
@@ -566,7 +576,8 @@ fixed <- formula(logValue ~
                    metabolite +
                    genotype * activity +
                    genotype * metabolite +
-                   activity * metabolite)
+                   activity * metabolite +
+                   activity * metabolite * genotype)
 random <- formula(~ 1 | id)
 ctrl <- lmeControl(opt = "optim",
                    maxIter = 500, msMaxIter = 500)
@@ -619,14 +630,15 @@ anova(M)
 ```
 
 ```
-##                     numDF denDF  F-value p-value
-## (Intercept)             1   538 21296925  <.0001
-## genotype                1    38 14177385  <.0001
-## activity                1    38  9785253  <.0001
-## metabolite             14   538 22936360  <.0001
-## genotype:activity       1    38        0  0.6035
-## genotype:metabolite    14   538        7  <.0001
-## activity:metabolite    14   538        1  0.8918
+##                              numDF denDF   F-value p-value
+## (Intercept)                      1   524  149301.5  <.0001
+## genotype                         1    38   98911.6  <.0001
+## activity                         1    38   63134.6  <.0001
+## metabolite                      14   524 2824393.4  <.0001
+## genotype:activity                1    38       0.0  0.9801
+## genotype:metabolite             14   524       3.4  <.0001
+## activity:metabolite             14   524       0.8  0.7007
+## genotype:activity:metabolite    14   524       1.8  0.0375
 ```
 
 ```r
@@ -636,33 +648,33 @@ summary(M)
 ```
 ## Linear mixed-effects model fit by REML
 ##  Data: D1 
-##        AIC      BIC    logLik
-##   1694.892 2361.376 -694.4458
+##       AIC      BIC    logLik
+##   1713.92 2437.281 -689.9601
 ## 
 ## Random effects:
 ##  Formula: ~1 | id
 ##         (Intercept)  Residual
-## StdDev:  0.06222017 0.7252289
+## StdDev:  0.06348574 0.7260516
 ## 
 ## Correlation Structure: General
 ##  Formula: ~1 | id 
 ##  Parameter estimate(s):
 ##  Correlation: 
 ##    1      2      3      4      5      6      7      8      9      10    
-## 2  -0.086                                                               
-## 3   0.025  0.080                                                        
-## 4   0.038 -0.043  0.014                                                 
-## 5   0.038 -0.052  0.056  0.014                                          
-## 6   0.042  0.021  0.027  0.086  0.034                                   
-## 7  -0.076  0.162  0.035  0.007 -0.151  0.002                            
-## 8   0.020  0.047  0.237  0.169  0.068  0.177  0.031                     
-## 9   0.019  0.008 -0.089  0.010 -0.003 -0.077 -0.245  0.025              
-## 10 -0.164  0.076  0.031 -0.024  0.016  0.008  0.289  0.145 -0.058       
-## 11  0.027 -0.009  0.083  0.060  0.155  0.023  0.017  0.318 -0.052  0.061
-## 12  0.108  0.057  0.029  0.111 -0.443  0.074  0.062 -0.145 -0.039 -0.333
-## 13 -0.154  0.119  0.053 -0.023 -0.117  0.058  0.265  0.020 -0.050  0.187
-## 14  0.100 -0.017  0.074 -0.007  0.052 -0.062  0.000 -0.128 -0.018 -0.058
-## 15  0.006  0.021  0.044  0.172 -0.033  0.070  0.036  0.176 -0.011  0.054
+## 2  -0.020                                                               
+## 3   0.080 -0.014                                                        
+## 4   0.126  0.007 -0.046                                                 
+## 5   0.081  0.049 -0.092  0.127                                          
+## 6   0.016  0.039  0.137 -0.105  0.003                                   
+## 7   0.054 -0.008  0.009  0.004 -0.168  0.069                            
+## 8  -0.022 -0.057 -0.091 -0.025  0.030 -0.027 -0.223                     
+## 9   0.016  0.041 -0.009  0.014  0.032 -0.047 -0.201  0.099              
+## 10  0.028  0.114  0.009 -0.012 -0.007 -0.004  0.072 -0.133 -0.008       
+## 11  0.026 -0.095  0.072  0.034  0.105  0.037  0.025  0.235 -0.240  0.035
+## 12 -0.042  0.229 -0.014 -0.008  0.147  0.121  0.060 -0.151 -0.016  0.021
+## 13  0.003  0.071 -0.107  0.013  0.066  0.056  0.065 -0.043 -0.030  0.139
+## 14  0.066 -0.049  0.106  0.019 -0.108  0.092  0.088 -0.187 -0.005 -0.060
+## 15 -0.017  0.147  0.087  0.012  0.082  0.066 -0.042  0.018  0.107  0.024
 ##    11     12     13     14    
 ## 2                             
 ## 3                             
@@ -674,567 +686,675 @@ summary(M)
 ## 9                             
 ## 10                            
 ## 11                            
-## 12 -0.388                     
-## 13 -0.017 -0.006              
-## 14  0.061  0.069 -0.060       
-## 15  0.026  0.137  0.098  0.010
+## 12 -0.255                     
+## 13  0.032  0.043              
+## 14 -0.044  0.218 -0.085       
+## 15 -0.032  0.096  0.017 -0.010
 ## Fixed effects: list(fixed) 
-##                                                Value Std.Error  DF
-## (Intercept)                                0.8435123 0.1993774 538
-## genotypeKO                                -0.0096514 0.2070457  38
-## activityExercise                           0.1620288 0.2094355  38
-## metabolitearginine                        -0.4253956 0.2719001 538
-## metaboliteCITRIC                           0.2235985 0.2760201 538
-## metaboliteFUMARIC                         -1.7593045 0.2801625 538
-## metaboliteglutamine                        1.2263403 0.2739290 538
-## metaboliteisoleucine                      -0.5665789 0.2694938 538
-## metaboliteLACTIC                           1.6101043 0.2800638 538
-## metaboliteLCAC total                       0.0580709 0.2729833 538
-## metaboliteleucine                         -0.2426250 0.2711761 538
-## metaboliteMALIC                            0.1188729 0.2799638 538
-## metaboliteMCAC Total                      -1.2910636 0.2760959 538
-## metaboliteMETHYLSUCCINIC                  -2.1973093 0.2813740 538
-## metabolitePYRUVIC_P2P                     -1.4600854 0.2748223 538
-## metaboliteSUCCINIC-2                       0.3582403 0.2798113 538
-## metabolitevaline                          -0.4935056 0.2715735 538
-## genotypeKO:activityExercise                0.0743726 0.1205622  38
-## genotypeKO:metabolitearginine              0.0531687 0.2755158 538
-## genotypeKO:metaboliteCITRIC               -0.0929074 0.2741748 538
-## genotypeKO:metaboliteFUMARIC              -0.0496999 0.2889446 538
-## genotypeKO:metaboliteglutamine            -0.0404563 0.2829928 538
-## genotypeKO:metaboliteisoleucine           -0.1019044 0.2658592 538
-## genotypeKO:metaboliteLACTIC               -0.0887323 0.2885991 538
-## genotypeKO:metaboliteLCAC total            0.3701918 0.2795042 538
-## genotypeKO:metaboliteleucine              -0.4141598 0.2725178 538
-## genotypeKO:metaboliteMALIC                -0.1397596 0.2882483 538
-## genotypeKO:metaboliteMCAC Total           -0.2073685 0.2910631 538
-## genotypeKO:metaboliteMETHYLSUCCINIC       -0.1269491 0.2931634 538
-## genotypeKO:metabolitePYRUVIC_P2P          -1.5588673 0.2697961 538
-## genotypeKO:metaboliteSUCCINIC-2           -0.1630092 0.2877133 538
-## genotypeKO:metabolitevaline                0.0464627 0.2741423 538
-## activityExercise:metabolitearginine       -0.3857341 0.2801195 538
-## activityExercise:metaboliteCITRIC         -0.1193411 0.2792636 538
-## activityExercise:metaboliteFUMARIC        -0.1783012 0.2925823 538
-## activityExercise:metaboliteglutamine      -0.2868221 0.2868500 538
-## activityExercise:metaboliteisoleucine     -0.2323430 0.2714854 538
-## activityExercise:metaboliteLACTIC         -0.1391883 0.2922699 538
-## activityExercise:metaboliteLCAC total     -0.3102560 0.2837081 538
-## activityExercise:metaboliteleucine        -0.5660946 0.2774401 538
-## activityExercise:metaboliteMALIC          -0.1077386 0.2919527 538
-## activityExercise:metaboliteMCAC Total     -0.3244149 0.2941258 538
-## activityExercise:metaboliteMETHYLSUCCINIC -0.2171200 0.2964005 538
-## activityExercise:metabolitePYRUVIC_P2P    -0.3803011 0.2753307 538
-## activityExercise:metaboliteSUCCINIC-2     -0.3209592 0.2914690 538
-## activityExercise:metabolitevaline         -0.0771800 0.2788925 538
-##                                             t-value p-value
-## (Intercept)                                4.230732  0.0000
-## genotypeKO                                -0.046615  0.9631
-## activityExercise                           0.773646  0.4439
-## metabolitearginine                        -1.564529  0.1183
-## metaboliteCITRIC                           0.810081  0.4183
-## metaboliteFUMARIC                         -6.279586  0.0000
-## metaboliteglutamine                        4.476855  0.0000
-## metaboliteisoleucine                      -2.102382  0.0360
-## metaboliteLACTIC                           5.749062  0.0000
-## metaboliteLCAC total                       0.212727  0.8316
-## metaboliteleucine                         -0.894714  0.3713
-## metaboliteMALIC                            0.424601  0.6713
-## metaboliteMCAC Total                      -4.676141  0.0000
-## metaboliteMETHYLSUCCINIC                  -7.809213  0.0000
-## metabolitePYRUVIC_P2P                     -5.312834  0.0000
-## metaboliteSUCCINIC-2                       1.280293  0.2010
-## metabolitevaline                          -1.817209  0.0697
-## genotypeKO:activityExercise                0.616882  0.5410
-## genotypeKO:metabolitearginine              0.192979  0.8470
-## genotypeKO:metaboliteCITRIC               -0.338862  0.7348
-## genotypeKO:metaboliteFUMARIC              -0.172005  0.8635
-## genotypeKO:metaboliteglutamine            -0.142959  0.8864
-## genotypeKO:metaboliteisoleucine           -0.383302  0.7016
-## genotypeKO:metaboliteLACTIC               -0.307459  0.7586
-## genotypeKO:metaboliteLCAC total            1.324459  0.1859
-## genotypeKO:metaboliteleucine              -1.519753  0.1292
-## genotypeKO:metaboliteMALIC                -0.484858  0.6280
-## genotypeKO:metaboliteMCAC Total           -0.712452  0.4765
-## genotypeKO:metaboliteMETHYLSUCCINIC       -0.433032  0.6652
-## genotypeKO:metabolitePYRUVIC_P2P          -5.777947  0.0000
-## genotypeKO:metaboliteSUCCINIC-2           -0.566568  0.5712
-## genotypeKO:metabolitevaline                0.169484  0.8655
-## activityExercise:metabolitearginine       -1.377034  0.1691
-## activityExercise:metaboliteCITRIC         -0.427342  0.6693
-## activityExercise:metaboliteFUMARIC        -0.609405  0.5425
-## activityExercise:metaboliteglutamine      -0.999903  0.3178
-## activityExercise:metaboliteisoleucine     -0.855821  0.3925
-## activityExercise:metaboliteLACTIC         -0.476232  0.6341
-## activityExercise:metaboliteLCAC total     -1.093574  0.2746
-## activityExercise:metaboliteleucine        -2.040421  0.0418
-## activityExercise:metaboliteMALIC          -0.369027  0.7123
-## activityExercise:metaboliteMCAC Total     -1.102980  0.2705
-## activityExercise:metaboliteMETHYLSUCCINIC -0.732522  0.4642
-## activityExercise:metabolitePYRUVIC_P2P    -1.381252  0.1678
-## activityExercise:metaboliteSUCCINIC-2     -1.101178  0.2713
-## activityExercise:metabolitevaline         -0.276738  0.7821
+##                                                           Value Std.Error
+## (Intercept)                                           0.7800250 0.2429359
+## genotypeKO                                            0.1111659 0.3348671
+## activityExercise                                      0.2776343 0.3275776
+## metabolitearginine                                   -0.3534360 0.3336614
+## metaboliteCITRIC                                      0.2699043 0.3422640
+## metaboliteFUMARIC                                    -1.7086321 0.3422640
+## metaboliteglutamine                                   1.2558975 0.3336614
+## metaboliteisoleucine                                 -0.5368730 0.3336614
+## metaboliteLACTIC                                      1.6755101 0.3422640
+## metaboliteLCAC total                                  0.1169499 0.3336614
+## metaboliteleucine                                    -0.3706435 0.3336614
+## metaboliteMALIC                                       0.1387884 0.3422640
+## metaboliteMCAC Total                                 -1.2621611 0.3336614
+## metaboliteMETHYLSUCCINIC                             -2.0968883 0.3422640
+## metabolitePYRUVIC_P2P                                -0.9377425 0.3422640
+## metaboliteSUCCINIC-2                                  0.3515290 0.3422640
+## metabolitevaline                                     -0.3999569 0.3336614
+## genotypeKO:activityExercise                          -0.2725876 0.4271739
+## genotypeKO:metabolitearginine                        -0.0845930 0.4655750
+## genotypeKO:metaboliteCITRIC                          -0.1808884 0.4717783
+## genotypeKO:metaboliteFUMARIC                         -0.1459773 0.4717783
+## genotypeKO:metaboliteglutamine                       -0.0934134 0.4655750
+## genotypeKO:metaboliteisoleucine                      -0.1551589 0.4655750
+## genotypeKO:metaboliteLACTIC                          -0.2130032 0.4717783
+## genotypeKO:metaboliteLCAC total                       0.2585912 0.4655750
+## genotypeKO:metaboliteleucine                         -0.1519655 0.4655750
+## genotypeKO:metaboliteMALIC                           -0.1775990 0.4717783
+## genotypeKO:metaboliteMCAC Total                      -0.2590161 0.4655750
+## genotypeKO:metaboliteMETHYLSUCCINIC                  -0.3177490 0.4717783
+## genotypeKO:metabolitePYRUVIC_P2P                     -2.5513187 0.4717783
+## genotypeKO:metaboliteSUCCINIC-2                      -0.1502577 0.4717783
+## genotypeKO:metabolitevaline                          -0.1344774 0.4655750
+## activityExercise:metabolitearginine                  -0.5175138 0.4551654
+## activityExercise:metaboliteCITRIC                    -0.2035335 0.4615087
+## activityExercise:metaboliteFUMARIC                   -0.2704327 0.4615087
+## activityExercise:metaboliteglutamine                 -0.3376519 0.4551654
+## activityExercise:metaboliteisoleucine                -0.2834567 0.4551654
+## activityExercise:metaboliteLACTIC                    -0.2581078 0.4615087
+## activityExercise:metaboliteLCAC total                -0.4170637 0.4551654
+## activityExercise:metaboliteleucine                   -0.3160980 0.4551654
+## activityExercise:metaboliteMALIC                     -0.1439485 0.4615087
+## activityExercise:metaboliteMCAC Total                -0.3739947 0.4551654
+## activityExercise:metaboliteMETHYLSUCCINIC            -0.3997036 0.4615087
+## activityExercise:metabolitePYRUVIC_P2P               -1.3300154 0.4615087
+## activityExercise:metaboliteSUCCINIC-2                -0.3087569 0.4615087
+## activityExercise:metabolitevaline                    -0.2501754 0.4551654
+## genotypeKO:activityExercise:metabolitearginine        0.2727438 0.5742045
+## genotypeKO:activityExercise:metaboliteCITRIC          0.0996485 0.6048647
+## genotypeKO:activityExercise:metaboliteFUMARIC         0.2290113 0.6014938
+## genotypeKO:activityExercise:metaboliteglutamine       0.0838461 0.5947977
+## genotypeKO:activityExercise:metaboliteisoleucine      0.2896583 0.5969625
+## genotypeKO:activityExercise:metaboliteLACTIC          0.2524058 0.5989676
+## genotypeKO:activityExercise:metaboliteLCAC total      0.3834262 0.6047703
+## genotypeKO:activityExercise:metaboliteleucine        -0.4830162 0.6010027
+## genotypeKO:activityExercise:metaboliteMALIC           0.1327393 0.6047662
+## genotypeKO:activityExercise:metaboliteMCAC Total      0.2062359 0.6050828
+## genotypeKO:activityExercise:metaboliteMETHYLSUCCINIC  0.5375277 0.6001742
+## genotypeKO:activityExercise:metabolitePYRUVIC_P2P     2.1895025 0.6137569
+## genotypeKO:activityExercise:metaboliteSUCCINIC-2      0.0678668 0.6165921
+## genotypeKO:activityExercise:metabolitevaline          0.5488350 0.5997617
+##                                                       DF   t-value p-value
+## (Intercept)                                          524  3.210826  0.0014
+## genotypeKO                                            38  0.331970  0.7417
+## activityExercise                                      38  0.847538  0.4020
+## metabolitearginine                                   524 -1.059266  0.2900
+## metaboliteCITRIC                                     524  0.788585  0.4307
+## metaboliteFUMARIC                                    524 -4.992147  0.0000
+## metaboliteglutamine                                  524  3.763988  0.0002
+## metaboliteisoleucine                                 524 -1.609036  0.1082
+## metaboliteLACTIC                                     524  4.895374  0.0000
+## metaboliteLCAC total                                 524  0.350505  0.7261
+## metaboliteleucine                                    524 -1.110837  0.2671
+## metaboliteMALIC                                      524  0.405501  0.6853
+## metaboliteMCAC Total                                 524 -3.782761  0.0002
+## metaboliteMETHYLSUCCINIC                             524 -6.126523  0.0000
+## metabolitePYRUVIC_P2P                                524 -2.739822  0.0064
+## metaboliteSUCCINIC-2                                 524  1.027070  0.3049
+## metabolitevaline                                     524 -1.198691  0.2312
+## genotypeKO:activityExercise                           38 -0.638119  0.5272
+## genotypeKO:metabolitearginine                        524 -0.181696  0.8559
+## genotypeKO:metaboliteCITRIC                          524 -0.383418  0.7016
+## genotypeKO:metaboliteFUMARIC                         524 -0.309419  0.7571
+## genotypeKO:metaboliteglutamine                       524 -0.200641  0.8411
+## genotypeKO:metaboliteisoleucine                      524 -0.333263  0.7391
+## genotypeKO:metaboliteLACTIC                          524 -0.451490  0.6518
+## genotypeKO:metaboliteLCAC total                      524  0.555423  0.5788
+## genotypeKO:metaboliteleucine                         524 -0.326404  0.7442
+## genotypeKO:metaboliteMALIC                           524 -0.376446  0.7067
+## genotypeKO:metaboliteMCAC Total                      524 -0.556336  0.5782
+## genotypeKO:metaboliteMETHYLSUCCINIC                  524 -0.673513  0.5009
+## genotypeKO:metabolitePYRUVIC_P2P                     524 -5.407876  0.0000
+## genotypeKO:metaboliteSUCCINIC-2                      524 -0.318492  0.7502
+## genotypeKO:metabolitevaline                          524 -0.288841  0.7728
+## activityExercise:metabolitearginine                  524 -1.136980  0.2561
+## activityExercise:metaboliteCITRIC                    524 -0.441018  0.6594
+## activityExercise:metaboliteFUMARIC                   524 -0.585975  0.5581
+## activityExercise:metaboliteglutamine                 524 -0.741822  0.4585
+## activityExercise:metaboliteisoleucine                524 -0.622755  0.5337
+## activityExercise:metaboliteLACTIC                    524 -0.559270  0.5762
+## activityExercise:metaboliteLCAC total                524 -0.916290  0.3599
+## activityExercise:metaboliteleucine                   524 -0.694469  0.4877
+## activityExercise:metaboliteMALIC                     524 -0.311909  0.7552
+## activityExercise:metaboliteMCAC Total                524 -0.821668  0.4116
+## activityExercise:metaboliteMETHYLSUCCINIC            524 -0.866080  0.3868
+## activityExercise:metabolitePYRUVIC_P2P               524 -2.881886  0.0041
+## activityExercise:metaboliteSUCCINIC-2                524 -0.669016  0.5038
+## activityExercise:metabolitevaline                    524 -0.549636  0.5828
+## genotypeKO:activityExercise:metabolitearginine       524  0.474994  0.6350
+## genotypeKO:activityExercise:metaboliteCITRIC         524  0.164745  0.8692
+## genotypeKO:activityExercise:metaboliteFUMARIC        524  0.380738  0.7036
+## genotypeKO:activityExercise:metaboliteglutamine      524  0.140966  0.8880
+## genotypeKO:activityExercise:metaboliteisoleucine     524  0.485220  0.6277
+## genotypeKO:activityExercise:metaboliteLACTIC         524  0.421401  0.6736
+## genotypeKO:activityExercise:metaboliteLCAC total     524  0.634003  0.5264
+## genotypeKO:activityExercise:metaboliteleucine        524 -0.803684  0.4219
+## genotypeKO:activityExercise:metaboliteMALIC          524  0.219489  0.8264
+## genotypeKO:activityExercise:metaboliteMCAC Total     524  0.340839  0.7334
+## genotypeKO:activityExercise:metaboliteMETHYLSUCCINIC 524  0.895620  0.3709
+## genotypeKO:activityExercise:metabolitePYRUVIC_P2P    524  3.567377  0.0004
+## genotypeKO:activityExercise:metaboliteSUCCINIC-2     524  0.110068  0.9124
+## genotypeKO:activityExercise:metabolitevaline         524  0.915088  0.3606
 ##  Correlation: 
-##                                           (Intr) gntyKO actvtE mtbltr
-## genotypeKO                                -0.546                     
-## activityExercise                          -0.578 -0.165              
-## metabolitearginine                        -0.693  0.333  0.360       
-## metaboliteCITRIC                          -0.684  0.331  0.356  0.501
-## metaboliteFUMARIC                         -0.690  0.355  0.379  0.507
-## metaboliteglutamine                       -0.699  0.352  0.377  0.500
-## metaboliteisoleucine                      -0.700  0.338  0.364  0.502
-## metaboliteLACTIC                          -0.687  0.351  0.375  0.495
-## metaboliteLCAC total                      -0.697  0.344  0.370  0.492
-## metaboliteleucine                         -0.698  0.340  0.366  0.502
-## metaboliteMALIC                           -0.690  0.356  0.379  0.494
-## metaboliteMCAC Total                      -0.700  0.360  0.384  0.498
-## metaboliteMETHYLSUCCINIC                  -0.688  0.356  0.379  0.498
-## metabolitePYRUVIC_P2P                     -0.686  0.330  0.356  0.493
-## metaboliteSUCCINIC-2                      -0.689  0.353  0.376  0.500
-## metabolitevaline                          -0.696  0.337  0.363  0.494
-## genotypeKO:activityExercise                0.185 -0.340 -0.321 -0.014
-## genotypeKO:metabolitearginine              0.338 -0.619  0.243 -0.519
-## genotypeKO:metaboliteCITRIC                0.346 -0.633  0.234 -0.252
-## genotypeKO:metaboliteFUMARIC               0.358 -0.655  0.171 -0.265
-## genotypeKO:metaboliteglutamine             0.351 -0.643  0.199 -0.235
-## genotypeKO:metaboliteisoleucine            0.352 -0.644  0.250 -0.238
-## genotypeKO:metaboliteLACTIC                0.354 -0.647  0.179 -0.242
-## genotypeKO:metaboliteLCAC total            0.346 -0.634  0.217 -0.220
-## genotypeKO:metaboliteleucine               0.348 -0.636  0.236 -0.237
-## genotypeKO:metaboliteMALIC                 0.359 -0.656  0.171 -0.240
-## genotypeKO:metaboliteMCAC Total            0.353 -0.646  0.173 -0.233
-## genotypeKO:metaboliteMETHYLSUCCINIC        0.354 -0.648  0.165 -0.248
-## genotypeKO:metabolitePYRUVIC_P2P           0.349 -0.639  0.241 -0.238
-## genotypeKO:metaboliteSUCCINIC-2            0.356 -0.651  0.177 -0.252
-## genotypeKO:metabolitevaline                0.343 -0.628  0.239 -0.222
-## activityExercise:metabolitearginine        0.364  0.242 -0.629 -0.552
-## activityExercise:metaboliteCITRIC          0.370  0.232 -0.641 -0.270
-## activityExercise:metaboliteFUMARIC         0.381  0.170 -0.660 -0.282
-## activityExercise:metaboliteglutamine       0.376  0.198 -0.651 -0.254
-## activityExercise:metaboliteisoleucine      0.376  0.247 -0.651 -0.257
-## activityExercise:metaboliteLACTIC          0.377  0.179 -0.653 -0.260
-## activityExercise:metaboliteLCAC total      0.371  0.216 -0.642 -0.240
-## activityExercise:metaboliteleucine         0.373  0.234 -0.645 -0.257
-## activityExercise:metaboliteMALIC           0.382  0.171 -0.661 -0.258
-## activityExercise:metaboliteMCAC Total      0.377  0.173 -0.653 -0.252
-## activityExercise:metaboliteMETHYLSUCCINIC  0.378  0.165 -0.654 -0.266
-## activityExercise:metabolitePYRUVIC_P2P     0.374  0.239 -0.647 -0.256
-## activityExercise:metaboliteSUCCINIC-2      0.380  0.177 -0.657 -0.270
-## activityExercise:metabolitevaline          0.368  0.237 -0.638 -0.242
-##                                           mCITRI mFUMAR mtbltg mtblts
-## genotypeKO                                                           
-## activityExercise                                                     
-## metabolitearginine                                                   
-## metaboliteCITRIC                                                     
-## metaboliteFUMARIC                          0.488                     
-## metaboliteglutamine                        0.498  0.497              
-## metaboliteisoleucine                       0.502  0.495  0.503       
-## metaboliteLACTIC                           0.489  0.490  0.506  0.506
-## metaboliteLCAC total                       0.502  0.505  0.502  0.504
-## metaboliteleucine                          0.493  0.486  0.502  0.516
-## metaboliteMALIC                            0.491  0.501  0.502  0.507
-## metaboliteMCAC Total                       0.495  0.507  0.511  0.511
-## metaboliteMETHYLSUCCINIC                   0.490  0.501  0.499  0.493
-## metabolitePYRUVIC_P2P                      0.496  0.498  0.501  0.506
-## metaboliteSUCCINIC-2                       0.491  0.507  0.505  0.499
-## metabolitevaline                           0.486  0.499  0.513  0.508
-## genotypeKO:activityExercise               -0.008 -0.001 -0.022  0.002
-## genotypeKO:metabolitearginine             -0.247 -0.269 -0.238 -0.231
-## genotypeKO:metaboliteCITRIC               -0.523 -0.249 -0.252 -0.248
-## genotypeKO:metaboliteFUMARIC              -0.240 -0.543 -0.251 -0.236
-## genotypeKO:metaboliteglutamine            -0.243 -0.251 -0.529 -0.234
-## genotypeKO:metaboliteisoleucine           -0.249 -0.246 -0.245 -0.506
-## genotypeKO:metaboliteLACTIC               -0.241 -0.252 -0.268 -0.257
-## genotypeKO:metaboliteLCAC total           -0.249 -0.265 -0.243 -0.237
-## genotypeKO:metaboliteleucine              -0.233 -0.227 -0.242 -0.259
-## genotypeKO:metaboliteMALIC                -0.244 -0.273 -0.260 -0.259
-## genotypeKO:metaboliteMCAC Total           -0.238 -0.269 -0.261 -0.251
-## genotypeKO:metaboliteMETHYLSUCCINIC       -0.244 -0.273 -0.256 -0.234
-## genotypeKO:metabolitePYRUVIC_P2P          -0.253 -0.267 -0.257 -0.256
-## genotypeKO:metaboliteSUCCINIC-2           -0.245 -0.285 -0.266 -0.243
-## genotypeKO:metabolitevaline               -0.218 -0.253 -0.266 -0.244
-## activityExercise:metabolitearginine       -0.265 -0.286 -0.257 -0.251
-## activityExercise:metaboliteCITRIC         -0.556 -0.266 -0.270 -0.266
-## activityExercise:metaboliteFUMARIC        -0.258 -0.574 -0.269 -0.255
-## activityExercise:metaboliteglutamine      -0.261 -0.268 -0.562 -0.254
-## activityExercise:metaboliteisoleucine     -0.267 -0.263 -0.263 -0.541
-## activityExercise:metaboliteLACTIC         -0.259 -0.269 -0.285 -0.275
-## activityExercise:metaboliteLCAC total     -0.267 -0.282 -0.261 -0.256
-## activityExercise:metaboliteleucine        -0.252 -0.246 -0.261 -0.278
-## activityExercise:metaboliteMALIC          -0.262 -0.289 -0.277 -0.276
-## activityExercise:metaboliteMCAC Total     -0.256 -0.286 -0.278 -0.269
-## activityExercise:metaboliteMETHYLSUCCINIC -0.262 -0.288 -0.273 -0.253
-## activityExercise:metabolitePYRUVIC_P2P    -0.270 -0.283 -0.275 -0.274
-## activityExercise:metaboliteSUCCINIC-2     -0.262 -0.300 -0.283 -0.261
-## activityExercise:metabolitevaline         -0.238 -0.270 -0.283 -0.263
-##                                           mLACTI mLCACt mtbltl mMALIC
-## genotypeKO                                                           
-## activityExercise                                                     
-## metabolitearginine                                                   
-## metaboliteCITRIC                                                     
-## metaboliteFUMARIC                                                    
-## metaboliteglutamine                                                  
-## metaboliteisoleucine                                                 
-## metaboliteLACTIC                                                     
-## metaboliteLCAC total                       0.498                     
-## metaboliteleucine                          0.505  0.508              
-## metaboliteMALIC                            0.495  0.486  0.500       
-## metaboliteMCAC Total                       0.501  0.506  0.508  0.503
-## metaboliteMETHYLSUCCINIC                   0.491  0.504  0.502  0.511
-## metabolitePYRUVIC_P2P                      0.495  0.505  0.489  0.495
-## metaboliteSUCCINIC-2                       0.499  0.503  0.502  0.495
-## metabolitevaline                           0.485  0.501  0.512  0.506
-## genotypeKO:activityExercise                0.000 -0.020 -0.020 -0.006
-## genotypeKO:metabolitearginine             -0.245 -0.222 -0.235 -0.242
-## genotypeKO:metaboliteCITRIC               -0.250 -0.257 -0.236 -0.253
-## genotypeKO:metaboliteFUMARIC              -0.252 -0.263 -0.223 -0.272
-## genotypeKO:metaboliteglutamine            -0.268 -0.241 -0.236 -0.259
-## genotypeKO:metaboliteisoleucine           -0.268 -0.245 -0.264 -0.270
-## genotypeKO:metaboliteLACTIC               -0.542 -0.250 -0.259 -0.262
-## genotypeKO:metaboliteLCAC total           -0.251 -0.525 -0.248 -0.229
-## genotypeKO:metaboliteleucine              -0.265 -0.253 -0.515 -0.256
-## genotypeKO:metaboliteMALIC                -0.262 -0.229 -0.250 -0.542
-## genotypeKO:metaboliteMCAC Total           -0.258 -0.250 -0.250 -0.262
-## genotypeKO:metaboliteMETHYLSUCCINIC       -0.254 -0.261 -0.254 -0.292
-## genotypeKO:metabolitePYRUVIC_P2P          -0.263 -0.263 -0.228 -0.262
-## genotypeKO:metaboliteSUCCINIC-2           -0.270 -0.260 -0.254 -0.261
-## genotypeKO:metabolitevaline               -0.225 -0.238 -0.255 -0.267
-## activityExercise:metabolitearginine       -0.263 -0.242 -0.255 -0.260
-## activityExercise:metaboliteCITRIC         -0.267 -0.274 -0.255 -0.270
-## activityExercise:metaboliteFUMARIC        -0.269 -0.280 -0.243 -0.288
-## activityExercise:metaboliteglutamine      -0.284 -0.260 -0.255 -0.276
-## activityExercise:metaboliteisoleucine     -0.285 -0.264 -0.282 -0.286
-## activityExercise:metaboliteLACTIC         -0.574 -0.268 -0.276 -0.278
-## activityExercise:metaboliteLCAC total     -0.268 -0.557 -0.267 -0.247
-## activityExercise:metaboliteleucine        -0.282 -0.271 -0.549 -0.273
-## activityExercise:metaboliteMALIC          -0.278 -0.248 -0.268 -0.574
-## activityExercise:metaboliteMCAC Total     -0.275 -0.268 -0.268 -0.278
-## activityExercise:metaboliteMETHYLSUCCINIC -0.271 -0.278 -0.272 -0.307
-## activityExercise:metabolitePYRUVIC_P2P    -0.279 -0.280 -0.248 -0.278
-## activityExercise:metaboliteSUCCINIC-2     -0.286 -0.278 -0.272 -0.278
-## activityExercise:metabolitevaline         -0.244 -0.257 -0.274 -0.283
-##                                           mMCACT mMETHY mPYRUV mSUCCI
-## genotypeKO                                                           
-## activityExercise                                                     
-## metabolitearginine                                                   
-## metaboliteCITRIC                                                     
-## metaboliteFUMARIC                                                    
-## metaboliteglutamine                                                  
-## metaboliteisoleucine                                                 
-## metaboliteLACTIC                                                     
-## metaboliteLCAC total                                                 
-## metaboliteleucine                                                    
-## metaboliteMALIC                                                      
-## metaboliteMCAC Total                                                 
-## metaboliteMETHYLSUCCINIC                   0.493                     
-## metabolitePYRUVIC_P2P                      0.501  0.490              
-## metaboliteSUCCINIC-2                       0.497  0.486  0.483       
-## metabolitevaline                           0.507  0.497  0.493  0.500
-## genotypeKO:activityExercise               -0.027 -0.018  0.003 -0.006
-## genotypeKO:metabolitearginine             -0.241 -0.254 -0.229 -0.256
-## genotypeKO:metaboliteCITRIC               -0.252 -0.256 -0.250 -0.253
-## genotypeKO:metaboliteFUMARIC              -0.275 -0.275 -0.255 -0.284
-## genotypeKO:metaboliteglutamine            -0.266 -0.258 -0.245 -0.265
-## genotypeKO:metaboliteisoleucine           -0.267 -0.245 -0.255 -0.252
-## genotypeKO:metaboliteLACTIC               -0.263 -0.257 -0.250 -0.269
-## genotypeKO:metaboliteLCAC total           -0.256 -0.266 -0.253 -0.262
-## genotypeKO:metaboliteleucine              -0.261 -0.264 -0.222 -0.259
-## genotypeKO:metaboliteMALIC                -0.267 -0.295 -0.250 -0.261
-## genotypeKO:metaboliteMCAC Total           -0.540 -0.246 -0.245 -0.250
-## genotypeKO:metaboliteMETHYLSUCCINIC       -0.249 -0.548 -0.241 -0.245
-## genotypeKO:metabolitePYRUVIC_P2P          -0.263 -0.255 -0.517 -0.238
-## genotypeKO:metaboliteSUCCINIC-2           -0.257 -0.248 -0.228 -0.541
-## genotypeKO:metabolitevaline               -0.259 -0.253 -0.228 -0.256
-## activityExercise:metabolitearginine       -0.260 -0.271 -0.249 -0.273
-## activityExercise:metaboliteCITRIC         -0.270 -0.273 -0.268 -0.270
-## activityExercise:metaboliteFUMARIC        -0.291 -0.291 -0.272 -0.299
-## activityExercise:metaboliteglutamine      -0.283 -0.275 -0.263 -0.282
-## activityExercise:metaboliteisoleucine     -0.284 -0.263 -0.272 -0.269
-## activityExercise:metaboliteLACTIC         -0.280 -0.273 -0.268 -0.285
-## activityExercise:metaboliteLCAC total     -0.274 -0.282 -0.271 -0.278
-## activityExercise:metaboliteleucine        -0.278 -0.280 -0.241 -0.276
-## activityExercise:metaboliteMALIC          -0.284 -0.310 -0.267 -0.277
-## activityExercise:metaboliteMCAC Total     -0.571 -0.263 -0.263 -0.268
-## activityExercise:metaboliteMETHYLSUCCINIC -0.267 -0.579 -0.259 -0.262
-## activityExercise:metabolitePYRUVIC_P2P    -0.280 -0.272 -0.551 -0.256
-## activityExercise:metaboliteSUCCINIC-2     -0.274 -0.265 -0.246 -0.573
-## activityExercise:metabolitevaline         -0.276 -0.270 -0.248 -0.273
-##                                           mtbltv gnKO:E gntypKO:mtbltr
-## genotypeKO                                                            
-## activityExercise                                                      
-## metabolitearginine                                                    
-## metaboliteCITRIC                                                      
-## metaboliteFUMARIC                                                     
-## metaboliteglutamine                                                   
-## metaboliteisoleucine                                                  
-## metaboliteLACTIC                                                      
-## metaboliteLCAC total                                                  
-## metaboliteleucine                                                     
-## metaboliteMALIC                                                       
-## metaboliteMCAC Total                                                  
-## metaboliteMETHYLSUCCINIC                                              
-## metabolitePYRUVIC_P2P                                                 
-## metaboliteSUCCINIC-2                                                  
-## metabolitevaline                                                      
-## genotypeKO:activityExercise               -0.017                      
-## genotypeKO:metabolitearginine             -0.221  0.015               
-## genotypeKO:metaboliteCITRIC               -0.224  0.014  0.473        
-## genotypeKO:metaboliteFUMARIC              -0.248  0.002  0.496        
-## genotypeKO:metaboliteglutamine            -0.260  0.030  0.438        
-## genotypeKO:metaboliteisoleucine           -0.249 -0.016  0.444        
-## genotypeKO:metaboliteLACTIC               -0.222  0.000  0.452        
-## genotypeKO:metaboliteLCAC total           -0.235  0.026  0.409        
-## genotypeKO:metaboliteleucine              -0.257  0.026  0.443        
-## genotypeKO:metaboliteMALIC                -0.261  0.011  0.447        
-## genotypeKO:metaboliteMCAC Total           -0.249  0.039  0.434        
-## genotypeKO:metaboliteMETHYLSUCCINIC       -0.246  0.034  0.463        
-## genotypeKO:metabolitePYRUVIC_P2P          -0.236 -0.005  0.444        
-## genotypeKO:metaboliteSUCCINIC-2           -0.252  0.011  0.472        
-## genotypeKO:metabolitevaline               -0.517  0.022  0.413        
-## activityExercise:metabolitearginine       -0.241  0.015 -0.299        
-## activityExercise:metaboliteCITRIC         -0.243  0.014 -0.177        
-## activityExercise:metaboliteFUMARIC        -0.266  0.002 -0.124        
-## activityExercise:metaboliteglutamine      -0.278  0.029 -0.192        
-## activityExercise:metaboliteisoleucine     -0.268 -0.015 -0.224        
-## activityExercise:metaboliteLACTIC         -0.242  0.000 -0.166        
-## activityExercise:metaboliteLCAC total     -0.254  0.025 -0.226        
-## activityExercise:metaboliteleucine        -0.275  0.025 -0.209        
-## activityExercise:metaboliteMALIC          -0.279  0.011 -0.172        
-## activityExercise:metaboliteMCAC Total     -0.268  0.037 -0.179        
-## activityExercise:metaboliteMETHYLSUCCINIC -0.264  0.032 -0.147        
-## activityExercise:metabolitePYRUVIC_P2P    -0.255 -0.005 -0.214        
-## activityExercise:metaboliteSUCCINIC-2     -0.269  0.011 -0.149        
-## activityExercise:metabolitevaline         -0.551  0.021 -0.234        
-##                                           gKO:CI gKO:FU gntypKO:mtbltg
-## genotypeKO                                                            
-## activityExercise                                                      
-## metabolitearginine                                                    
-## metaboliteCITRIC                                                      
-## metaboliteFUMARIC                                                     
-## metaboliteglutamine                                                   
-## metaboliteisoleucine                                                  
-## metaboliteLACTIC                                                      
-## metaboliteLCAC total                                                  
-## metaboliteleucine                                                     
-## metaboliteMALIC                                                       
-## metaboliteMCAC Total                                                  
-## metaboliteMETHYLSUCCINIC                                              
-## metabolitePYRUVIC_P2P                                                 
-## metaboliteSUCCINIC-2                                                  
-## metabolitevaline                                                      
-## genotypeKO:activityExercise                                           
-## genotypeKO:metabolitearginine                                         
-## genotypeKO:metaboliteCITRIC                                           
-## genotypeKO:metaboliteFUMARIC               0.460                      
-## genotypeKO:metaboliteglutamine             0.464  0.462               
-## genotypeKO:metaboliteisoleucine            0.476  0.452  0.448        
-## genotypeKO:metaboliteLACTIC                0.462  0.465  0.494        
-## genotypeKO:metaboliteLCAC total            0.477  0.489  0.446        
-## genotypeKO:metaboliteleucine               0.445  0.418  0.444        
-## genotypeKO:metaboliteMALIC                 0.467  0.503  0.478        
-## genotypeKO:metaboliteMCAC Total            0.455  0.496  0.480        
-## genotypeKO:metaboliteMETHYLSUCCINIC        0.468  0.502  0.470        
-## genotypeKO:metabolitePYRUVIC_P2P           0.484  0.493  0.474        
-## genotypeKO:metaboliteSUCCINIC-2            0.468  0.525  0.490        
-## genotypeKO:metabolitevaline                0.418  0.466  0.490        
-## activityExercise:metabolitearginine       -0.177 -0.124 -0.191        
-## activityExercise:metaboliteCITRIC         -0.309 -0.161 -0.169        
-## activityExercise:metaboliteFUMARIC        -0.162 -0.186 -0.141        
-## activityExercise:metaboliteglutamine      -0.170 -0.141 -0.235        
-## activityExercise:metaboliteisoleucine     -0.196 -0.185 -0.202        
-## activityExercise:metaboliteLACTIC         -0.161 -0.127 -0.111        
-## activityExercise:metaboliteLCAC total     -0.165 -0.123 -0.175        
-## activityExercise:metaboliteleucine        -0.210 -0.203 -0.191        
-## activityExercise:metaboliteMALIC          -0.156 -0.092 -0.127        
-## activityExercise:metaboliteMCAC Total     -0.162 -0.093 -0.119        
-## activityExercise:metaboliteMETHYLSUCCINIC -0.146 -0.083 -0.125        
-## activityExercise:metabolitePYRUVIC_P2P    -0.180 -0.139 -0.169        
-## activityExercise:metaboliteSUCCINIC-2     -0.156 -0.071 -0.117        
-## activityExercise:metabolitevaline         -0.232 -0.155 -0.145        
-##                                           gntypKO:mtblts gKO:LA gKO:Lt
-## genotypeKO                                                            
-## activityExercise                                                      
-## metabolitearginine                                                    
-## metaboliteCITRIC                                                      
-## metaboliteFUMARIC                                                     
-## metaboliteglutamine                                                   
-## metaboliteisoleucine                                                  
-## metaboliteLACTIC                                                      
-## metaboliteLCAC total                                                  
-## metaboliteleucine                                                     
-## metaboliteMALIC                                                       
-## metaboliteMCAC Total                                                  
-## metaboliteMETHYLSUCCINIC                                              
-## metabolitePYRUVIC_P2P                                                 
-## metaboliteSUCCINIC-2                                                  
-## metabolitevaline                                                      
-## genotypeKO:activityExercise                                           
-## genotypeKO:metabolitearginine                                         
-## genotypeKO:metaboliteCITRIC                                           
-## genotypeKO:metaboliteFUMARIC                                          
-## genotypeKO:metaboliteglutamine                                        
-## genotypeKO:metaboliteisoleucine                                       
-## genotypeKO:metaboliteLACTIC                0.495                      
-## genotypeKO:metaboliteLCAC total            0.454          0.463       
-## genotypeKO:metaboliteleucine               0.500          0.489  0.468
-## genotypeKO:metaboliteMALIC                 0.498          0.483  0.422
-## genotypeKO:metaboliteMCAC Total            0.482          0.476  0.463
-## genotypeKO:metaboliteMETHYLSUCCINIC        0.447          0.469  0.485
-## genotypeKO:metabolitePYRUVIC_P2P           0.493          0.485  0.489
-## genotypeKO:metaboliteSUCCINIC-2            0.466          0.497  0.483
-## genotypeKO:metabolitevaline                0.468          0.415  0.440
-## activityExercise:metabolitearginine       -0.225         -0.166 -0.225
-## activityExercise:metaboliteCITRIC         -0.197         -0.160 -0.165
-## activityExercise:metaboliteFUMARIC        -0.187         -0.127 -0.123
-## activityExercise:metaboliteglutamine      -0.204         -0.111 -0.176
-## activityExercise:metaboliteisoleucine     -0.389         -0.147 -0.205
-## activityExercise:metaboliteLACTIC         -0.148         -0.189 -0.148
-## activityExercise:metaboliteLCAC total     -0.206         -0.148 -0.264
-## activityExercise:metaboliteleucine        -0.178         -0.138 -0.176
-## activityExercise:metaboliteMALIC          -0.146         -0.111 -0.187
-## activityExercise:metaboliteMCAC Total     -0.155         -0.113 -0.144
-## activityExercise:metaboliteMETHYLSUCCINIC -0.183         -0.115 -0.118
-## activityExercise:metabolitePYRUVIC_P2P    -0.191         -0.147 -0.162
-## activityExercise:metaboliteSUCCINIC-2     -0.177         -0.099 -0.130
-## activityExercise:metabolitevaline         -0.204         -0.204 -0.199
-##                                           gntypKO:mtbltl gKO:MA gKO:MT
-## genotypeKO                                                            
-## activityExercise                                                      
-## metabolitearginine                                                    
-## metaboliteCITRIC                                                      
-## metaboliteFUMARIC                                                     
-## metaboliteglutamine                                                   
-## metaboliteisoleucine                                                  
-## metaboliteLACTIC                                                      
-## metaboliteLCAC total                                                  
-## metaboliteleucine                                                     
-## metaboliteMALIC                                                       
-## metaboliteMCAC Total                                                  
-## metaboliteMETHYLSUCCINIC                                              
-## metabolitePYRUVIC_P2P                                                 
-## metaboliteSUCCINIC-2                                                  
-## metabolitevaline                                                      
-## genotypeKO:activityExercise                                           
-## genotypeKO:metabolitearginine                                         
-## genotypeKO:metaboliteCITRIC                                           
-## genotypeKO:metaboliteFUMARIC                                          
-## genotypeKO:metaboliteglutamine                                        
-## genotypeKO:metaboliteisoleucine                                       
-## genotypeKO:metaboliteLACTIC                                           
-## genotypeKO:metaboliteLCAC total                                       
-## genotypeKO:metaboliteleucine                                          
-## genotypeKO:metaboliteMALIC                 0.472                      
-## genotypeKO:metaboliteMCAC Total            0.471          0.483       
-## genotypeKO:metaboliteMETHYLSUCCINIC        0.481          0.539  0.449
-## genotypeKO:metabolitePYRUVIC_P2P           0.429          0.483  0.475
-## genotypeKO:metaboliteSUCCINIC-2            0.479          0.482  0.463
-## genotypeKO:metabolitevaline                0.483          0.492  0.468
-## activityExercise:metabolitearginine       -0.209         -0.171 -0.177
-## activityExercise:metaboliteCITRIC         -0.210         -0.155 -0.161
-## activityExercise:metaboliteFUMARIC        -0.204         -0.092 -0.092
-## activityExercise:metaboliteglutamine      -0.192         -0.127 -0.119
-## activityExercise:metaboliteisoleucine     -0.178         -0.144 -0.153
-## activityExercise:metaboliteLACTIC         -0.138         -0.111 -0.113
-## activityExercise:metaboliteLCAC total     -0.177         -0.187 -0.143
-## activityExercise:metaboliteleucine        -0.326         -0.155 -0.150
-## activityExercise:metaboliteMALIC          -0.155         -0.192 -0.107
-## activityExercise:metaboliteMCAC Total     -0.151         -0.107 -0.171
-## activityExercise:metaboliteMETHYLSUCCINIC -0.137         -0.050 -0.130
-## activityExercise:metabolitePYRUVIC_P2P    -0.235         -0.150 -0.151
-## activityExercise:metaboliteSUCCINIC-2     -0.149         -0.114 -0.126
-## activityExercise:metabolitevaline         -0.175         -0.132 -0.149
-##                                           gKO:ME gKO:PY gKO:SU
-## genotypeKO                                                    
-## activityExercise                                              
-## metabolitearginine                                            
-## metaboliteCITRIC                                              
-## metaboliteFUMARIC                                             
-## metaboliteglutamine                                           
-## metaboliteisoleucine                                          
-## metaboliteLACTIC                                              
-## metaboliteLCAC total                                          
-## metaboliteleucine                                             
-## metaboliteMALIC                                               
-## metaboliteMCAC Total                                          
-## metaboliteMETHYLSUCCINIC                                      
-## metabolitePYRUVIC_P2P                                         
-## metaboliteSUCCINIC-2                                          
-## metabolitevaline                                              
-## genotypeKO:activityExercise                                   
-## genotypeKO:metabolitearginine                                 
-## genotypeKO:metaboliteCITRIC                                   
-## genotypeKO:metaboliteFUMARIC                                  
-## genotypeKO:metaboliteglutamine                                
-## genotypeKO:metaboliteisoleucine                               
-## genotypeKO:metaboliteLACTIC                                   
-## genotypeKO:metaboliteLCAC total                               
-## genotypeKO:metaboliteleucine                                  
-## genotypeKO:metaboliteMALIC                                    
-## genotypeKO:metaboliteMCAC Total                               
-## genotypeKO:metaboliteMETHYLSUCCINIC                           
-## genotypeKO:metabolitePYRUVIC_P2P           0.466              
-## genotypeKO:metaboliteSUCCINIC-2            0.453  0.440       
-## genotypeKO:metabolitevaline                0.462  0.442  0.473
-## activityExercise:metabolitearginine       -0.146 -0.215 -0.149
-## activityExercise:metaboliteCITRIC         -0.145 -0.180 -0.155
-## activityExercise:metaboliteFUMARIC        -0.083 -0.140 -0.071
-## activityExercise:metaboliteglutamine      -0.125 -0.171 -0.117
-## activityExercise:metaboliteisoleucine     -0.182 -0.191 -0.176
-## activityExercise:metaboliteLACTIC         -0.115 -0.148 -0.099
-## activityExercise:metaboliteLCAC total     -0.118 -0.163 -0.130
-## activityExercise:metaboliteleucine        -0.136 -0.235 -0.149
-## activityExercise:metaboliteMALIC          -0.050 -0.151 -0.114
-## activityExercise:metaboliteMCAC Total     -0.130 -0.153 -0.127
-## activityExercise:metaboliteMETHYLSUCCINIC -0.154 -0.157 -0.132
-## activityExercise:metabolitePYRUVIC_P2P    -0.156 -0.350 -0.191
-## activityExercise:metaboliteSUCCINIC-2     -0.132 -0.192 -0.196
-## activityExercise:metabolitevaline         -0.150 -0.220 -0.151
-##                                           gntypKO:mtbltv
-## genotypeKO                                              
-## activityExercise                                        
-## metabolitearginine                                      
-## metaboliteCITRIC                                        
-## metaboliteFUMARIC                                       
-## metaboliteglutamine                                     
-## metaboliteisoleucine                                    
-## metaboliteLACTIC                                        
-## metaboliteLCAC total                                    
-## metaboliteleucine                                       
-## metaboliteMALIC                                         
-## metaboliteMCAC Total                                    
-## metaboliteMETHYLSUCCINIC                                
-## metabolitePYRUVIC_P2P                                   
-## metaboliteSUCCINIC-2                                    
-## metabolitevaline                                        
-## genotypeKO:activityExercise                             
-## genotypeKO:metabolitearginine                           
-## genotypeKO:metaboliteCITRIC                             
-## genotypeKO:metaboliteFUMARIC                            
-## genotypeKO:metaboliteglutamine                          
-## genotypeKO:metaboliteisoleucine                         
-## genotypeKO:metaboliteLACTIC                             
-## genotypeKO:metaboliteLCAC total                         
-## genotypeKO:metaboliteleucine                            
-## genotypeKO:metaboliteMALIC                              
-## genotypeKO:metaboliteMCAC Total                         
-## genotypeKO:metaboliteMETHYLSUCCINIC                     
-## genotypeKO:metabolitePYRUVIC_P2P                        
-## genotypeKO:metaboliteSUCCINIC-2                         
-## genotypeKO:metabolitevaline                             
-## activityExercise:metabolitearginine       -0.234        
-## activityExercise:metaboliteCITRIC         -0.232        
-## activityExercise:metaboliteFUMARIC        -0.156        
-## activityExercise:metaboliteglutamine      -0.146        
-## activityExercise:metaboliteisoleucine     -0.204        
-## activityExercise:metaboliteLACTIC         -0.205        
-## activityExercise:metaboliteLCAC total     -0.200        
-## activityExercise:metaboliteleucine        -0.175        
-## activityExercise:metaboliteMALIC          -0.133        
-## activityExercise:metaboliteMCAC Total     -0.150        
-## activityExercise:metaboliteMETHYLSUCCINIC -0.151        
-## activityExercise:metabolitePYRUVIC_P2P    -0.219        
-## activityExercise:metaboliteSUCCINIC-2     -0.152        
-## activityExercise:metabolitevaline         -0.311        
-##                                           actvtyExrcs:mtbltr aE:CIT aE:FUM
+##                                                      (Intr) gntyKO actvtE
+## genotypeKO                                           -0.725              
+## activityExercise                                     -0.742  0.538       
+## metabolitearginine                                   -0.723  0.525  0.536
+## metaboliteCITRIC                                     -0.704  0.511  0.522
+## metaboliteFUMARIC                                    -0.704  0.511  0.522
+## metaboliteglutamine                                  -0.723  0.525  0.536
+## metaboliteisoleucine                                 -0.723  0.525  0.536
+## metaboliteLACTIC                                     -0.704  0.511  0.522
+## metaboliteLCAC total                                 -0.723  0.525  0.536
+## metaboliteleucine                                    -0.723  0.525  0.536
+## metaboliteMALIC                                      -0.704  0.511  0.522
+## metaboliteMCAC Total                                 -0.723  0.525  0.536
+## metaboliteMETHYLSUCCINIC                             -0.704  0.511  0.522
+## metabolitePYRUVIC_P2P                                -0.704  0.511  0.522
+## metaboliteSUCCINIC-2                                 -0.704  0.511  0.522
+## metabolitevaline                                     -0.723  0.525  0.536
+## genotypeKO:activityExercise                           0.569 -0.784 -0.767
+## genotypeKO:metabolitearginine                         0.518 -0.714 -0.384
+## genotypeKO:metaboliteCITRIC                           0.511 -0.704 -0.379
+## genotypeKO:metaboliteFUMARIC                          0.511 -0.704 -0.379
+## genotypeKO:metaboliteglutamine                        0.518 -0.714 -0.384
+## genotypeKO:metaboliteisoleucine                       0.518 -0.714 -0.384
+## genotypeKO:metaboliteLACTIC                           0.511 -0.704 -0.379
+## genotypeKO:metaboliteLCAC total                       0.518 -0.714 -0.384
+## genotypeKO:metaboliteleucine                          0.518 -0.714 -0.384
+## genotypeKO:metaboliteMALIC                            0.511 -0.704 -0.379
+## genotypeKO:metaboliteMCAC Total                       0.518 -0.714 -0.384
+## genotypeKO:metaboliteMETHYLSUCCINIC                   0.511 -0.704 -0.379
+## genotypeKO:metabolitePYRUVIC_P2P                      0.511 -0.704 -0.379
+## genotypeKO:metaboliteSUCCINIC-2                       0.511 -0.704 -0.379
+## genotypeKO:metabolitevaline                           0.518 -0.714 -0.384
+## activityExercise:metabolitearginine                   0.530 -0.385 -0.715
+## activityExercise:metaboliteCITRIC                     0.522 -0.379 -0.704
+## activityExercise:metaboliteFUMARIC                    0.522 -0.379 -0.704
+## activityExercise:metaboliteglutamine                  0.530 -0.385 -0.715
+## activityExercise:metaboliteisoleucine                 0.530 -0.385 -0.715
+## activityExercise:metaboliteLACTIC                     0.522 -0.379 -0.704
+## activityExercise:metaboliteLCAC total                 0.530 -0.385 -0.715
+## activityExercise:metaboliteleucine                    0.530 -0.385 -0.715
+## activityExercise:metaboliteMALIC                      0.522 -0.379 -0.704
+## activityExercise:metaboliteMCAC Total                 0.530 -0.385 -0.715
+## activityExercise:metaboliteMETHYLSUCCINIC             0.522 -0.379 -0.704
+## activityExercise:metabolitePYRUVIC_P2P                0.522 -0.379 -0.704
+## activityExercise:metaboliteSUCCINIC-2                 0.522 -0.379 -0.704
+## activityExercise:metabolitevaline                     0.530 -0.385 -0.715
+## genotypeKO:activityExercise:metabolitearginine       -0.420  0.579  0.566
+## genotypeKO:activityExercise:metaboliteCITRIC         -0.399  0.549  0.537
+## genotypeKO:activityExercise:metaboliteFUMARIC        -0.401  0.553  0.540
+## genotypeKO:activityExercise:metaboliteglutamine      -0.406  0.559  0.547
+## genotypeKO:activityExercise:metaboliteisoleucine     -0.404  0.557  0.545
+## genotypeKO:activityExercise:metaboliteLACTIC         -0.403  0.555  0.543
+## genotypeKO:activityExercise:metaboliteLCAC total     -0.399  0.550  0.538
+## genotypeKO:activityExercise:metaboliteleucine        -0.401  0.553  0.541
+## genotypeKO:activityExercise:metaboliteMALIC          -0.399  0.550  0.538
+## genotypeKO:activityExercise:metaboliteMCAC Total     -0.399  0.549  0.537
+## genotypeKO:activityExercise:metaboliteMETHYLSUCCINIC -0.402  0.554  0.542
+## genotypeKO:activityExercise:metabolitePYRUVIC_P2P    -0.393  0.541  0.530
+## genotypeKO:activityExercise:metaboliteSUCCINIC-2     -0.391  0.539  0.527
+## genotypeKO:activityExercise:metabolitevaline         -0.402  0.554  0.542
+##                                                      mtbltr mCITRI mFUMAR
+## genotypeKO                                                               
+## activityExercise                                                         
+## metabolitearginine                                                       
+## metaboliteCITRIC                                      0.513              
+## metaboliteFUMARIC                                     0.513  0.500       
+## metaboliteglutamine                                   0.526  0.513  0.513
+## metaboliteisoleucine                                  0.526  0.513  0.513
+## metaboliteLACTIC                                      0.513  0.500  0.500
+## metaboliteLCAC total                                  0.526  0.513  0.513
+## metaboliteleucine                                     0.526  0.513  0.513
+## metaboliteMALIC                                       0.513  0.500  0.500
+## metaboliteMCAC Total                                  0.526  0.513  0.513
+## metaboliteMETHYLSUCCINIC                              0.513  0.500  0.500
+## metabolitePYRUVIC_P2P                                 0.513  0.500  0.500
+## metaboliteSUCCINIC-2                                  0.513  0.500  0.500
+## metabolitevaline                                      0.526  0.513  0.513
+## genotypeKO:activityExercise                          -0.411 -0.401 -0.401
+## genotypeKO:metabolitearginine                        -0.717 -0.368 -0.368
+## genotypeKO:metaboliteCITRIC                          -0.372 -0.725 -0.363
+## genotypeKO:metaboliteFUMARIC                         -0.372 -0.363 -0.725
+## genotypeKO:metaboliteglutamine                       -0.377 -0.368 -0.368
+## genotypeKO:metaboliteisoleucine                      -0.377 -0.368 -0.368
+## genotypeKO:metaboliteLACTIC                          -0.372 -0.363 -0.363
+## genotypeKO:metaboliteLCAC total                      -0.377 -0.368 -0.368
+## genotypeKO:metaboliteleucine                         -0.377 -0.368 -0.368
+## genotypeKO:metaboliteMALIC                           -0.372 -0.363 -0.363
+## genotypeKO:metaboliteMCAC Total                      -0.377 -0.368 -0.368
+## genotypeKO:metaboliteMETHYLSUCCINIC                  -0.372 -0.363 -0.363
+## genotypeKO:metabolitePYRUVIC_P2P                     -0.372 -0.363 -0.363
+## genotypeKO:metaboliteSUCCINIC-2                      -0.372 -0.363 -0.363
+## genotypeKO:metabolitevaline                          -0.377 -0.368 -0.368
+## activityExercise:metabolitearginine                  -0.733 -0.376 -0.376
+## activityExercise:metaboliteCITRIC                    -0.380 -0.742 -0.371
+## activityExercise:metaboliteFUMARIC                   -0.380 -0.371 -0.742
+## activityExercise:metaboliteglutamine                 -0.386 -0.376 -0.376
+## activityExercise:metaboliteisoleucine                -0.386 -0.376 -0.376
+## activityExercise:metaboliteLACTIC                    -0.380 -0.371 -0.371
+## activityExercise:metaboliteLCAC total                -0.386 -0.376 -0.376
+## activityExercise:metaboliteleucine                   -0.386 -0.376 -0.376
+## activityExercise:metaboliteMALIC                     -0.380 -0.371 -0.371
+## activityExercise:metaboliteMCAC Total                -0.386 -0.376 -0.376
+## activityExercise:metaboliteMETHYLSUCCINIC            -0.380 -0.371 -0.371
+## activityExercise:metabolitePYRUVIC_P2P               -0.380 -0.371 -0.371
+## activityExercise:metaboliteSUCCINIC-2                -0.380 -0.371 -0.371
+## activityExercise:metabolitevaline                    -0.386 -0.376 -0.376
+## genotypeKO:activityExercise:metabolitearginine        0.581  0.298  0.298
+## genotypeKO:activityExercise:metaboliteCITRIC          0.290  0.566  0.283
+## genotypeKO:activityExercise:metaboliteFUMARIC         0.292  0.285  0.569
+## genotypeKO:activityExercise:metaboliteglutamine       0.295  0.288  0.288
+## genotypeKO:activityExercise:metaboliteisoleucine      0.294  0.287  0.287
+## genotypeKO:activityExercise:metaboliteLACTIC          0.293  0.286  0.286
+## genotypeKO:activityExercise:metaboliteLCAC total      0.290  0.283  0.283
+## genotypeKO:activityExercise:metaboliteleucine         0.292  0.285  0.285
+## genotypeKO:activityExercise:metaboliteMALIC           0.290  0.283  0.283
+## genotypeKO:activityExercise:metaboliteMCAC Total      0.290  0.283  0.283
+## genotypeKO:activityExercise:metaboliteMETHYLSUCCINIC  0.292  0.285  0.285
+## genotypeKO:activityExercise:metabolitePYRUVIC_P2P     0.286  0.279  0.279
+## genotypeKO:activityExercise:metaboliteSUCCINIC-2      0.285  0.278  0.278
+## genotypeKO:activityExercise:metabolitevaline          0.293  0.285  0.285
+##                                                      mtbltg mtblts mLACTI
+## genotypeKO                                                               
+## activityExercise                                                         
+## metabolitearginine                                                       
+## metaboliteCITRIC                                                         
+## metaboliteFUMARIC                                                        
+## metaboliteglutamine                                                      
+## metaboliteisoleucine                                  0.526              
+## metaboliteLACTIC                                      0.513  0.513       
+## metaboliteLCAC total                                  0.526  0.526  0.513
+## metaboliteleucine                                     0.526  0.526  0.513
+## metaboliteMALIC                                       0.513  0.513  0.500
+## metaboliteMCAC Total                                  0.526  0.526  0.513
+## metaboliteMETHYLSUCCINIC                              0.513  0.513  0.500
+## metabolitePYRUVIC_P2P                                 0.513  0.513  0.500
+## metaboliteSUCCINIC-2                                  0.513  0.513  0.500
+## metabolitevaline                                      0.526  0.526  0.513
+## genotypeKO:activityExercise                          -0.411 -0.411 -0.401
+## genotypeKO:metabolitearginine                        -0.377 -0.377 -0.368
+## genotypeKO:metaboliteCITRIC                          -0.372 -0.372 -0.363
+## genotypeKO:metaboliteFUMARIC                         -0.372 -0.372 -0.363
+## genotypeKO:metaboliteglutamine                       -0.717 -0.377 -0.368
+## genotypeKO:metaboliteisoleucine                      -0.377 -0.717 -0.368
+## genotypeKO:metaboliteLACTIC                          -0.372 -0.372 -0.725
+## genotypeKO:metaboliteLCAC total                      -0.377 -0.377 -0.368
+## genotypeKO:metaboliteleucine                         -0.377 -0.377 -0.368
+## genotypeKO:metaboliteMALIC                           -0.372 -0.372 -0.363
+## genotypeKO:metaboliteMCAC Total                      -0.377 -0.377 -0.368
+## genotypeKO:metaboliteMETHYLSUCCINIC                  -0.372 -0.372 -0.363
+## genotypeKO:metabolitePYRUVIC_P2P                     -0.372 -0.372 -0.363
+## genotypeKO:metaboliteSUCCINIC-2                      -0.372 -0.372 -0.363
+## genotypeKO:metabolitevaline                          -0.377 -0.377 -0.368
+## activityExercise:metabolitearginine                  -0.386 -0.386 -0.376
+## activityExercise:metaboliteCITRIC                    -0.380 -0.380 -0.371
+## activityExercise:metaboliteFUMARIC                   -0.380 -0.380 -0.371
+## activityExercise:metaboliteglutamine                 -0.733 -0.386 -0.376
+## activityExercise:metaboliteisoleucine                -0.386 -0.733 -0.376
+## activityExercise:metaboliteLACTIC                    -0.380 -0.380 -0.742
+## activityExercise:metaboliteLCAC total                -0.386 -0.386 -0.376
+## activityExercise:metaboliteleucine                   -0.386 -0.386 -0.376
+## activityExercise:metaboliteMALIC                     -0.380 -0.380 -0.371
+## activityExercise:metaboliteMCAC Total                -0.386 -0.386 -0.376
+## activityExercise:metaboliteMETHYLSUCCINIC            -0.380 -0.380 -0.371
+## activityExercise:metabolitePYRUVIC_P2P               -0.380 -0.380 -0.371
+## activityExercise:metaboliteSUCCINIC-2                -0.380 -0.380 -0.371
+## activityExercise:metabolitevaline                    -0.386 -0.386 -0.376
+## genotypeKO:activityExercise:metabolitearginine        0.306  0.306  0.298
+## genotypeKO:activityExercise:metaboliteCITRIC          0.290  0.290  0.283
+## genotypeKO:activityExercise:metaboliteFUMARIC         0.292  0.292  0.285
+## genotypeKO:activityExercise:metaboliteglutamine       0.561  0.295  0.288
+## genotypeKO:activityExercise:metaboliteisoleucine      0.294  0.559  0.287
+## genotypeKO:activityExercise:metaboliteLACTIC          0.293  0.293  0.571
+## genotypeKO:activityExercise:metaboliteLCAC total      0.290  0.290  0.283
+## genotypeKO:activityExercise:metaboliteleucine         0.292  0.292  0.285
+## genotypeKO:activityExercise:metaboliteMALIC           0.290  0.290  0.283
+## genotypeKO:activityExercise:metaboliteMCAC Total      0.290  0.290  0.283
+## genotypeKO:activityExercise:metaboliteMETHYLSUCCINIC  0.292  0.292  0.285
+## genotypeKO:activityExercise:metabolitePYRUVIC_P2P     0.286  0.286  0.279
+## genotypeKO:activityExercise:metaboliteSUCCINIC-2      0.285  0.285  0.278
+## genotypeKO:activityExercise:metabolitevaline          0.293  0.293  0.285
+##                                                      mLCACt mtbltl mMALIC
+## genotypeKO                                                               
+## activityExercise                                                         
+## metabolitearginine                                                       
+## metaboliteCITRIC                                                         
+## metaboliteFUMARIC                                                        
+## metaboliteglutamine                                                      
+## metaboliteisoleucine                                                     
+## metaboliteLACTIC                                                         
+## metaboliteLCAC total                                                     
+## metaboliteleucine                                     0.526              
+## metaboliteMALIC                                       0.513  0.513       
+## metaboliteMCAC Total                                  0.526  0.526  0.513
+## metaboliteMETHYLSUCCINIC                              0.513  0.513  0.500
+## metabolitePYRUVIC_P2P                                 0.513  0.513  0.500
+## metaboliteSUCCINIC-2                                  0.513  0.513  0.500
+## metabolitevaline                                      0.526  0.526  0.513
+## genotypeKO:activityExercise                          -0.411 -0.411 -0.401
+## genotypeKO:metabolitearginine                        -0.377 -0.377 -0.368
+## genotypeKO:metaboliteCITRIC                          -0.372 -0.372 -0.363
+## genotypeKO:metaboliteFUMARIC                         -0.372 -0.372 -0.363
+## genotypeKO:metaboliteglutamine                       -0.377 -0.377 -0.368
+## genotypeKO:metaboliteisoleucine                      -0.377 -0.377 -0.368
+## genotypeKO:metaboliteLACTIC                          -0.372 -0.372 -0.363
+## genotypeKO:metaboliteLCAC total                      -0.717 -0.377 -0.368
+## genotypeKO:metaboliteleucine                         -0.377 -0.717 -0.368
+## genotypeKO:metaboliteMALIC                           -0.372 -0.372 -0.725
+## genotypeKO:metaboliteMCAC Total                      -0.377 -0.377 -0.368
+## genotypeKO:metaboliteMETHYLSUCCINIC                  -0.372 -0.372 -0.363
+## genotypeKO:metabolitePYRUVIC_P2P                     -0.372 -0.372 -0.363
+## genotypeKO:metaboliteSUCCINIC-2                      -0.372 -0.372 -0.363
+## genotypeKO:metabolitevaline                          -0.377 -0.377 -0.368
+## activityExercise:metabolitearginine                  -0.386 -0.386 -0.376
+## activityExercise:metaboliteCITRIC                    -0.380 -0.380 -0.371
+## activityExercise:metaboliteFUMARIC                   -0.380 -0.380 -0.371
+## activityExercise:metaboliteglutamine                 -0.386 -0.386 -0.376
+## activityExercise:metaboliteisoleucine                -0.386 -0.386 -0.376
+## activityExercise:metaboliteLACTIC                    -0.380 -0.380 -0.371
+## activityExercise:metaboliteLCAC total                -0.733 -0.386 -0.376
+## activityExercise:metaboliteleucine                   -0.386 -0.733 -0.376
+## activityExercise:metaboliteMALIC                     -0.380 -0.380 -0.742
+## activityExercise:metaboliteMCAC Total                -0.386 -0.386 -0.376
+## activityExercise:metaboliteMETHYLSUCCINIC            -0.380 -0.380 -0.371
+## activityExercise:metabolitePYRUVIC_P2P               -0.380 -0.380 -0.371
+## activityExercise:metaboliteSUCCINIC-2                -0.380 -0.380 -0.371
+## activityExercise:metabolitevaline                    -0.386 -0.386 -0.376
+## genotypeKO:activityExercise:metabolitearginine        0.306  0.306  0.298
+## genotypeKO:activityExercise:metaboliteCITRIC          0.290  0.290  0.283
+## genotypeKO:activityExercise:metaboliteFUMARIC         0.292  0.292  0.285
+## genotypeKO:activityExercise:metaboliteglutamine       0.295  0.295  0.288
+## genotypeKO:activityExercise:metaboliteisoleucine      0.294  0.294  0.287
+## genotypeKO:activityExercise:metaboliteLACTIC          0.293  0.293  0.286
+## genotypeKO:activityExercise:metaboliteLCAC total      0.552  0.290  0.283
+## genotypeKO:activityExercise:metaboliteleucine         0.292  0.555  0.285
+## genotypeKO:activityExercise:metaboliteMALIC           0.290  0.290  0.566
+## genotypeKO:activityExercise:metaboliteMCAC Total      0.290  0.290  0.283
+## genotypeKO:activityExercise:metaboliteMETHYLSUCCINIC  0.292  0.292  0.285
+## genotypeKO:activityExercise:metabolitePYRUVIC_P2P     0.286  0.286  0.279
+## genotypeKO:activityExercise:metaboliteSUCCINIC-2      0.285  0.285  0.278
+## genotypeKO:activityExercise:metabolitevaline          0.293  0.293  0.285
+##                                                      mMCACT mMETHY mPYRUV
+## genotypeKO                                                               
+## activityExercise                                                         
+## metabolitearginine                                                       
+## metaboliteCITRIC                                                         
+## metaboliteFUMARIC                                                        
+## metaboliteglutamine                                                      
+## metaboliteisoleucine                                                     
+## metaboliteLACTIC                                                         
+## metaboliteLCAC total                                                     
+## metaboliteleucine                                                        
+## metaboliteMALIC                                                          
+## metaboliteMCAC Total                                                     
+## metaboliteMETHYLSUCCINIC                              0.513              
+## metabolitePYRUVIC_P2P                                 0.513  0.500       
+## metaboliteSUCCINIC-2                                  0.513  0.500  0.500
+## metabolitevaline                                      0.526  0.513  0.513
+## genotypeKO:activityExercise                          -0.411 -0.401 -0.401
+## genotypeKO:metabolitearginine                        -0.377 -0.368 -0.368
+## genotypeKO:metaboliteCITRIC                          -0.372 -0.363 -0.363
+## genotypeKO:metaboliteFUMARIC                         -0.372 -0.363 -0.363
+## genotypeKO:metaboliteglutamine                       -0.377 -0.368 -0.368
+## genotypeKO:metaboliteisoleucine                      -0.377 -0.368 -0.368
+## genotypeKO:metaboliteLACTIC                          -0.372 -0.363 -0.363
+## genotypeKO:metaboliteLCAC total                      -0.377 -0.368 -0.368
+## genotypeKO:metaboliteleucine                         -0.377 -0.368 -0.368
+## genotypeKO:metaboliteMALIC                           -0.372 -0.363 -0.363
+## genotypeKO:metaboliteMCAC Total                      -0.717 -0.368 -0.368
+## genotypeKO:metaboliteMETHYLSUCCINIC                  -0.372 -0.725 -0.363
+## genotypeKO:metabolitePYRUVIC_P2P                     -0.372 -0.363 -0.725
+## genotypeKO:metaboliteSUCCINIC-2                      -0.372 -0.363 -0.363
+## genotypeKO:metabolitevaline                          -0.377 -0.368 -0.368
+## activityExercise:metabolitearginine                  -0.386 -0.376 -0.376
+## activityExercise:metaboliteCITRIC                    -0.380 -0.371 -0.371
+## activityExercise:metaboliteFUMARIC                   -0.380 -0.371 -0.371
+## activityExercise:metaboliteglutamine                 -0.386 -0.376 -0.376
+## activityExercise:metaboliteisoleucine                -0.386 -0.376 -0.376
+## activityExercise:metaboliteLACTIC                    -0.380 -0.371 -0.371
+## activityExercise:metaboliteLCAC total                -0.386 -0.376 -0.376
+## activityExercise:metaboliteleucine                   -0.386 -0.376 -0.376
+## activityExercise:metaboliteMALIC                     -0.380 -0.371 -0.371
+## activityExercise:metaboliteMCAC Total                -0.733 -0.376 -0.376
+## activityExercise:metaboliteMETHYLSUCCINIC            -0.380 -0.742 -0.371
+## activityExercise:metabolitePYRUVIC_P2P               -0.380 -0.371 -0.742
+## activityExercise:metaboliteSUCCINIC-2                -0.380 -0.371 -0.371
+## activityExercise:metabolitevaline                    -0.386 -0.376 -0.376
+## genotypeKO:activityExercise:metabolitearginine        0.306  0.298  0.298
+## genotypeKO:activityExercise:metaboliteCITRIC          0.290  0.283  0.283
+## genotypeKO:activityExercise:metaboliteFUMARIC         0.292  0.285  0.285
+## genotypeKO:activityExercise:metaboliteglutamine       0.295  0.288  0.288
+## genotypeKO:activityExercise:metaboliteisoleucine      0.294  0.287  0.287
+## genotypeKO:activityExercise:metaboliteLACTIC          0.293  0.286  0.286
+## genotypeKO:activityExercise:metaboliteLCAC total      0.290  0.283  0.283
+## genotypeKO:activityExercise:metaboliteleucine         0.292  0.285  0.285
+## genotypeKO:activityExercise:metaboliteMALIC           0.290  0.283  0.283
+## genotypeKO:activityExercise:metaboliteMCAC Total      0.551  0.283  0.283
+## genotypeKO:activityExercise:metaboliteMETHYLSUCCINIC  0.292  0.570  0.285
+## genotypeKO:activityExercise:metabolitePYRUVIC_P2P     0.286  0.279  0.558
+## genotypeKO:activityExercise:metaboliteSUCCINIC-2      0.285  0.278  0.278
+## genotypeKO:activityExercise:metabolitevaline          0.293  0.285  0.285
+##                                                      mSUCCI mtbltv gnKO:E
+## genotypeKO                                                               
+## activityExercise                                                         
+## metabolitearginine                                                       
+## metaboliteCITRIC                                                         
+## metaboliteFUMARIC                                                        
+## metaboliteglutamine                                                      
+## metaboliteisoleucine                                                     
+## metaboliteLACTIC                                                         
+## metaboliteLCAC total                                                     
+## metaboliteleucine                                                        
+## metaboliteMALIC                                                          
+## metaboliteMCAC Total                                                     
+## metaboliteMETHYLSUCCINIC                                                 
+## metabolitePYRUVIC_P2P                                                    
+## metaboliteSUCCINIC-2                                                     
+## metabolitevaline                                      0.513              
+## genotypeKO:activityExercise                          -0.401 -0.411       
+## genotypeKO:metabolitearginine                        -0.368 -0.377  0.560
+## genotypeKO:metaboliteCITRIC                          -0.363 -0.372  0.552
+## genotypeKO:metaboliteFUMARIC                         -0.363 -0.372  0.552
+## genotypeKO:metaboliteglutamine                       -0.368 -0.377  0.560
+## genotypeKO:metaboliteisoleucine                      -0.368 -0.377  0.560
+## genotypeKO:metaboliteLACTIC                          -0.363 -0.372  0.552
+## genotypeKO:metaboliteLCAC total                      -0.368 -0.377  0.560
+## genotypeKO:metaboliteleucine                         -0.368 -0.377  0.560
+## genotypeKO:metaboliteMALIC                           -0.363 -0.372  0.552
+## genotypeKO:metaboliteMCAC Total                      -0.368 -0.377  0.560
+## genotypeKO:metaboliteMETHYLSUCCINIC                  -0.363 -0.372  0.552
+## genotypeKO:metabolitePYRUVIC_P2P                     -0.363 -0.372  0.552
+## genotypeKO:metaboliteSUCCINIC-2                      -0.725 -0.372  0.552
+## genotypeKO:metabolitevaline                          -0.368 -0.717  0.560
+## activityExercise:metabolitearginine                  -0.376 -0.386  0.548
+## activityExercise:metaboliteCITRIC                    -0.371 -0.380  0.540
+## activityExercise:metaboliteFUMARIC                   -0.371 -0.380  0.540
+## activityExercise:metaboliteglutamine                 -0.376 -0.386  0.548
+## activityExercise:metaboliteisoleucine                -0.376 -0.386  0.548
+## activityExercise:metaboliteLACTIC                    -0.371 -0.380  0.540
+## activityExercise:metaboliteLCAC total                -0.376 -0.386  0.548
+## activityExercise:metaboliteleucine                   -0.376 -0.386  0.548
+## activityExercise:metaboliteMALIC                     -0.371 -0.380  0.540
+## activityExercise:metaboliteMCAC Total                -0.376 -0.386  0.548
+## activityExercise:metaboliteMETHYLSUCCINIC            -0.371 -0.380  0.540
+## activityExercise:metabolitePYRUVIC_P2P               -0.371 -0.380  0.540
+## activityExercise:metaboliteSUCCINIC-2                -0.742 -0.380  0.540
+## activityExercise:metabolitevaline                    -0.376 -0.733  0.548
+## genotypeKO:activityExercise:metabolitearginine        0.298  0.306 -0.693
+## genotypeKO:activityExercise:metaboliteCITRIC          0.283  0.290 -0.700
+## genotypeKO:activityExercise:metaboliteFUMARIC         0.285  0.292 -0.695
+## genotypeKO:activityExercise:metaboliteglutamine       0.288  0.295 -0.694
+## genotypeKO:activityExercise:metaboliteisoleucine      0.287  0.294 -0.728
+## genotypeKO:activityExercise:metaboliteLACTIC          0.286  0.293 -0.693
+## genotypeKO:activityExercise:metaboliteLCAC total      0.283  0.290 -0.716
+## genotypeKO:activityExercise:metaboliteleucine         0.285  0.292 -0.721
+## genotypeKO:activityExercise:metaboliteMALIC           0.283  0.290 -0.697
+## genotypeKO:activityExercise:metaboliteMCAC Total      0.283  0.290 -0.709
+## genotypeKO:activityExercise:metaboliteMETHYLSUCCINIC  0.285  0.292 -0.694
+## genotypeKO:activityExercise:metabolitePYRUVIC_P2P     0.279  0.286 -0.702
+## genotypeKO:activityExercise:metaboliteSUCCINIC-2      0.555  0.285 -0.713
+## genotypeKO:activityExercise:metabolitevaline          0.285  0.556 -0.690
+##                                                      gntypKO:mtbltr gKO:CI
+## genotypeKO                                                                
+## activityExercise                                                          
+## metabolitearginine                                                        
+## metaboliteCITRIC                                                          
+## metaboliteFUMARIC                                                         
+## metaboliteglutamine                                                       
+## metaboliteisoleucine                                                      
+## metaboliteLACTIC                                                          
+## metaboliteLCAC total                                                      
+## metaboliteleucine                                                         
+## metaboliteMALIC                                                           
+## metaboliteMCAC Total                                                      
+## metaboliteMETHYLSUCCINIC                                                  
+## metabolitePYRUVIC_P2P                                                     
+## metaboliteSUCCINIC-2                                                      
+## metabolitevaline                                                          
+## genotypeKO:activityExercise                                               
+## genotypeKO:metabolitearginine                                             
+## genotypeKO:metaboliteCITRIC                           0.507               
+## genotypeKO:metaboliteFUMARIC                          0.507          0.500
+## genotypeKO:metaboliteglutamine                        0.514          0.507
+## genotypeKO:metaboliteisoleucine                       0.514          0.507
+## genotypeKO:metaboliteLACTIC                           0.507          0.500
+## genotypeKO:metaboliteLCAC total                       0.514          0.507
+## genotypeKO:metaboliteleucine                          0.514          0.507
+## genotypeKO:metaboliteMALIC                            0.507          0.500
+## genotypeKO:metaboliteMCAC Total                       0.514          0.507
+## genotypeKO:metaboliteMETHYLSUCCINIC                   0.507          0.500
+## genotypeKO:metabolitePYRUVIC_P2P                      0.507          0.500
+## genotypeKO:metaboliteSUCCINIC-2                       0.507          0.500
+## genotypeKO:metabolitevaline                           0.514          0.507
+## activityExercise:metabolitearginine                   0.525          0.273
+## activityExercise:metaboliteCITRIC                     0.273          0.538
+## activityExercise:metaboliteFUMARIC                    0.273          0.269
+## activityExercise:metaboliteglutamine                  0.277          0.273
+## activityExercise:metaboliteisoleucine                 0.277          0.273
+## activityExercise:metaboliteLACTIC                     0.273          0.269
+## activityExercise:metaboliteLCAC total                 0.277          0.273
+## activityExercise:metaboliteleucine                    0.277          0.273
+## activityExercise:metaboliteMALIC                      0.273          0.269
+## activityExercise:metaboliteMCAC Total                 0.277          0.273
+## activityExercise:metaboliteMETHYLSUCCINIC             0.273          0.269
+## activityExercise:metabolitePYRUVIC_P2P                0.273          0.269
+## activityExercise:metaboliteSUCCINIC-2                 0.273          0.269
+## activityExercise:metabolitevaline                     0.277          0.273
+## genotypeKO:activityExercise:metabolitearginine       -0.811         -0.411
+## genotypeKO:activityExercise:metaboliteCITRIC         -0.395         -0.780
+## genotypeKO:activityExercise:metaboliteFUMARIC        -0.397         -0.392
+## genotypeKO:activityExercise:metaboliteglutamine      -0.402         -0.397
+## genotypeKO:activityExercise:metaboliteisoleucine     -0.401         -0.395
+## genotypeKO:activityExercise:metaboliteLACTIC         -0.399         -0.394
+## genotypeKO:activityExercise:metaboliteLCAC total     -0.395         -0.390
+## genotypeKO:activityExercise:metaboliteleucine        -0.398         -0.392
+## genotypeKO:activityExercise:metaboliteMALIC          -0.395         -0.390
+## genotypeKO:activityExercise:metaboliteMCAC Total     -0.395         -0.390
+## genotypeKO:activityExercise:metaboliteMETHYLSUCCINIC -0.398         -0.393
+## genotypeKO:activityExercise:metabolitePYRUVIC_P2P    -0.389         -0.384
+## genotypeKO:activityExercise:metaboliteSUCCINIC-2     -0.388         -0.383
+## genotypeKO:activityExercise:metabolitevaline         -0.399         -0.393
+##                                                      gKO:FU gntypKO:mtbltg
+## genotypeKO                                                                
+## activityExercise                                                          
+## metabolitearginine                                                        
+## metaboliteCITRIC                                                          
+## metaboliteFUMARIC                                                         
+## metaboliteglutamine                                                       
+## metaboliteisoleucine                                                      
+## metaboliteLACTIC                                                          
+## metaboliteLCAC total                                                      
+## metaboliteleucine                                                         
+## metaboliteMALIC                                                           
+## metaboliteMCAC Total                                                      
+## metaboliteMETHYLSUCCINIC                                                  
+## metabolitePYRUVIC_P2P                                                     
+## metaboliteSUCCINIC-2                                                      
+## metabolitevaline                                                          
+## genotypeKO:activityExercise                                               
+## genotypeKO:metabolitearginine                                             
+## genotypeKO:metaboliteCITRIC                                               
+## genotypeKO:metaboliteFUMARIC                                              
+## genotypeKO:metaboliteglutamine                        0.507               
+## genotypeKO:metaboliteisoleucine                       0.507  0.514        
+## genotypeKO:metaboliteLACTIC                           0.500  0.507        
+## genotypeKO:metaboliteLCAC total                       0.507  0.514        
+## genotypeKO:metaboliteleucine                          0.507  0.514        
+## genotypeKO:metaboliteMALIC                            0.500  0.507        
+## genotypeKO:metaboliteMCAC Total                       0.507  0.514        
+## genotypeKO:metaboliteMETHYLSUCCINIC                   0.500  0.507        
+## genotypeKO:metabolitePYRUVIC_P2P                      0.500  0.507        
+## genotypeKO:metaboliteSUCCINIC-2                       0.500  0.507        
+## genotypeKO:metabolitevaline                           0.507  0.514        
+## activityExercise:metabolitearginine                   0.273  0.277        
+## activityExercise:metaboliteCITRIC                     0.269  0.273        
+## activityExercise:metaboliteFUMARIC                    0.538  0.273        
+## activityExercise:metaboliteglutamine                  0.273  0.525        
+## activityExercise:metaboliteisoleucine                 0.273  0.277        
+## activityExercise:metaboliteLACTIC                     0.269  0.273        
+## activityExercise:metaboliteLCAC total                 0.273  0.277        
+## activityExercise:metaboliteleucine                    0.273  0.277        
+## activityExercise:metaboliteMALIC                      0.269  0.273        
+## activityExercise:metaboliteMCAC Total                 0.273  0.277        
+## activityExercise:metaboliteMETHYLSUCCINIC             0.269  0.273        
+## activityExercise:metabolitePYRUVIC_P2P                0.269  0.273        
+## activityExercise:metaboliteSUCCINIC-2                 0.269  0.273        
+## activityExercise:metabolitevaline                     0.273  0.277        
+## genotypeKO:activityExercise:metabolitearginine       -0.411 -0.416        
+## genotypeKO:activityExercise:metaboliteCITRIC         -0.390 -0.395        
+## genotypeKO:activityExercise:metaboliteFUMARIC        -0.784 -0.397        
+## genotypeKO:activityExercise:metaboliteglutamine      -0.397 -0.783        
+## genotypeKO:activityExercise:metaboliteisoleucine     -0.395 -0.401        
+## genotypeKO:activityExercise:metaboliteLACTIC         -0.394 -0.399        
+## genotypeKO:activityExercise:metaboliteLCAC total     -0.390 -0.395        
+## genotypeKO:activityExercise:metaboliteleucine        -0.392 -0.398        
+## genotypeKO:activityExercise:metaboliteMALIC          -0.390 -0.395        
+## genotypeKO:activityExercise:metaboliteMCAC Total     -0.390 -0.395        
+## genotypeKO:activityExercise:metaboliteMETHYLSUCCINIC -0.393 -0.398        
+## genotypeKO:activityExercise:metabolitePYRUVIC_P2P    -0.384 -0.389        
+## genotypeKO:activityExercise:metaboliteSUCCINIC-2     -0.383 -0.388        
+## genotypeKO:activityExercise:metabolitevaline         -0.393 -0.399        
+##                                                      gntypKO:mtblts gKO:LA
+## genotypeKO                                                                
+## activityExercise                                                          
+## metabolitearginine                                                        
+## metaboliteCITRIC                                                          
+## metaboliteFUMARIC                                                         
+## metaboliteglutamine                                                       
+## metaboliteisoleucine                                                      
+## metaboliteLACTIC                                                          
+## metaboliteLCAC total                                                      
+## metaboliteleucine                                                         
+## metaboliteMALIC                                                           
+## metaboliteMCAC Total                                                      
+## metaboliteMETHYLSUCCINIC                                                  
+## metabolitePYRUVIC_P2P                                                     
+## metaboliteSUCCINIC-2                                                      
+## metabolitevaline                                                          
+## genotypeKO:activityExercise                                               
+## genotypeKO:metabolitearginine                                             
+## genotypeKO:metaboliteCITRIC                                               
+## genotypeKO:metaboliteFUMARIC                                              
+## genotypeKO:metaboliteglutamine                                            
+## genotypeKO:metaboliteisoleucine                                           
+## genotypeKO:metaboliteLACTIC                           0.507               
+## genotypeKO:metaboliteLCAC total                       0.514          0.507
+## genotypeKO:metaboliteleucine                          0.514          0.507
+## genotypeKO:metaboliteMALIC                            0.507          0.500
+## genotypeKO:metaboliteMCAC Total                       0.514          0.507
+## genotypeKO:metaboliteMETHYLSUCCINIC                   0.507          0.500
+## genotypeKO:metabolitePYRUVIC_P2P                      0.507          0.500
+## genotypeKO:metaboliteSUCCINIC-2                       0.507          0.500
+## genotypeKO:metabolitevaline                           0.514          0.507
+## activityExercise:metabolitearginine                   0.277          0.273
+## activityExercise:metaboliteCITRIC                     0.273          0.269
+## activityExercise:metaboliteFUMARIC                    0.273          0.269
+## activityExercise:metaboliteglutamine                  0.277          0.273
+## activityExercise:metaboliteisoleucine                 0.525          0.273
+## activityExercise:metaboliteLACTIC                     0.273          0.538
+## activityExercise:metaboliteLCAC total                 0.277          0.273
+## activityExercise:metaboliteleucine                    0.277          0.273
+## activityExercise:metaboliteMALIC                      0.273          0.269
+## activityExercise:metaboliteMCAC Total                 0.277          0.273
+## activityExercise:metaboliteMETHYLSUCCINIC             0.273          0.269
+## activityExercise:metabolitePYRUVIC_P2P                0.273          0.269
+## activityExercise:metaboliteSUCCINIC-2                 0.273          0.269
+## activityExercise:metabolitevaline                     0.277          0.273
+## genotypeKO:activityExercise:metabolitearginine       -0.416         -0.411
+## genotypeKO:activityExercise:metaboliteCITRIC         -0.395         -0.390
+## genotypeKO:activityExercise:metaboliteFUMARIC        -0.397         -0.392
+## genotypeKO:activityExercise:metaboliteglutamine      -0.402         -0.397
+## genotypeKO:activityExercise:metaboliteisoleucine     -0.780         -0.395
+## genotypeKO:activityExercise:metaboliteLACTIC         -0.399         -0.788
+## genotypeKO:activityExercise:metaboliteLCAC total     -0.395         -0.390
+## genotypeKO:activityExercise:metaboliteleucine        -0.398         -0.392
+## genotypeKO:activityExercise:metaboliteMALIC          -0.395         -0.390
+## genotypeKO:activityExercise:metaboliteMCAC Total     -0.395         -0.390
+## genotypeKO:activityExercise:metaboliteMETHYLSUCCINIC -0.398         -0.393
+## genotypeKO:activityExercise:metabolitePYRUVIC_P2P    -0.389         -0.384
+## genotypeKO:activityExercise:metaboliteSUCCINIC-2     -0.388         -0.383
+## genotypeKO:activityExercise:metabolitevaline         -0.399         -0.393
+##                                                      gKO:Lt gntypKO:mtbltl
 ## genotypeKO                                                                
 ## activityExercise                                                          
 ## metabolitearginine                                                        
@@ -1259,28 +1379,1242 @@ summary(M)
 ## genotypeKO:metaboliteisoleucine                                           
 ## genotypeKO:metaboliteLACTIC                                               
 ## genotypeKO:metaboliteLCAC total                                           
-## genotypeKO:metaboliteleucine                                              
-## genotypeKO:metaboliteMALIC                                                
-## genotypeKO:metaboliteMCAC Total                                           
-## genotypeKO:metaboliteMETHYLSUCCINIC                                       
-## genotypeKO:metabolitePYRUVIC_P2P                                          
-## genotypeKO:metaboliteSUCCINIC-2                                           
-## genotypeKO:metabolitevaline                                               
-## activityExercise:metabolitearginine                                       
-## activityExercise:metaboliteCITRIC          0.477                          
-## activityExercise:metaboliteFUMARIC         0.497              0.464       
-## activityExercise:metaboliteglutamine       0.446              0.469  0.466
-## activityExercise:metaboliteisoleucine      0.452              0.479  0.458
-## activityExercise:metaboliteLACTIC          0.458              0.466  0.469
-## activityExercise:metaboliteLCAC total      0.421              0.480  0.491
-## activityExercise:metaboliteleucine         0.451              0.452  0.428
-## activityExercise:metaboliteMALIC           0.454              0.471  0.502
-## activityExercise:metaboliteMCAC Total      0.443              0.461  0.497
-## activityExercise:metaboliteMETHYLSUCCINIC  0.468              0.471  0.502
-## activityExercise:metabolitePYRUVIC_P2P     0.451              0.486  0.493
-## activityExercise:metaboliteSUCCINIC-2      0.476              0.472  0.523
-## activityExercise:metabolitevaline          0.424              0.428  0.470
-##                                           actvtyExrcs:mtbltg
+## genotypeKO:metaboliteleucine                          0.514               
+## genotypeKO:metaboliteMALIC                            0.507  0.507        
+## genotypeKO:metaboliteMCAC Total                       0.514  0.514        
+## genotypeKO:metaboliteMETHYLSUCCINIC                   0.507  0.507        
+## genotypeKO:metabolitePYRUVIC_P2P                      0.507  0.507        
+## genotypeKO:metaboliteSUCCINIC-2                       0.507  0.507        
+## genotypeKO:metabolitevaline                           0.514  0.514        
+## activityExercise:metabolitearginine                   0.277  0.277        
+## activityExercise:metaboliteCITRIC                     0.273  0.273        
+## activityExercise:metaboliteFUMARIC                    0.273  0.273        
+## activityExercise:metaboliteglutamine                  0.277  0.277        
+## activityExercise:metaboliteisoleucine                 0.277  0.277        
+## activityExercise:metaboliteLACTIC                     0.273  0.273        
+## activityExercise:metaboliteLCAC total                 0.525  0.277        
+## activityExercise:metaboliteleucine                    0.277  0.525        
+## activityExercise:metaboliteMALIC                      0.273  0.273        
+## activityExercise:metaboliteMCAC Total                 0.277  0.277        
+## activityExercise:metaboliteMETHYLSUCCINIC             0.273  0.273        
+## activityExercise:metabolitePYRUVIC_P2P                0.273  0.273        
+## activityExercise:metaboliteSUCCINIC-2                 0.273  0.273        
+## activityExercise:metabolitevaline                     0.277  0.277        
+## genotypeKO:activityExercise:metabolitearginine       -0.416 -0.416        
+## genotypeKO:activityExercise:metaboliteCITRIC         -0.395 -0.395        
+## genotypeKO:activityExercise:metaboliteFUMARIC        -0.397 -0.397        
+## genotypeKO:activityExercise:metaboliteglutamine      -0.402 -0.402        
+## genotypeKO:activityExercise:metaboliteisoleucine     -0.401 -0.401        
+## genotypeKO:activityExercise:metaboliteLACTIC         -0.399 -0.399        
+## genotypeKO:activityExercise:metaboliteLCAC total     -0.770 -0.395        
+## genotypeKO:activityExercise:metaboliteleucine        -0.398 -0.775        
+## genotypeKO:activityExercise:metaboliteMALIC          -0.395 -0.395        
+## genotypeKO:activityExercise:metaboliteMCAC Total     -0.395 -0.395        
+## genotypeKO:activityExercise:metaboliteMETHYLSUCCINIC -0.398 -0.398        
+## genotypeKO:activityExercise:metabolitePYRUVIC_P2P    -0.389 -0.389        
+## genotypeKO:activityExercise:metaboliteSUCCINIC-2     -0.388 -0.388        
+## genotypeKO:activityExercise:metabolitevaline         -0.399 -0.399        
+##                                                      gKO:MA gKO:MT gKO:ME
+## genotypeKO                                                               
+## activityExercise                                                         
+## metabolitearginine                                                       
+## metaboliteCITRIC                                                         
+## metaboliteFUMARIC                                                        
+## metaboliteglutamine                                                      
+## metaboliteisoleucine                                                     
+## metaboliteLACTIC                                                         
+## metaboliteLCAC total                                                     
+## metaboliteleucine                                                        
+## metaboliteMALIC                                                          
+## metaboliteMCAC Total                                                     
+## metaboliteMETHYLSUCCINIC                                                 
+## metabolitePYRUVIC_P2P                                                    
+## metaboliteSUCCINIC-2                                                     
+## metabolitevaline                                                         
+## genotypeKO:activityExercise                                              
+## genotypeKO:metabolitearginine                                            
+## genotypeKO:metaboliteCITRIC                                              
+## genotypeKO:metaboliteFUMARIC                                             
+## genotypeKO:metaboliteglutamine                                           
+## genotypeKO:metaboliteisoleucine                                          
+## genotypeKO:metaboliteLACTIC                                              
+## genotypeKO:metaboliteLCAC total                                          
+## genotypeKO:metaboliteleucine                                             
+## genotypeKO:metaboliteMALIC                                               
+## genotypeKO:metaboliteMCAC Total                       0.507              
+## genotypeKO:metaboliteMETHYLSUCCINIC                   0.500  0.507       
+## genotypeKO:metabolitePYRUVIC_P2P                      0.500  0.507  0.500
+## genotypeKO:metaboliteSUCCINIC-2                       0.500  0.507  0.500
+## genotypeKO:metabolitevaline                           0.507  0.514  0.507
+## activityExercise:metabolitearginine                   0.273  0.277  0.273
+## activityExercise:metaboliteCITRIC                     0.269  0.273  0.269
+## activityExercise:metaboliteFUMARIC                    0.269  0.273  0.269
+## activityExercise:metaboliteglutamine                  0.273  0.277  0.273
+## activityExercise:metaboliteisoleucine                 0.273  0.277  0.273
+## activityExercise:metaboliteLACTIC                     0.269  0.273  0.269
+## activityExercise:metaboliteLCAC total                 0.273  0.277  0.273
+## activityExercise:metaboliteleucine                    0.273  0.277  0.273
+## activityExercise:metaboliteMALIC                      0.538  0.273  0.269
+## activityExercise:metaboliteMCAC Total                 0.273  0.525  0.273
+## activityExercise:metaboliteMETHYLSUCCINIC             0.269  0.273  0.538
+## activityExercise:metabolitePYRUVIC_P2P                0.269  0.273  0.269
+## activityExercise:metaboliteSUCCINIC-2                 0.269  0.273  0.269
+## activityExercise:metabolitevaline                     0.273  0.277  0.273
+## genotypeKO:activityExercise:metabolitearginine       -0.411 -0.416 -0.411
+## genotypeKO:activityExercise:metaboliteCITRIC         -0.390 -0.395 -0.390
+## genotypeKO:activityExercise:metaboliteFUMARIC        -0.392 -0.397 -0.392
+## genotypeKO:activityExercise:metaboliteglutamine      -0.397 -0.402 -0.397
+## genotypeKO:activityExercise:metaboliteisoleucine     -0.395 -0.401 -0.395
+## genotypeKO:activityExercise:metaboliteLACTIC         -0.394 -0.399 -0.394
+## genotypeKO:activityExercise:metaboliteLCAC total     -0.390 -0.395 -0.390
+## genotypeKO:activityExercise:metaboliteleucine        -0.392 -0.398 -0.392
+## genotypeKO:activityExercise:metaboliteMALIC          -0.780 -0.395 -0.390
+## genotypeKO:activityExercise:metaboliteMCAC Total     -0.390 -0.769 -0.390
+## genotypeKO:activityExercise:metaboliteMETHYLSUCCINIC -0.393 -0.398 -0.786
+## genotypeKO:activityExercise:metabolitePYRUVIC_P2P    -0.384 -0.389 -0.384
+## genotypeKO:activityExercise:metaboliteSUCCINIC-2     -0.383 -0.388 -0.383
+## genotypeKO:activityExercise:metabolitevaline         -0.393 -0.399 -0.393
+##                                                      gKO:PY gKO:SU
+## genotypeKO                                                        
+## activityExercise                                                  
+## metabolitearginine                                                
+## metaboliteCITRIC                                                  
+## metaboliteFUMARIC                                                 
+## metaboliteglutamine                                               
+## metaboliteisoleucine                                              
+## metaboliteLACTIC                                                  
+## metaboliteLCAC total                                              
+## metaboliteleucine                                                 
+## metaboliteMALIC                                                   
+## metaboliteMCAC Total                                              
+## metaboliteMETHYLSUCCINIC                                          
+## metabolitePYRUVIC_P2P                                             
+## metaboliteSUCCINIC-2                                              
+## metabolitevaline                                                  
+## genotypeKO:activityExercise                                       
+## genotypeKO:metabolitearginine                                     
+## genotypeKO:metaboliteCITRIC                                       
+## genotypeKO:metaboliteFUMARIC                                      
+## genotypeKO:metaboliteglutamine                                    
+## genotypeKO:metaboliteisoleucine                                   
+## genotypeKO:metaboliteLACTIC                                       
+## genotypeKO:metaboliteLCAC total                                   
+## genotypeKO:metaboliteleucine                                      
+## genotypeKO:metaboliteMALIC                                        
+## genotypeKO:metaboliteMCAC Total                                   
+## genotypeKO:metaboliteMETHYLSUCCINIC                               
+## genotypeKO:metabolitePYRUVIC_P2P                                  
+## genotypeKO:metaboliteSUCCINIC-2                       0.500       
+## genotypeKO:metabolitevaline                           0.507  0.507
+## activityExercise:metabolitearginine                   0.273  0.273
+## activityExercise:metaboliteCITRIC                     0.269  0.269
+## activityExercise:metaboliteFUMARIC                    0.269  0.269
+## activityExercise:metaboliteglutamine                  0.273  0.273
+## activityExercise:metaboliteisoleucine                 0.273  0.273
+## activityExercise:metaboliteLACTIC                     0.269  0.269
+## activityExercise:metaboliteLCAC total                 0.273  0.273
+## activityExercise:metaboliteleucine                    0.273  0.273
+## activityExercise:metaboliteMALIC                      0.269  0.269
+## activityExercise:metaboliteMCAC Total                 0.273  0.273
+## activityExercise:metaboliteMETHYLSUCCINIC             0.269  0.269
+## activityExercise:metabolitePYRUVIC_P2P                0.538  0.269
+## activityExercise:metaboliteSUCCINIC-2                 0.269  0.538
+## activityExercise:metabolitevaline                     0.273  0.273
+## genotypeKO:activityExercise:metabolitearginine       -0.411 -0.411
+## genotypeKO:activityExercise:metaboliteCITRIC         -0.390 -0.390
+## genotypeKO:activityExercise:metaboliteFUMARIC        -0.392 -0.392
+## genotypeKO:activityExercise:metaboliteglutamine      -0.397 -0.397
+## genotypeKO:activityExercise:metaboliteisoleucine     -0.395 -0.395
+## genotypeKO:activityExercise:metaboliteLACTIC         -0.394 -0.394
+## genotypeKO:activityExercise:metaboliteLCAC total     -0.390 -0.390
+## genotypeKO:activityExercise:metaboliteleucine        -0.392 -0.392
+## genotypeKO:activityExercise:metaboliteMALIC          -0.390 -0.390
+## genotypeKO:activityExercise:metaboliteMCAC Total     -0.390 -0.390
+## genotypeKO:activityExercise:metaboliteMETHYLSUCCINIC -0.393 -0.393
+## genotypeKO:activityExercise:metabolitePYRUVIC_P2P    -0.769 -0.384
+## genotypeKO:activityExercise:metaboliteSUCCINIC-2     -0.383 -0.765
+## genotypeKO:activityExercise:metabolitevaline         -0.393 -0.393
+##                                                      gntypKO:mtbltv
+## genotypeKO                                                         
+## activityExercise                                                   
+## metabolitearginine                                                 
+## metaboliteCITRIC                                                   
+## metaboliteFUMARIC                                                  
+## metaboliteglutamine                                                
+## metaboliteisoleucine                                               
+## metaboliteLACTIC                                                   
+## metaboliteLCAC total                                               
+## metaboliteleucine                                                  
+## metaboliteMALIC                                                    
+## metaboliteMCAC Total                                               
+## metaboliteMETHYLSUCCINIC                                           
+## metabolitePYRUVIC_P2P                                              
+## metaboliteSUCCINIC-2                                               
+## metabolitevaline                                                   
+## genotypeKO:activityExercise                                        
+## genotypeKO:metabolitearginine                                      
+## genotypeKO:metaboliteCITRIC                                        
+## genotypeKO:metaboliteFUMARIC                                       
+## genotypeKO:metaboliteglutamine                                     
+## genotypeKO:metaboliteisoleucine                                    
+## genotypeKO:metaboliteLACTIC                                        
+## genotypeKO:metaboliteLCAC total                                    
+## genotypeKO:metaboliteleucine                                       
+## genotypeKO:metaboliteMALIC                                         
+## genotypeKO:metaboliteMCAC Total                                    
+## genotypeKO:metaboliteMETHYLSUCCINIC                                
+## genotypeKO:metabolitePYRUVIC_P2P                                   
+## genotypeKO:metaboliteSUCCINIC-2                                    
+## genotypeKO:metabolitevaline                                        
+## activityExercise:metabolitearginine                   0.277        
+## activityExercise:metaboliteCITRIC                     0.273        
+## activityExercise:metaboliteFUMARIC                    0.273        
+## activityExercise:metaboliteglutamine                  0.277        
+## activityExercise:metaboliteisoleucine                 0.277        
+## activityExercise:metaboliteLACTIC                     0.273        
+## activityExercise:metaboliteLCAC total                 0.277        
+## activityExercise:metaboliteleucine                    0.277        
+## activityExercise:metaboliteMALIC                      0.273        
+## activityExercise:metaboliteMCAC Total                 0.277        
+## activityExercise:metaboliteMETHYLSUCCINIC             0.273        
+## activityExercise:metabolitePYRUVIC_P2P                0.273        
+## activityExercise:metaboliteSUCCINIC-2                 0.273        
+## activityExercise:metabolitevaline                     0.525        
+## genotypeKO:activityExercise:metabolitearginine       -0.416        
+## genotypeKO:activityExercise:metaboliteCITRIC         -0.395        
+## genotypeKO:activityExercise:metaboliteFUMARIC        -0.397        
+## genotypeKO:activityExercise:metaboliteglutamine      -0.402        
+## genotypeKO:activityExercise:metaboliteisoleucine     -0.401        
+## genotypeKO:activityExercise:metaboliteLACTIC         -0.399        
+## genotypeKO:activityExercise:metaboliteLCAC total     -0.395        
+## genotypeKO:activityExercise:metaboliteleucine        -0.398        
+## genotypeKO:activityExercise:metaboliteMALIC          -0.395        
+## genotypeKO:activityExercise:metaboliteMCAC Total     -0.395        
+## genotypeKO:activityExercise:metaboliteMETHYLSUCCINIC -0.398        
+## genotypeKO:activityExercise:metabolitePYRUVIC_P2P    -0.389        
+## genotypeKO:activityExercise:metaboliteSUCCINIC-2     -0.388        
+## genotypeKO:activityExercise:metabolitevaline         -0.776        
+##                                                      actvtyExrcs:mtbltr
+## genotypeKO                                                             
+## activityExercise                                                       
+## metabolitearginine                                                     
+## metaboliteCITRIC                                                       
+## metaboliteFUMARIC                                                      
+## metaboliteglutamine                                                    
+## metaboliteisoleucine                                                   
+## metaboliteLACTIC                                                       
+## metaboliteLCAC total                                                   
+## metaboliteleucine                                                      
+## metaboliteMALIC                                                        
+## metaboliteMCAC Total                                                   
+## metaboliteMETHYLSUCCINIC                                               
+## metabolitePYRUVIC_P2P                                                  
+## metaboliteSUCCINIC-2                                                   
+## metabolitevaline                                                       
+## genotypeKO:activityExercise                                            
+## genotypeKO:metabolitearginine                                          
+## genotypeKO:metaboliteCITRIC                                            
+## genotypeKO:metaboliteFUMARIC                                           
+## genotypeKO:metaboliteglutamine                                         
+## genotypeKO:metaboliteisoleucine                                        
+## genotypeKO:metaboliteLACTIC                                            
+## genotypeKO:metaboliteLCAC total                                        
+## genotypeKO:metaboliteleucine                                           
+## genotypeKO:metaboliteMALIC                                             
+## genotypeKO:metaboliteMCAC Total                                        
+## genotypeKO:metaboliteMETHYLSUCCINIC                                    
+## genotypeKO:metabolitePYRUVIC_P2P                                       
+## genotypeKO:metaboliteSUCCINIC-2                                        
+## genotypeKO:metabolitevaline                                            
+## activityExercise:metabolitearginine                                    
+## activityExercise:metaboliteCITRIC                     0.507            
+## activityExercise:metaboliteFUMARIC                    0.507            
+## activityExercise:metaboliteglutamine                  0.514            
+## activityExercise:metaboliteisoleucine                 0.514            
+## activityExercise:metaboliteLACTIC                     0.507            
+## activityExercise:metaboliteLCAC total                 0.514            
+## activityExercise:metaboliteleucine                    0.514            
+## activityExercise:metaboliteMALIC                      0.507            
+## activityExercise:metaboliteMCAC Total                 0.514            
+## activityExercise:metaboliteMETHYLSUCCINIC             0.507            
+## activityExercise:metabolitePYRUVIC_P2P                0.507            
+## activityExercise:metaboliteSUCCINIC-2                 0.507            
+## activityExercise:metabolitevaline                     0.514            
+## genotypeKO:activityExercise:metabolitearginine       -0.793            
+## genotypeKO:activityExercise:metaboliteCITRIC         -0.387            
+## genotypeKO:activityExercise:metaboliteFUMARIC        -0.389            
+## genotypeKO:activityExercise:metaboliteglutamine      -0.394            
+## genotypeKO:activityExercise:metaboliteisoleucine     -0.392            
+## genotypeKO:activityExercise:metaboliteLACTIC         -0.391            
+## genotypeKO:activityExercise:metaboliteLCAC total     -0.387            
+## genotypeKO:activityExercise:metaboliteleucine        -0.389            
+## genotypeKO:activityExercise:metaboliteMALIC          -0.387            
+## genotypeKO:activityExercise:metaboliteMCAC Total     -0.387            
+## genotypeKO:activityExercise:metaboliteMETHYLSUCCINIC -0.390            
+## genotypeKO:activityExercise:metabolitePYRUVIC_P2P    -0.381            
+## genotypeKO:activityExercise:metaboliteSUCCINIC-2     -0.379            
+## genotypeKO:activityExercise:metabolitevaline         -0.390            
+##                                                      aE:CIT aE:FUM
+## genotypeKO                                                        
+## activityExercise                                                  
+## metabolitearginine                                                
+## metaboliteCITRIC                                                  
+## metaboliteFUMARIC                                                 
+## metaboliteglutamine                                               
+## metaboliteisoleucine                                              
+## metaboliteLACTIC                                                  
+## metaboliteLCAC total                                              
+## metaboliteleucine                                                 
+## metaboliteMALIC                                                   
+## metaboliteMCAC Total                                              
+## metaboliteMETHYLSUCCINIC                                          
+## metabolitePYRUVIC_P2P                                             
+## metaboliteSUCCINIC-2                                              
+## metabolitevaline                                                  
+## genotypeKO:activityExercise                                       
+## genotypeKO:metabolitearginine                                     
+## genotypeKO:metaboliteCITRIC                                       
+## genotypeKO:metaboliteFUMARIC                                      
+## genotypeKO:metaboliteglutamine                                    
+## genotypeKO:metaboliteisoleucine                                   
+## genotypeKO:metaboliteLACTIC                                       
+## genotypeKO:metaboliteLCAC total                                   
+## genotypeKO:metaboliteleucine                                      
+## genotypeKO:metaboliteMALIC                                        
+## genotypeKO:metaboliteMCAC Total                                   
+## genotypeKO:metaboliteMETHYLSUCCINIC                               
+## genotypeKO:metabolitePYRUVIC_P2P                                  
+## genotypeKO:metaboliteSUCCINIC-2                                   
+## genotypeKO:metabolitevaline                                       
+## activityExercise:metabolitearginine                               
+## activityExercise:metaboliteCITRIC                                 
+## activityExercise:metaboliteFUMARIC                    0.500       
+## activityExercise:metaboliteglutamine                  0.507  0.507
+## activityExercise:metaboliteisoleucine                 0.507  0.507
+## activityExercise:metaboliteLACTIC                     0.500  0.500
+## activityExercise:metaboliteLCAC total                 0.507  0.507
+## activityExercise:metaboliteleucine                    0.507  0.507
+## activityExercise:metaboliteMALIC                      0.500  0.500
+## activityExercise:metaboliteMCAC Total                 0.507  0.507
+## activityExercise:metaboliteMETHYLSUCCINIC             0.500  0.500
+## activityExercise:metabolitePYRUVIC_P2P                0.500  0.500
+## activityExercise:metaboliteSUCCINIC-2                 0.500  0.500
+## activityExercise:metabolitevaline                     0.507  0.507
+## genotypeKO:activityExercise:metabolitearginine       -0.402 -0.402
+## genotypeKO:activityExercise:metaboliteCITRIC         -0.763 -0.381
+## genotypeKO:activityExercise:metaboliteFUMARIC        -0.384 -0.767
+## genotypeKO:activityExercise:metaboliteglutamine      -0.388 -0.388
+## genotypeKO:activityExercise:metaboliteisoleucine     -0.387 -0.387
+## genotypeKO:activityExercise:metaboliteLACTIC         -0.385 -0.385
+## genotypeKO:activityExercise:metaboliteLCAC total     -0.382 -0.382
+## genotypeKO:activityExercise:metaboliteleucine        -0.384 -0.384
+## genotypeKO:activityExercise:metaboliteMALIC          -0.382 -0.382
+## genotypeKO:activityExercise:metaboliteMCAC Total     -0.381 -0.381
+## genotypeKO:activityExercise:metaboliteMETHYLSUCCINIC -0.384 -0.384
+## genotypeKO:activityExercise:metabolitePYRUVIC_P2P    -0.376 -0.376
+## genotypeKO:activityExercise:metaboliteSUCCINIC-2     -0.374 -0.374
+## genotypeKO:activityExercise:metabolitevaline         -0.385 -0.385
+##                                                      actvtyExrcs:mtbltg
+## genotypeKO                                                             
+## activityExercise                                                       
+## metabolitearginine                                                     
+## metaboliteCITRIC                                                       
+## metaboliteFUMARIC                                                      
+## metaboliteglutamine                                                    
+## metaboliteisoleucine                                                   
+## metaboliteLACTIC                                                       
+## metaboliteLCAC total                                                   
+## metaboliteleucine                                                      
+## metaboliteMALIC                                                        
+## metaboliteMCAC Total                                                   
+## metaboliteMETHYLSUCCINIC                                               
+## metabolitePYRUVIC_P2P                                                  
+## metaboliteSUCCINIC-2                                                   
+## metabolitevaline                                                       
+## genotypeKO:activityExercise                                            
+## genotypeKO:metabolitearginine                                          
+## genotypeKO:metaboliteCITRIC                                            
+## genotypeKO:metaboliteFUMARIC                                           
+## genotypeKO:metaboliteglutamine                                         
+## genotypeKO:metaboliteisoleucine                                        
+## genotypeKO:metaboliteLACTIC                                            
+## genotypeKO:metaboliteLCAC total                                        
+## genotypeKO:metaboliteleucine                                           
+## genotypeKO:metaboliteMALIC                                             
+## genotypeKO:metaboliteMCAC Total                                        
+## genotypeKO:metaboliteMETHYLSUCCINIC                                    
+## genotypeKO:metabolitePYRUVIC_P2P                                       
+## genotypeKO:metaboliteSUCCINIC-2                                        
+## genotypeKO:metabolitevaline                                            
+## activityExercise:metabolitearginine                                    
+## activityExercise:metaboliteCITRIC                                      
+## activityExercise:metaboliteFUMARIC                                     
+## activityExercise:metaboliteglutamine                                   
+## activityExercise:metaboliteisoleucine                 0.514            
+## activityExercise:metaboliteLACTIC                     0.507            
+## activityExercise:metaboliteLCAC total                 0.514            
+## activityExercise:metaboliteleucine                    0.514            
+## activityExercise:metaboliteMALIC                      0.507            
+## activityExercise:metaboliteMCAC Total                 0.514            
+## activityExercise:metaboliteMETHYLSUCCINIC             0.507            
+## activityExercise:metabolitePYRUVIC_P2P                0.507            
+## activityExercise:metaboliteSUCCINIC-2                 0.507            
+## activityExercise:metabolitevaline                     0.514            
+## genotypeKO:activityExercise:metabolitearginine       -0.408            
+## genotypeKO:activityExercise:metaboliteCITRIC         -0.387            
+## genotypeKO:activityExercise:metaboliteFUMARIC        -0.389            
+## genotypeKO:activityExercise:metaboliteglutamine      -0.765            
+## genotypeKO:activityExercise:metaboliteisoleucine     -0.392            
+## genotypeKO:activityExercise:metaboliteLACTIC         -0.391            
+## genotypeKO:activityExercise:metaboliteLCAC total     -0.387            
+## genotypeKO:activityExercise:metaboliteleucine        -0.389            
+## genotypeKO:activityExercise:metaboliteMALIC          -0.387            
+## genotypeKO:activityExercise:metaboliteMCAC Total     -0.387            
+## genotypeKO:activityExercise:metaboliteMETHYLSUCCINIC -0.390            
+## genotypeKO:activityExercise:metabolitePYRUVIC_P2P    -0.381            
+## genotypeKO:activityExercise:metaboliteSUCCINIC-2     -0.379            
+## genotypeKO:activityExercise:metabolitevaline         -0.390            
+##                                                      actvtyExrcs:mtblts
+## genotypeKO                                                             
+## activityExercise                                                       
+## metabolitearginine                                                     
+## metaboliteCITRIC                                                       
+## metaboliteFUMARIC                                                      
+## metaboliteglutamine                                                    
+## metaboliteisoleucine                                                   
+## metaboliteLACTIC                                                       
+## metaboliteLCAC total                                                   
+## metaboliteleucine                                                      
+## metaboliteMALIC                                                        
+## metaboliteMCAC Total                                                   
+## metaboliteMETHYLSUCCINIC                                               
+## metabolitePYRUVIC_P2P                                                  
+## metaboliteSUCCINIC-2                                                   
+## metabolitevaline                                                       
+## genotypeKO:activityExercise                                            
+## genotypeKO:metabolitearginine                                          
+## genotypeKO:metaboliteCITRIC                                            
+## genotypeKO:metaboliteFUMARIC                                           
+## genotypeKO:metaboliteglutamine                                         
+## genotypeKO:metaboliteisoleucine                                        
+## genotypeKO:metaboliteLACTIC                                            
+## genotypeKO:metaboliteLCAC total                                        
+## genotypeKO:metaboliteleucine                                           
+## genotypeKO:metaboliteMALIC                                             
+## genotypeKO:metaboliteMCAC Total                                        
+## genotypeKO:metaboliteMETHYLSUCCINIC                                    
+## genotypeKO:metabolitePYRUVIC_P2P                                       
+## genotypeKO:metaboliteSUCCINIC-2                                        
+## genotypeKO:metabolitevaline                                            
+## activityExercise:metabolitearginine                                    
+## activityExercise:metaboliteCITRIC                                      
+## activityExercise:metaboliteFUMARIC                                     
+## activityExercise:metaboliteglutamine                                   
+## activityExercise:metaboliteisoleucine                                  
+## activityExercise:metaboliteLACTIC                     0.507            
+## activityExercise:metaboliteLCAC total                 0.514            
+## activityExercise:metaboliteleucine                    0.514            
+## activityExercise:metaboliteMALIC                      0.507            
+## activityExercise:metaboliteMCAC Total                 0.514            
+## activityExercise:metaboliteMETHYLSUCCINIC             0.507            
+## activityExercise:metabolitePYRUVIC_P2P                0.507            
+## activityExercise:metaboliteSUCCINIC-2                 0.507            
+## activityExercise:metabolitevaline                     0.514            
+## genotypeKO:activityExercise:metabolitearginine       -0.408            
+## genotypeKO:activityExercise:metaboliteCITRIC         -0.387            
+## genotypeKO:activityExercise:metaboliteFUMARIC        -0.389            
+## genotypeKO:activityExercise:metaboliteglutamine      -0.394            
+## genotypeKO:activityExercise:metaboliteisoleucine     -0.762            
+## genotypeKO:activityExercise:metaboliteLACTIC         -0.391            
+## genotypeKO:activityExercise:metaboliteLCAC total     -0.387            
+## genotypeKO:activityExercise:metaboliteleucine        -0.389            
+## genotypeKO:activityExercise:metaboliteMALIC          -0.387            
+## genotypeKO:activityExercise:metaboliteMCAC Total     -0.387            
+## genotypeKO:activityExercise:metaboliteMETHYLSUCCINIC -0.390            
+## genotypeKO:activityExercise:metabolitePYRUVIC_P2P    -0.381            
+## genotypeKO:activityExercise:metaboliteSUCCINIC-2     -0.379            
+## genotypeKO:activityExercise:metabolitevaline         -0.390            
+##                                                      aE:LAC aE:LCt
+## genotypeKO                                                        
+## activityExercise                                                  
+## metabolitearginine                                                
+## metaboliteCITRIC                                                  
+## metaboliteFUMARIC                                                 
+## metaboliteglutamine                                               
+## metaboliteisoleucine                                              
+## metaboliteLACTIC                                                  
+## metaboliteLCAC total                                              
+## metaboliteleucine                                                 
+## metaboliteMALIC                                                   
+## metaboliteMCAC Total                                              
+## metaboliteMETHYLSUCCINIC                                          
+## metabolitePYRUVIC_P2P                                             
+## metaboliteSUCCINIC-2                                              
+## metabolitevaline                                                  
+## genotypeKO:activityExercise                                       
+## genotypeKO:metabolitearginine                                     
+## genotypeKO:metaboliteCITRIC                                       
+## genotypeKO:metaboliteFUMARIC                                      
+## genotypeKO:metaboliteglutamine                                    
+## genotypeKO:metaboliteisoleucine                                   
+## genotypeKO:metaboliteLACTIC                                       
+## genotypeKO:metaboliteLCAC total                                   
+## genotypeKO:metaboliteleucine                                      
+## genotypeKO:metaboliteMALIC                                        
+## genotypeKO:metaboliteMCAC Total                                   
+## genotypeKO:metaboliteMETHYLSUCCINIC                               
+## genotypeKO:metabolitePYRUVIC_P2P                                  
+## genotypeKO:metaboliteSUCCINIC-2                                   
+## genotypeKO:metabolitevaline                                       
+## activityExercise:metabolitearginine                               
+## activityExercise:metaboliteCITRIC                                 
+## activityExercise:metaboliteFUMARIC                                
+## activityExercise:metaboliteglutamine                              
+## activityExercise:metaboliteisoleucine                             
+## activityExercise:metaboliteLACTIC                                 
+## activityExercise:metaboliteLCAC total                 0.507       
+## activityExercise:metaboliteleucine                    0.507  0.514
+## activityExercise:metaboliteMALIC                      0.500  0.507
+## activityExercise:metaboliteMCAC Total                 0.507  0.514
+## activityExercise:metaboliteMETHYLSUCCINIC             0.500  0.507
+## activityExercise:metabolitePYRUVIC_P2P                0.500  0.507
+## activityExercise:metaboliteSUCCINIC-2                 0.500  0.507
+## activityExercise:metabolitevaline                     0.507  0.514
+## genotypeKO:activityExercise:metabolitearginine       -0.402 -0.408
+## genotypeKO:activityExercise:metaboliteCITRIC         -0.381 -0.387
+## genotypeKO:activityExercise:metaboliteFUMARIC        -0.384 -0.389
+## genotypeKO:activityExercise:metaboliteglutamine      -0.388 -0.394
+## genotypeKO:activityExercise:metaboliteisoleucine     -0.387 -0.392
+## genotypeKO:activityExercise:metaboliteLACTIC         -0.771 -0.391
+## genotypeKO:activityExercise:metaboliteLCAC total     -0.382 -0.753
+## genotypeKO:activityExercise:metaboliteleucine        -0.384 -0.389
+## genotypeKO:activityExercise:metaboliteMALIC          -0.382 -0.387
+## genotypeKO:activityExercise:metaboliteMCAC Total     -0.381 -0.387
+## genotypeKO:activityExercise:metaboliteMETHYLSUCCINIC -0.384 -0.390
+## genotypeKO:activityExercise:metabolitePYRUVIC_P2P    -0.376 -0.381
+## genotypeKO:activityExercise:metaboliteSUCCINIC-2     -0.374 -0.379
+## genotypeKO:activityExercise:metabolitevaline         -0.385 -0.390
+##                                                      actvtyExrcs:mtbltl
+## genotypeKO                                                             
+## activityExercise                                                       
+## metabolitearginine                                                     
+## metaboliteCITRIC                                                       
+## metaboliteFUMARIC                                                      
+## metaboliteglutamine                                                    
+## metaboliteisoleucine                                                   
+## metaboliteLACTIC                                                       
+## metaboliteLCAC total                                                   
+## metaboliteleucine                                                      
+## metaboliteMALIC                                                        
+## metaboliteMCAC Total                                                   
+## metaboliteMETHYLSUCCINIC                                               
+## metabolitePYRUVIC_P2P                                                  
+## metaboliteSUCCINIC-2                                                   
+## metabolitevaline                                                       
+## genotypeKO:activityExercise                                            
+## genotypeKO:metabolitearginine                                          
+## genotypeKO:metaboliteCITRIC                                            
+## genotypeKO:metaboliteFUMARIC                                           
+## genotypeKO:metaboliteglutamine                                         
+## genotypeKO:metaboliteisoleucine                                        
+## genotypeKO:metaboliteLACTIC                                            
+## genotypeKO:metaboliteLCAC total                                        
+## genotypeKO:metaboliteleucine                                           
+## genotypeKO:metaboliteMALIC                                             
+## genotypeKO:metaboliteMCAC Total                                        
+## genotypeKO:metaboliteMETHYLSUCCINIC                                    
+## genotypeKO:metabolitePYRUVIC_P2P                                       
+## genotypeKO:metaboliteSUCCINIC-2                                        
+## genotypeKO:metabolitevaline                                            
+## activityExercise:metabolitearginine                                    
+## activityExercise:metaboliteCITRIC                                      
+## activityExercise:metaboliteFUMARIC                                     
+## activityExercise:metaboliteglutamine                                   
+## activityExercise:metaboliteisoleucine                                  
+## activityExercise:metaboliteLACTIC                                      
+## activityExercise:metaboliteLCAC total                                  
+## activityExercise:metaboliteleucine                                     
+## activityExercise:metaboliteMALIC                      0.507            
+## activityExercise:metaboliteMCAC Total                 0.514            
+## activityExercise:metaboliteMETHYLSUCCINIC             0.507            
+## activityExercise:metabolitePYRUVIC_P2P                0.507            
+## activityExercise:metaboliteSUCCINIC-2                 0.507            
+## activityExercise:metabolitevaline                     0.514            
+## genotypeKO:activityExercise:metabolitearginine       -0.408            
+## genotypeKO:activityExercise:metaboliteCITRIC         -0.387            
+## genotypeKO:activityExercise:metaboliteFUMARIC        -0.389            
+## genotypeKO:activityExercise:metaboliteglutamine      -0.394            
+## genotypeKO:activityExercise:metaboliteisoleucine     -0.392            
+## genotypeKO:activityExercise:metaboliteLACTIC         -0.391            
+## genotypeKO:activityExercise:metaboliteLCAC total     -0.387            
+## genotypeKO:activityExercise:metaboliteleucine        -0.757            
+## genotypeKO:activityExercise:metaboliteMALIC          -0.387            
+## genotypeKO:activityExercise:metaboliteMCAC Total     -0.387            
+## genotypeKO:activityExercise:metaboliteMETHYLSUCCINIC -0.390            
+## genotypeKO:activityExercise:metabolitePYRUVIC_P2P    -0.381            
+## genotypeKO:activityExercise:metaboliteSUCCINIC-2     -0.379            
+## genotypeKO:activityExercise:metabolitevaline         -0.390            
+##                                                      aE:MAL aE:MCT aE:MET
+## genotypeKO                                                               
+## activityExercise                                                         
+## metabolitearginine                                                       
+## metaboliteCITRIC                                                         
+## metaboliteFUMARIC                                                        
+## metaboliteglutamine                                                      
+## metaboliteisoleucine                                                     
+## metaboliteLACTIC                                                         
+## metaboliteLCAC total                                                     
+## metaboliteleucine                                                        
+## metaboliteMALIC                                                          
+## metaboliteMCAC Total                                                     
+## metaboliteMETHYLSUCCINIC                                                 
+## metabolitePYRUVIC_P2P                                                    
+## metaboliteSUCCINIC-2                                                     
+## metabolitevaline                                                         
+## genotypeKO:activityExercise                                              
+## genotypeKO:metabolitearginine                                            
+## genotypeKO:metaboliteCITRIC                                              
+## genotypeKO:metaboliteFUMARIC                                             
+## genotypeKO:metaboliteglutamine                                           
+## genotypeKO:metaboliteisoleucine                                          
+## genotypeKO:metaboliteLACTIC                                              
+## genotypeKO:metaboliteLCAC total                                          
+## genotypeKO:metaboliteleucine                                             
+## genotypeKO:metaboliteMALIC                                               
+## genotypeKO:metaboliteMCAC Total                                          
+## genotypeKO:metaboliteMETHYLSUCCINIC                                      
+## genotypeKO:metabolitePYRUVIC_P2P                                         
+## genotypeKO:metaboliteSUCCINIC-2                                          
+## genotypeKO:metabolitevaline                                              
+## activityExercise:metabolitearginine                                      
+## activityExercise:metaboliteCITRIC                                        
+## activityExercise:metaboliteFUMARIC                                       
+## activityExercise:metaboliteglutamine                                     
+## activityExercise:metaboliteisoleucine                                    
+## activityExercise:metaboliteLACTIC                                        
+## activityExercise:metaboliteLCAC total                                    
+## activityExercise:metaboliteleucine                                       
+## activityExercise:metaboliteMALIC                                         
+## activityExercise:metaboliteMCAC Total                 0.507              
+## activityExercise:metaboliteMETHYLSUCCINIC             0.500  0.507       
+## activityExercise:metabolitePYRUVIC_P2P                0.500  0.507  0.500
+## activityExercise:metaboliteSUCCINIC-2                 0.500  0.507  0.500
+## activityExercise:metabolitevaline                     0.507  0.514  0.507
+## genotypeKO:activityExercise:metabolitearginine       -0.402 -0.408 -0.402
+## genotypeKO:activityExercise:metaboliteCITRIC         -0.381 -0.387 -0.381
+## genotypeKO:activityExercise:metaboliteFUMARIC        -0.384 -0.389 -0.384
+## genotypeKO:activityExercise:metaboliteglutamine      -0.388 -0.394 -0.388
+## genotypeKO:activityExercise:metaboliteisoleucine     -0.387 -0.392 -0.387
+## genotypeKO:activityExercise:metaboliteLACTIC         -0.385 -0.391 -0.385
+## genotypeKO:activityExercise:metaboliteLCAC total     -0.382 -0.387 -0.382
+## genotypeKO:activityExercise:metaboliteleucine        -0.384 -0.389 -0.384
+## genotypeKO:activityExercise:metaboliteMALIC          -0.763 -0.387 -0.382
+## genotypeKO:activityExercise:metaboliteMCAC Total     -0.381 -0.752 -0.381
+## genotypeKO:activityExercise:metaboliteMETHYLSUCCINIC -0.384 -0.390 -0.769
+## genotypeKO:activityExercise:metabolitePYRUVIC_P2P    -0.376 -0.381 -0.376
+## genotypeKO:activityExercise:metaboliteSUCCINIC-2     -0.374 -0.379 -0.374
+## genotypeKO:activityExercise:metabolitevaline         -0.385 -0.390 -0.385
+##                                                      aE:PYR aE:SUC
+## genotypeKO                                                        
+## activityExercise                                                  
+## metabolitearginine                                                
+## metaboliteCITRIC                                                  
+## metaboliteFUMARIC                                                 
+## metaboliteglutamine                                               
+## metaboliteisoleucine                                              
+## metaboliteLACTIC                                                  
+## metaboliteLCAC total                                              
+## metaboliteleucine                                                 
+## metaboliteMALIC                                                   
+## metaboliteMCAC Total                                              
+## metaboliteMETHYLSUCCINIC                                          
+## metabolitePYRUVIC_P2P                                             
+## metaboliteSUCCINIC-2                                              
+## metabolitevaline                                                  
+## genotypeKO:activityExercise                                       
+## genotypeKO:metabolitearginine                                     
+## genotypeKO:metaboliteCITRIC                                       
+## genotypeKO:metaboliteFUMARIC                                      
+## genotypeKO:metaboliteglutamine                                    
+## genotypeKO:metaboliteisoleucine                                   
+## genotypeKO:metaboliteLACTIC                                       
+## genotypeKO:metaboliteLCAC total                                   
+## genotypeKO:metaboliteleucine                                      
+## genotypeKO:metaboliteMALIC                                        
+## genotypeKO:metaboliteMCAC Total                                   
+## genotypeKO:metaboliteMETHYLSUCCINIC                               
+## genotypeKO:metabolitePYRUVIC_P2P                                  
+## genotypeKO:metaboliteSUCCINIC-2                                   
+## genotypeKO:metabolitevaline                                       
+## activityExercise:metabolitearginine                               
+## activityExercise:metaboliteCITRIC                                 
+## activityExercise:metaboliteFUMARIC                                
+## activityExercise:metaboliteglutamine                              
+## activityExercise:metaboliteisoleucine                             
+## activityExercise:metaboliteLACTIC                                 
+## activityExercise:metaboliteLCAC total                             
+## activityExercise:metaboliteleucine                                
+## activityExercise:metaboliteMALIC                                  
+## activityExercise:metaboliteMCAC Total                             
+## activityExercise:metaboliteMETHYLSUCCINIC                         
+## activityExercise:metabolitePYRUVIC_P2P                            
+## activityExercise:metaboliteSUCCINIC-2                 0.500       
+## activityExercise:metabolitevaline                     0.507  0.507
+## genotypeKO:activityExercise:metabolitearginine       -0.402 -0.402
+## genotypeKO:activityExercise:metaboliteCITRIC         -0.381 -0.381
+## genotypeKO:activityExercise:metaboliteFUMARIC        -0.384 -0.384
+## genotypeKO:activityExercise:metaboliteglutamine      -0.388 -0.388
+## genotypeKO:activityExercise:metaboliteisoleucine     -0.387 -0.387
+## genotypeKO:activityExercise:metaboliteLACTIC         -0.385 -0.385
+## genotypeKO:activityExercise:metaboliteLCAC total     -0.382 -0.382
+## genotypeKO:activityExercise:metaboliteleucine        -0.384 -0.384
+## genotypeKO:activityExercise:metaboliteMALIC          -0.382 -0.382
+## genotypeKO:activityExercise:metaboliteMCAC Total     -0.381 -0.381
+## genotypeKO:activityExercise:metaboliteMETHYLSUCCINIC -0.384 -0.384
+## genotypeKO:activityExercise:metabolitePYRUVIC_P2P    -0.752 -0.376
+## genotypeKO:activityExercise:metaboliteSUCCINIC-2     -0.374 -0.748
+## genotypeKO:activityExercise:metabolitevaline         -0.385 -0.385
+##                                                      actvtyExrcs:mtbltv
+## genotypeKO                                                             
+## activityExercise                                                       
+## metabolitearginine                                                     
+## metaboliteCITRIC                                                       
+## metaboliteFUMARIC                                                      
+## metaboliteglutamine                                                    
+## metaboliteisoleucine                                                   
+## metaboliteLACTIC                                                       
+## metaboliteLCAC total                                                   
+## metaboliteleucine                                                      
+## metaboliteMALIC                                                        
+## metaboliteMCAC Total                                                   
+## metaboliteMETHYLSUCCINIC                                               
+## metabolitePYRUVIC_P2P                                                  
+## metaboliteSUCCINIC-2                                                   
+## metabolitevaline                                                       
+## genotypeKO:activityExercise                                            
+## genotypeKO:metabolitearginine                                          
+## genotypeKO:metaboliteCITRIC                                            
+## genotypeKO:metaboliteFUMARIC                                           
+## genotypeKO:metaboliteglutamine                                         
+## genotypeKO:metaboliteisoleucine                                        
+## genotypeKO:metaboliteLACTIC                                            
+## genotypeKO:metaboliteLCAC total                                        
+## genotypeKO:metaboliteleucine                                           
+## genotypeKO:metaboliteMALIC                                             
+## genotypeKO:metaboliteMCAC Total                                        
+## genotypeKO:metaboliteMETHYLSUCCINIC                                    
+## genotypeKO:metabolitePYRUVIC_P2P                                       
+## genotypeKO:metaboliteSUCCINIC-2                                        
+## genotypeKO:metabolitevaline                                            
+## activityExercise:metabolitearginine                                    
+## activityExercise:metaboliteCITRIC                                      
+## activityExercise:metaboliteFUMARIC                                     
+## activityExercise:metaboliteglutamine                                   
+## activityExercise:metaboliteisoleucine                                  
+## activityExercise:metaboliteLACTIC                                      
+## activityExercise:metaboliteLCAC total                                  
+## activityExercise:metaboliteleucine                                     
+## activityExercise:metaboliteMALIC                                       
+## activityExercise:metaboliteMCAC Total                                  
+## activityExercise:metaboliteMETHYLSUCCINIC                              
+## activityExercise:metabolitePYRUVIC_P2P                                 
+## activityExercise:metaboliteSUCCINIC-2                                  
+## activityExercise:metabolitevaline                                      
+## genotypeKO:activityExercise:metabolitearginine       -0.408            
+## genotypeKO:activityExercise:metaboliteCITRIC         -0.387            
+## genotypeKO:activityExercise:metaboliteFUMARIC        -0.389            
+## genotypeKO:activityExercise:metaboliteglutamine      -0.394            
+## genotypeKO:activityExercise:metaboliteisoleucine     -0.392            
+## genotypeKO:activityExercise:metaboliteLACTIC         -0.391            
+## genotypeKO:activityExercise:metaboliteLCAC total     -0.387            
+## genotypeKO:activityExercise:metaboliteleucine        -0.389            
+## genotypeKO:activityExercise:metaboliteMALIC          -0.387            
+## genotypeKO:activityExercise:metaboliteMCAC Total     -0.387            
+## genotypeKO:activityExercise:metaboliteMETHYLSUCCINIC -0.390            
+## genotypeKO:activityExercise:metabolitePYRUVIC_P2P    -0.381            
+## genotypeKO:activityExercise:metaboliteSUCCINIC-2     -0.379            
+## genotypeKO:activityExercise:metabolitevaline         -0.759            
+##                                                      gntypKO:ctvtyExrcs:mtbltr
+## genotypeKO                                                                    
+## activityExercise                                                              
+## metabolitearginine                                                            
+## metaboliteCITRIC                                                              
+## metaboliteFUMARIC                                                             
+## metaboliteglutamine                                                           
+## metaboliteisoleucine                                                          
+## metaboliteLACTIC                                                              
+## metaboliteLCAC total                                                          
+## metaboliteleucine                                                             
+## metaboliteMALIC                                                               
+## metaboliteMCAC Total                                                          
+## metaboliteMETHYLSUCCINIC                                                      
+## metabolitePYRUVIC_P2P                                                         
+## metaboliteSUCCINIC-2                                                          
+## metabolitevaline                                                              
+## genotypeKO:activityExercise                                                   
+## genotypeKO:metabolitearginine                                                 
+## genotypeKO:metaboliteCITRIC                                                   
+## genotypeKO:metaboliteFUMARIC                                                  
+## genotypeKO:metaboliteglutamine                                                
+## genotypeKO:metaboliteisoleucine                                               
+## genotypeKO:metaboliteLACTIC                                                   
+## genotypeKO:metaboliteLCAC total                                               
+## genotypeKO:metaboliteleucine                                                  
+## genotypeKO:metaboliteMALIC                                                    
+## genotypeKO:metaboliteMCAC Total                                               
+## genotypeKO:metaboliteMETHYLSUCCINIC                                           
+## genotypeKO:metabolitePYRUVIC_P2P                                              
+## genotypeKO:metaboliteSUCCINIC-2                                               
+## genotypeKO:metabolitevaline                                                   
+## activityExercise:metabolitearginine                                           
+## activityExercise:metaboliteCITRIC                                             
+## activityExercise:metaboliteFUMARIC                                            
+## activityExercise:metaboliteglutamine                                          
+## activityExercise:metaboliteisoleucine                                         
+## activityExercise:metaboliteLACTIC                                             
+## activityExercise:metaboliteLCAC total                                         
+## activityExercise:metaboliteleucine                                            
+## activityExercise:metaboliteMALIC                                              
+## activityExercise:metaboliteMCAC Total                                         
+## activityExercise:metaboliteMETHYLSUCCINIC                                     
+## activityExercise:metabolitePYRUVIC_P2P                                        
+## activityExercise:metaboliteSUCCINIC-2                                         
+## activityExercise:metabolitevaline                                             
+## genotypeKO:activityExercise:metabolitearginine                                
+## genotypeKO:activityExercise:metaboliteCITRIC          0.499                   
+## genotypeKO:activityExercise:metaboliteFUMARIC         0.492                   
+## genotypeKO:activityExercise:metaboliteglutamine       0.489                   
+## genotypeKO:activityExercise:metaboliteisoleucine      0.508                   
+## genotypeKO:activityExercise:metaboliteLACTIC          0.461                   
+## genotypeKO:activityExercise:metaboliteLCAC total      0.482                   
+## genotypeKO:activityExercise:metaboliteleucine         0.509                   
+## genotypeKO:activityExercise:metaboliteMALIC           0.492                   
+## genotypeKO:activityExercise:metaboliteMCAC Total      0.486                   
+## genotypeKO:activityExercise:metaboliteMETHYLSUCCINIC  0.474                   
+## genotypeKO:activityExercise:metabolitePYRUVIC_P2P     0.515                   
+## genotypeKO:activityExercise:metaboliteSUCCINIC-2      0.486                   
+## genotypeKO:activityExercise:metabolitevaline          0.500                   
+##                                                      gKO:E:C gKO:E:F
+## genotypeKO                                                          
+## activityExercise                                                    
+## metabolitearginine                                                  
+## metaboliteCITRIC                                                    
+## metaboliteFUMARIC                                                   
+## metaboliteglutamine                                                 
+## metaboliteisoleucine                                                
+## metaboliteLACTIC                                                    
+## metaboliteLCAC total                                                
+## metaboliteleucine                                                   
+## metaboliteMALIC                                                     
+## metaboliteMCAC Total                                                
+## metaboliteMETHYLSUCCINIC                                            
+## metabolitePYRUVIC_P2P                                               
+## metaboliteSUCCINIC-2                                                
+## metabolitevaline                                                    
+## genotypeKO:activityExercise                                         
+## genotypeKO:metabolitearginine                                       
+## genotypeKO:metaboliteCITRIC                                         
+## genotypeKO:metaboliteFUMARIC                                        
+## genotypeKO:metaboliteglutamine                                      
+## genotypeKO:metaboliteisoleucine                                     
+## genotypeKO:metaboliteLACTIC                                         
+## genotypeKO:metaboliteLCAC total                                     
+## genotypeKO:metaboliteleucine                                        
+## genotypeKO:metaboliteMALIC                                          
+## genotypeKO:metaboliteMCAC Total                                     
+## genotypeKO:metaboliteMETHYLSUCCINIC                                 
+## genotypeKO:metabolitePYRUVIC_P2P                                    
+## genotypeKO:metaboliteSUCCINIC-2                                     
+## genotypeKO:metabolitevaline                                         
+## activityExercise:metabolitearginine                                 
+## activityExercise:metaboliteCITRIC                                   
+## activityExercise:metaboliteFUMARIC                                  
+## activityExercise:metaboliteglutamine                                
+## activityExercise:metaboliteisoleucine                               
+## activityExercise:metaboliteLACTIC                                   
+## activityExercise:metaboliteLCAC total                               
+## activityExercise:metaboliteleucine                                  
+## activityExercise:metaboliteMALIC                                    
+## activityExercise:metaboliteMCAC Total                               
+## activityExercise:metaboliteMETHYLSUCCINIC                           
+## activityExercise:metabolitePYRUVIC_P2P                              
+## activityExercise:metaboliteSUCCINIC-2                               
+## activityExercise:metabolitevaline                                   
+## genotypeKO:activityExercise:metabolitearginine                      
+## genotypeKO:activityExercise:metaboliteCITRIC                        
+## genotypeKO:activityExercise:metaboliteFUMARIC         0.475         
+## genotypeKO:activityExercise:metaboliteglutamine       0.480   0.478 
+## genotypeKO:activityExercise:metaboliteisoleucine      0.527   0.506 
+## genotypeKO:activityExercise:metaboliteLACTIC          0.501   0.478 
+## genotypeKO:activityExercise:metaboliteLCAC total      0.514   0.505 
+## genotypeKO:activityExercise:metaboliteleucine         0.540   0.485 
+## genotypeKO:activityExercise:metaboliteMALIC           0.511   0.504 
+## genotypeKO:activityExercise:metaboliteMCAC Total      0.474   0.494 
+## genotypeKO:activityExercise:metaboliteMETHYLSUCCINIC  0.487   0.506 
+## genotypeKO:activityExercise:metabolitePYRUVIC_P2P     0.490   0.487 
+## genotypeKO:activityExercise:metaboliteSUCCINIC-2      0.480   0.493 
+## genotypeKO:activityExercise:metabolitevaline          0.497   0.465 
+##                                                      gntypKO:ctvtyExrcs:mtbltg
+## genotypeKO                                                                    
+## activityExercise                                                              
+## metabolitearginine                                                            
+## metaboliteCITRIC                                                              
+## metaboliteFUMARIC                                                             
+## metaboliteglutamine                                                           
+## metaboliteisoleucine                                                          
+## metaboliteLACTIC                                                              
+## metaboliteLCAC total                                                          
+## metaboliteleucine                                                             
+## metaboliteMALIC                                                               
+## metaboliteMCAC Total                                                          
+## metaboliteMETHYLSUCCINIC                                                      
+## metabolitePYRUVIC_P2P                                                         
+## metaboliteSUCCINIC-2                                                          
+## metabolitevaline                                                              
+## genotypeKO:activityExercise                                                   
+## genotypeKO:metabolitearginine                                                 
+## genotypeKO:metaboliteCITRIC                                                   
+## genotypeKO:metaboliteFUMARIC                                                  
+## genotypeKO:metaboliteglutamine                                                
+## genotypeKO:metaboliteisoleucine                                               
+## genotypeKO:metaboliteLACTIC                                                   
+## genotypeKO:metaboliteLCAC total                                               
+## genotypeKO:metaboliteleucine                                                  
+## genotypeKO:metaboliteMALIC                                                    
+## genotypeKO:metaboliteMCAC Total                                               
+## genotypeKO:metaboliteMETHYLSUCCINIC                                           
+## genotypeKO:metabolitePYRUVIC_P2P                                              
+## genotypeKO:metaboliteSUCCINIC-2                                               
+## genotypeKO:metabolitevaline                                                   
+## activityExercise:metabolitearginine                                           
+## activityExercise:metaboliteCITRIC                                             
+## activityExercise:metaboliteFUMARIC                                            
+## activityExercise:metaboliteglutamine                                          
+## activityExercise:metaboliteisoleucine                                         
+## activityExercise:metaboliteLACTIC                                             
+## activityExercise:metaboliteLCAC total                                         
+## activityExercise:metaboliteleucine                                            
+## activityExercise:metaboliteMALIC                                              
+## activityExercise:metaboliteMCAC Total                                         
+## activityExercise:metaboliteMETHYLSUCCINIC                                     
+## activityExercise:metabolitePYRUVIC_P2P                                        
+## activityExercise:metaboliteSUCCINIC-2                                         
+## activityExercise:metabolitevaline                                             
+## genotypeKO:activityExercise:metabolitearginine                                
+## genotypeKO:activityExercise:metaboliteCITRIC                                  
+## genotypeKO:activityExercise:metaboliteFUMARIC                                 
+## genotypeKO:activityExercise:metaboliteglutamine                               
+## genotypeKO:activityExercise:metaboliteisoleucine      0.504                   
+## genotypeKO:activityExercise:metaboliteLACTIC          0.510                   
+## genotypeKO:activityExercise:metaboliteLCAC total      0.480                   
+## genotypeKO:activityExercise:metaboliteleucine         0.500                   
+## genotypeKO:activityExercise:metaboliteMALIC           0.490                   
+## genotypeKO:activityExercise:metaboliteMCAC Total      0.496                   
+## genotypeKO:activityExercise:metaboliteMETHYLSUCCINIC  0.474                   
+## genotypeKO:activityExercise:metabolitePYRUVIC_P2P     0.521                   
+## genotypeKO:activityExercise:metaboliteSUCCINIC-2      0.491                   
+## genotypeKO:activityExercise:metabolitevaline          0.496                   
+##                                                      gntypKO:ctvtyExrcs:mtblts
+## genotypeKO                                                                    
+## activityExercise                                                              
+## metabolitearginine                                                            
+## metaboliteCITRIC                                                              
+## metaboliteFUMARIC                                                             
+## metaboliteglutamine                                                           
+## metaboliteisoleucine                                                          
+## metaboliteLACTIC                                                              
+## metaboliteLCAC total                                                          
+## metaboliteleucine                                                             
+## metaboliteMALIC                                                               
+## metaboliteMCAC Total                                                          
+## metaboliteMETHYLSUCCINIC                                                      
+## metabolitePYRUVIC_P2P                                                         
+## metaboliteSUCCINIC-2                                                          
+## metabolitevaline                                                              
+## genotypeKO:activityExercise                                                   
+## genotypeKO:metabolitearginine                                                 
+## genotypeKO:metaboliteCITRIC                                                   
+## genotypeKO:metaboliteFUMARIC                                                  
+## genotypeKO:metaboliteglutamine                                                
+## genotypeKO:metaboliteisoleucine                                               
+## genotypeKO:metaboliteLACTIC                                                   
+## genotypeKO:metaboliteLCAC total                                               
+## genotypeKO:metaboliteleucine                                                  
+## genotypeKO:metaboliteMALIC                                                    
+## genotypeKO:metaboliteMCAC Total                                               
+## genotypeKO:metaboliteMETHYLSUCCINIC                                           
+## genotypeKO:metabolitePYRUVIC_P2P                                              
+## genotypeKO:metaboliteSUCCINIC-2                                               
+## genotypeKO:metabolitevaline                                                   
+## activityExercise:metabolitearginine                                           
+## activityExercise:metaboliteCITRIC                                             
+## activityExercise:metaboliteFUMARIC                                            
+## activityExercise:metaboliteglutamine                                          
+## activityExercise:metaboliteisoleucine                                         
+## activityExercise:metaboliteLACTIC                                             
+## activityExercise:metaboliteLCAC total                                         
+## activityExercise:metaboliteleucine                                            
+## activityExercise:metaboliteMALIC                                              
+## activityExercise:metaboliteMCAC Total                                         
+## activityExercise:metaboliteMETHYLSUCCINIC                                     
+## activityExercise:metabolitePYRUVIC_P2P                                        
+## activityExercise:metaboliteSUCCINIC-2                                         
+## activityExercise:metabolitevaline                                             
+## genotypeKO:activityExercise:metabolitearginine                                
+## genotypeKO:activityExercise:metaboliteCITRIC                                  
+## genotypeKO:activityExercise:metaboliteFUMARIC                                 
+## genotypeKO:activityExercise:metaboliteglutamine                               
+## genotypeKO:activityExercise:metaboliteisoleucine                              
+## genotypeKO:activityExercise:metaboliteLACTIC          0.499                   
+## genotypeKO:activityExercise:metaboliteLCAC total      0.537                   
+## genotypeKO:activityExercise:metaboliteleucine         0.541                   
+## genotypeKO:activityExercise:metaboliteMALIC           0.526                   
+## genotypeKO:activityExercise:metaboliteMCAC Total      0.517                   
+## genotypeKO:activityExercise:metaboliteMETHYLSUCCINIC  0.512                   
+## genotypeKO:activityExercise:metabolitePYRUVIC_P2P     0.503                   
+## genotypeKO:activityExercise:metaboliteSUCCINIC-2      0.539                   
+## genotypeKO:activityExercise:metabolitevaline          0.511                   
+##                                                      gKO:E:L gKO:Et
+## genotypeKO                                                         
+## activityExercise                                                   
+## metabolitearginine                                                 
+## metaboliteCITRIC                                                   
+## metaboliteFUMARIC                                                  
+## metaboliteglutamine                                                
+## metaboliteisoleucine                                               
+## metaboliteLACTIC                                                   
+## metaboliteLCAC total                                               
+## metaboliteleucine                                                  
+## metaboliteMALIC                                                    
+## metaboliteMCAC Total                                               
+## metaboliteMETHYLSUCCINIC                                           
+## metabolitePYRUVIC_P2P                                              
+## metaboliteSUCCINIC-2                                               
+## metabolitevaline                                                   
+## genotypeKO:activityExercise                                        
+## genotypeKO:metabolitearginine                                      
+## genotypeKO:metaboliteCITRIC                                        
+## genotypeKO:metaboliteFUMARIC                                       
+## genotypeKO:metaboliteglutamine                                     
+## genotypeKO:metaboliteisoleucine                                    
+## genotypeKO:metaboliteLACTIC                                        
+## genotypeKO:metaboliteLCAC total                                    
+## genotypeKO:metaboliteleucine                                       
+## genotypeKO:metaboliteMALIC                                         
+## genotypeKO:metaboliteMCAC Total                                    
+## genotypeKO:metaboliteMETHYLSUCCINIC                                
+## genotypeKO:metabolitePYRUVIC_P2P                                   
+## genotypeKO:metaboliteSUCCINIC-2                                    
+## genotypeKO:metabolitevaline                                        
+## activityExercise:metabolitearginine                                
+## activityExercise:metaboliteCITRIC                                  
+## activityExercise:metaboliteFUMARIC                                 
+## activityExercise:metaboliteglutamine                               
+## activityExercise:metaboliteisoleucine                              
+## activityExercise:metaboliteLACTIC                                  
+## activityExercise:metaboliteLCAC total                              
+## activityExercise:metaboliteleucine                                 
+## activityExercise:metaboliteMALIC                                   
+## activityExercise:metaboliteMCAC Total                              
+## activityExercise:metaboliteMETHYLSUCCINIC                          
+## activityExercise:metabolitePYRUVIC_P2P                             
+## activityExercise:metaboliteSUCCINIC-2                              
+## activityExercise:metabolitevaline                                  
+## genotypeKO:activityExercise:metabolitearginine                     
+## genotypeKO:activityExercise:metaboliteCITRIC                       
+## genotypeKO:activityExercise:metaboliteFUMARIC                      
+## genotypeKO:activityExercise:metaboliteglutamine                    
+## genotypeKO:activityExercise:metaboliteisoleucine                   
+## genotypeKO:activityExercise:metaboliteLACTIC                       
+## genotypeKO:activityExercise:metaboliteLCAC total      0.502        
+## genotypeKO:activityExercise:metaboliteleucine         0.508   0.526
+## genotypeKO:activityExercise:metaboliteMALIC           0.498   0.484
+## genotypeKO:activityExercise:metaboliteMCAC Total      0.524   0.510
+## genotypeKO:activityExercise:metaboliteMETHYLSUCCINIC  0.512   0.527
+## genotypeKO:activityExercise:metabolitePYRUVIC_P2P     0.499   0.496
+## genotypeKO:activityExercise:metaboliteSUCCINIC-2      0.482   0.518
+## genotypeKO:activityExercise:metabolitevaline          0.475   0.504
+##                                                      gntypKO:ctvtyExrcs:mtbltl
+## genotypeKO                                                                    
+## activityExercise                                                              
+## metabolitearginine                                                            
+## metaboliteCITRIC                                                              
+## metaboliteFUMARIC                                                             
+## metaboliteglutamine                                                           
+## metaboliteisoleucine                                                          
+## metaboliteLACTIC                                                              
+## metaboliteLCAC total                                                          
+## metaboliteleucine                                                             
+## metaboliteMALIC                                                               
+## metaboliteMCAC Total                                                          
+## metaboliteMETHYLSUCCINIC                                                      
+## metabolitePYRUVIC_P2P                                                         
+## metaboliteSUCCINIC-2                                                          
+## metabolitevaline                                                              
+## genotypeKO:activityExercise                                                   
+## genotypeKO:metabolitearginine                                                 
+## genotypeKO:metaboliteCITRIC                                                   
+## genotypeKO:metaboliteFUMARIC                                                  
+## genotypeKO:metaboliteglutamine                                                
+## genotypeKO:metaboliteisoleucine                                               
+## genotypeKO:metaboliteLACTIC                                                   
+## genotypeKO:metaboliteLCAC total                                               
+## genotypeKO:metaboliteleucine                                                  
+## genotypeKO:metaboliteMALIC                                                    
+## genotypeKO:metaboliteMCAC Total                                               
+## genotypeKO:metaboliteMETHYLSUCCINIC                                           
+## genotypeKO:metabolitePYRUVIC_P2P                                              
+## genotypeKO:metaboliteSUCCINIC-2                                               
+## genotypeKO:metabolitevaline                                                   
+## activityExercise:metabolitearginine                                           
+## activityExercise:metaboliteCITRIC                                             
+## activityExercise:metaboliteFUMARIC                                            
+## activityExercise:metaboliteglutamine                                          
+## activityExercise:metaboliteisoleucine                                         
+## activityExercise:metaboliteLACTIC                                             
+## activityExercise:metaboliteLCAC total                                         
+## activityExercise:metaboliteleucine                                            
+## activityExercise:metaboliteMALIC                                              
+## activityExercise:metaboliteMCAC Total                                         
+## activityExercise:metaboliteMETHYLSUCCINIC                                     
+## activityExercise:metabolitePYRUVIC_P2P                                        
+## activityExercise:metaboliteSUCCINIC-2                                         
+## activityExercise:metabolitevaline                                             
+## genotypeKO:activityExercise:metabolitearginine                                
+## genotypeKO:activityExercise:metaboliteCITRIC                                  
+## genotypeKO:activityExercise:metaboliteFUMARIC                                 
+## genotypeKO:activityExercise:metaboliteglutamine                               
+## genotypeKO:activityExercise:metaboliteisoleucine                              
+## genotypeKO:activityExercise:metaboliteLACTIC                                  
+## genotypeKO:activityExercise:metaboliteLCAC total                              
+## genotypeKO:activityExercise:metaboliteleucine                                 
+## genotypeKO:activityExercise:metaboliteMALIC           0.499                   
+## genotypeKO:activityExercise:metaboliteMCAC Total      0.527                   
+## genotypeKO:activityExercise:metaboliteMETHYLSUCCINIC  0.491                   
+## genotypeKO:activityExercise:metabolitePYRUVIC_P2P     0.506                   
+## genotypeKO:activityExercise:metaboliteSUCCINIC-2      0.503                   
+## genotypeKO:activityExercise:metabolitevaline          0.516                   
+##                                                      gKO:E:MA gKO:ET
+## genotypeKO                                                          
+## activityExercise                                                    
+## metabolitearginine                                                  
+## metaboliteCITRIC                                                    
+## metaboliteFUMARIC                                                   
+## metaboliteglutamine                                                 
+## metaboliteisoleucine                                                
+## metaboliteLACTIC                                                    
+## metaboliteLCAC total                                                
+## metaboliteleucine                                                   
+## metaboliteMALIC                                                     
+## metaboliteMCAC Total                                                
+## metaboliteMETHYLSUCCINIC                                            
+## metabolitePYRUVIC_P2P                                               
+## metaboliteSUCCINIC-2                                                
+## metabolitevaline                                                    
+## genotypeKO:activityExercise                                         
+## genotypeKO:metabolitearginine                                       
+## genotypeKO:metaboliteCITRIC                                         
+## genotypeKO:metaboliteFUMARIC                                        
+## genotypeKO:metaboliteglutamine                                      
+## genotypeKO:metaboliteisoleucine                                     
+## genotypeKO:metaboliteLACTIC                                         
+## genotypeKO:metaboliteLCAC total                                     
+## genotypeKO:metaboliteleucine                                        
+## genotypeKO:metaboliteMALIC                                          
+## genotypeKO:metaboliteMCAC Total                                     
+## genotypeKO:metaboliteMETHYLSUCCINIC                                 
+## genotypeKO:metabolitePYRUVIC_P2P                                    
+## genotypeKO:metaboliteSUCCINIC-2                                     
+## genotypeKO:metabolitevaline                                         
+## activityExercise:metabolitearginine                                 
+## activityExercise:metaboliteCITRIC                                   
+## activityExercise:metaboliteFUMARIC                                  
+## activityExercise:metaboliteglutamine                                
+## activityExercise:metaboliteisoleucine                               
+## activityExercise:metaboliteLACTIC                                   
+## activityExercise:metaboliteLCAC total                               
+## activityExercise:metaboliteleucine                                  
+## activityExercise:metaboliteMALIC                                    
+## activityExercise:metaboliteMCAC Total                               
+## activityExercise:metaboliteMETHYLSUCCINIC                           
+## activityExercise:metabolitePYRUVIC_P2P                              
+## activityExercise:metaboliteSUCCINIC-2                               
+## activityExercise:metabolitevaline                                   
+## genotypeKO:activityExercise:metabolitearginine                      
+## genotypeKO:activityExercise:metaboliteCITRIC                        
+## genotypeKO:activityExercise:metaboliteFUMARIC                       
+## genotypeKO:activityExercise:metaboliteglutamine                     
+## genotypeKO:activityExercise:metaboliteisoleucine                    
+## genotypeKO:activityExercise:metaboliteLACTIC                        
+## genotypeKO:activityExercise:metaboliteLCAC total                    
+## genotypeKO:activityExercise:metaboliteleucine                       
+## genotypeKO:activityExercise:metaboliteMALIC                         
+## genotypeKO:activityExercise:metaboliteMCAC Total      0.487         
+## genotypeKO:activityExercise:metaboliteMETHYLSUCCINIC  0.511    0.488
+## genotypeKO:activityExercise:metabolitePYRUVIC_P2P     0.476    0.519
+## genotypeKO:activityExercise:metaboliteSUCCINIC-2      0.504    0.517
+## genotypeKO:activityExercise:metabolitevaline          0.507    0.506
+##                                                      gKO:E:ME gKO:E:P
+## genotypeKO                                                           
+## activityExercise                                                     
+## metabolitearginine                                                   
+## metaboliteCITRIC                                                     
+## metaboliteFUMARIC                                                    
+## metaboliteglutamine                                                  
+## metaboliteisoleucine                                                 
+## metaboliteLACTIC                                                     
+## metaboliteLCAC total                                                 
+## metaboliteleucine                                                    
+## metaboliteMALIC                                                      
+## metaboliteMCAC Total                                                 
+## metaboliteMETHYLSUCCINIC                                             
+## metabolitePYRUVIC_P2P                                                
+## metaboliteSUCCINIC-2                                                 
+## metabolitevaline                                                     
+## genotypeKO:activityExercise                                          
+## genotypeKO:metabolitearginine                                        
+## genotypeKO:metaboliteCITRIC                                          
+## genotypeKO:metaboliteFUMARIC                                         
+## genotypeKO:metaboliteglutamine                                       
+## genotypeKO:metaboliteisoleucine                                      
+## genotypeKO:metaboliteLACTIC                                          
+## genotypeKO:metaboliteLCAC total                                      
+## genotypeKO:metaboliteleucine                                         
+## genotypeKO:metaboliteMALIC                                           
+## genotypeKO:metaboliteMCAC Total                                      
+## genotypeKO:metaboliteMETHYLSUCCINIC                                  
+## genotypeKO:metabolitePYRUVIC_P2P                                     
+## genotypeKO:metaboliteSUCCINIC-2                                      
+## genotypeKO:metabolitevaline                                          
+## activityExercise:metabolitearginine                                  
+## activityExercise:metaboliteCITRIC                                    
+## activityExercise:metaboliteFUMARIC                                   
+## activityExercise:metaboliteglutamine                                 
+## activityExercise:metaboliteisoleucine                                
+## activityExercise:metaboliteLACTIC                                    
+## activityExercise:metaboliteLCAC total                                
+## activityExercise:metaboliteleucine                                   
+## activityExercise:metaboliteMALIC                                     
+## activityExercise:metaboliteMCAC Total                                
+## activityExercise:metaboliteMETHYLSUCCINIC                            
+## activityExercise:metabolitePYRUVIC_P2P                               
+## activityExercise:metaboliteSUCCINIC-2                                
+## activityExercise:metabolitevaline                                    
+## genotypeKO:activityExercise:metabolitearginine                       
+## genotypeKO:activityExercise:metaboliteCITRIC                         
+## genotypeKO:activityExercise:metaboliteFUMARIC                        
+## genotypeKO:activityExercise:metaboliteglutamine                      
+## genotypeKO:activityExercise:metaboliteisoleucine                     
+## genotypeKO:activityExercise:metaboliteLACTIC                         
+## genotypeKO:activityExercise:metaboliteLCAC total                     
+## genotypeKO:activityExercise:metaboliteleucine                        
+## genotypeKO:activityExercise:metaboliteMALIC                          
+## genotypeKO:activityExercise:metaboliteMCAC Total                     
+## genotypeKO:activityExercise:metaboliteMETHYLSUCCINIC                 
+## genotypeKO:activityExercise:metabolitePYRUVIC_P2P     0.480          
+## genotypeKO:activityExercise:metaboliteSUCCINIC-2      0.506    0.506 
+## genotypeKO:activityExercise:metabolitevaline          0.492    0.490 
+##                                                      gKO:E:S
 ## genotypeKO                                                  
 ## activityExercise                                            
 ## metabolitearginine                                          
@@ -1316,158 +2650,34 @@ summary(M)
 ## activityExercise:metaboliteCITRIC                           
 ## activityExercise:metaboliteFUMARIC                          
 ## activityExercise:metaboliteglutamine                        
-## activityExercise:metaboliteisoleucine      0.456            
-## activityExercise:metaboliteLACTIC          0.495            
-## activityExercise:metaboliteLCAC total      0.453            
-## activityExercise:metaboliteleucine         0.452            
-## activityExercise:metaboliteMALIC           0.481            
-## activityExercise:metaboliteMCAC Total      0.484            
-## activityExercise:metaboliteMETHYLSUCCINIC  0.474            
-## activityExercise:metabolitePYRUVIC_P2P     0.477            
-## activityExercise:metaboliteSUCCINIC-2      0.492            
-## activityExercise:metabolitevaline          0.492            
-##                                           actvtyExrcs:mtblts aE:LAC aE:LCt
-## genotypeKO                                                                
-## activityExercise                                                          
-## metabolitearginine                                                        
-## metaboliteCITRIC                                                          
-## metaboliteFUMARIC                                                         
-## metaboliteglutamine                                                       
-## metaboliteisoleucine                                                      
-## metaboliteLACTIC                                                          
-## metaboliteLCAC total                                                      
-## metaboliteleucine                                                         
-## metaboliteMALIC                                                           
-## metaboliteMCAC Total                                                      
-## metaboliteMETHYLSUCCINIC                                                  
-## metabolitePYRUVIC_P2P                                                     
-## metaboliteSUCCINIC-2                                                      
-## metabolitevaline                                                          
-## genotypeKO:activityExercise                                               
-## genotypeKO:metabolitearginine                                             
-## genotypeKO:metaboliteCITRIC                                               
-## genotypeKO:metaboliteFUMARIC                                              
-## genotypeKO:metaboliteglutamine                                            
-## genotypeKO:metaboliteisoleucine                                           
-## genotypeKO:metaboliteLACTIC                                               
-## genotypeKO:metaboliteLCAC total                                           
-## genotypeKO:metaboliteleucine                                              
-## genotypeKO:metaboliteMALIC                                                
-## genotypeKO:metaboliteMCAC Total                                           
-## genotypeKO:metaboliteMETHYLSUCCINIC                                       
-## genotypeKO:metabolitePYRUVIC_P2P                                          
-## genotypeKO:metaboliteSUCCINIC-2                                           
-## genotypeKO:metabolitevaline                                               
-## activityExercise:metabolitearginine                                       
-## activityExercise:metaboliteCITRIC                                         
-## activityExercise:metaboliteFUMARIC                                        
-## activityExercise:metaboliteglutamine                                      
-## activityExercise:metaboliteisoleucine                                     
-## activityExercise:metaboliteLACTIC          0.496                          
-## activityExercise:metaboliteLCAC total      0.460              0.467       
-## activityExercise:metaboliteleucine         0.501              0.491  0.473
-## activityExercise:metaboliteMALIC           0.499              0.485  0.431
-## activityExercise:metaboliteMCAC Total      0.485              0.479  0.468
-## activityExercise:metaboliteMETHYLSUCCINIC  0.454              0.472  0.487
-## activityExercise:metabolitePYRUVIC_P2P     0.494              0.486  0.491
-## activityExercise:metaboliteSUCCINIC-2      0.470              0.498  0.486
-## activityExercise:metabolitevaline          0.473              0.425  0.448
-##                                           actvtyExrcs:mtbltl aE:MAL aE:MCT
-## genotypeKO                                                                
-## activityExercise                                                          
-## metabolitearginine                                                        
-## metaboliteCITRIC                                                          
-## metaboliteFUMARIC                                                         
-## metaboliteglutamine                                                       
-## metaboliteisoleucine                                                      
-## metaboliteLACTIC                                                          
-## metaboliteLCAC total                                                      
-## metaboliteleucine                                                         
-## metaboliteMALIC                                                           
-## metaboliteMCAC Total                                                      
-## metaboliteMETHYLSUCCINIC                                                  
-## metabolitePYRUVIC_P2P                                                     
-## metaboliteSUCCINIC-2                                                      
-## metabolitevaline                                                          
-## genotypeKO:activityExercise                                               
-## genotypeKO:metabolitearginine                                             
-## genotypeKO:metaboliteCITRIC                                               
-## genotypeKO:metaboliteFUMARIC                                              
-## genotypeKO:metaboliteglutamine                                            
-## genotypeKO:metaboliteisoleucine                                           
-## genotypeKO:metaboliteLACTIC                                               
-## genotypeKO:metaboliteLCAC total                                           
-## genotypeKO:metaboliteleucine                                              
-## genotypeKO:metaboliteMALIC                                                
-## genotypeKO:metaboliteMCAC Total                                           
-## genotypeKO:metaboliteMETHYLSUCCINIC                                       
-## genotypeKO:metabolitePYRUVIC_P2P                                          
-## genotypeKO:metaboliteSUCCINIC-2                                           
-## genotypeKO:metabolitevaline                                               
-## activityExercise:metabolitearginine                                       
-## activityExercise:metaboliteCITRIC                                         
-## activityExercise:metaboliteFUMARIC                                        
-## activityExercise:metaboliteglutamine                                      
-## activityExercise:metaboliteisoleucine                                     
-## activityExercise:metaboliteLACTIC                                         
-## activityExercise:metaboliteLCAC total                                     
-## activityExercise:metaboliteleucine                                        
-## activityExercise:metaboliteMALIC           0.475                          
-## activityExercise:metaboliteMCAC Total      0.475              0.485       
-## activityExercise:metaboliteMETHYLSUCCINIC  0.483              0.535  0.455
-## activityExercise:metabolitePYRUVIC_P2P     0.438              0.485  0.478
-## activityExercise:metaboliteSUCCINIC-2      0.482              0.484  0.467
-## activityExercise:metabolitevaline          0.486              0.493  0.473
-##                                           aE:MET aE:PYR aE:SUC
-## genotypeKO                                                    
-## activityExercise                                              
-## metabolitearginine                                            
-## metaboliteCITRIC                                              
-## metaboliteFUMARIC                                             
-## metaboliteglutamine                                           
-## metaboliteisoleucine                                          
-## metaboliteLACTIC                                              
-## metaboliteLCAC total                                          
-## metaboliteleucine                                             
-## metaboliteMALIC                                               
-## metaboliteMCAC Total                                          
-## metaboliteMETHYLSUCCINIC                                      
-## metabolitePYRUVIC_P2P                                         
-## metaboliteSUCCINIC-2                                          
-## metabolitevaline                                              
-## genotypeKO:activityExercise                                   
-## genotypeKO:metabolitearginine                                 
-## genotypeKO:metaboliteCITRIC                                   
-## genotypeKO:metaboliteFUMARIC                                  
-## genotypeKO:metaboliteglutamine                                
-## genotypeKO:metaboliteisoleucine                               
-## genotypeKO:metaboliteLACTIC                                   
-## genotypeKO:metaboliteLCAC total                               
-## genotypeKO:metaboliteleucine                                  
-## genotypeKO:metaboliteMALIC                                    
-## genotypeKO:metaboliteMCAC Total                               
-## genotypeKO:metaboliteMETHYLSUCCINIC                           
-## genotypeKO:metabolitePYRUVIC_P2P                              
-## genotypeKO:metaboliteSUCCINIC-2                               
-## genotypeKO:metabolitevaline                                   
-## activityExercise:metabolitearginine                           
-## activityExercise:metaboliteCITRIC                             
-## activityExercise:metaboliteFUMARIC                            
-## activityExercise:metaboliteglutamine                          
-## activityExercise:metaboliteisoleucine                         
-## activityExercise:metaboliteLACTIC                             
-## activityExercise:metaboliteLCAC total                         
-## activityExercise:metaboliteleucine                            
-## activityExercise:metaboliteMALIC                              
-## activityExercise:metaboliteMCAC Total                         
-## activityExercise:metaboliteMETHYLSUCCINIC                     
-## activityExercise:metabolitePYRUVIC_P2P     0.469              
-## activityExercise:metaboliteSUCCINIC-2      0.458  0.447       
-## activityExercise:metabolitevaline          0.467  0.449  0.476
+## activityExercise:metaboliteisoleucine                       
+## activityExercise:metaboliteLACTIC                           
+## activityExercise:metaboliteLCAC total                       
+## activityExercise:metaboliteleucine                          
+## activityExercise:metaboliteMALIC                            
+## activityExercise:metaboliteMCAC Total                       
+## activityExercise:metaboliteMETHYLSUCCINIC                   
+## activityExercise:metabolitePYRUVIC_P2P                      
+## activityExercise:metaboliteSUCCINIC-2                       
+## activityExercise:metabolitevaline                           
+## genotypeKO:activityExercise:metabolitearginine              
+## genotypeKO:activityExercise:metaboliteCITRIC                
+## genotypeKO:activityExercise:metaboliteFUMARIC               
+## genotypeKO:activityExercise:metaboliteglutamine             
+## genotypeKO:activityExercise:metaboliteisoleucine            
+## genotypeKO:activityExercise:metaboliteLACTIC                
+## genotypeKO:activityExercise:metaboliteLCAC total            
+## genotypeKO:activityExercise:metaboliteleucine               
+## genotypeKO:activityExercise:metaboliteMALIC                 
+## genotypeKO:activityExercise:metaboliteMCAC Total            
+## genotypeKO:activityExercise:metaboliteMETHYLSUCCINIC        
+## genotypeKO:activityExercise:metabolitePYRUVIC_P2P           
+## genotypeKO:activityExercise:metaboliteSUCCINIC-2            
+## genotypeKO:activityExercise:metabolitevaline          0.501 
 ## 
 ## Standardized Within-Group Residuals:
-##        Min         Q1        Med         Q3        Max 
-## -9.3276555 -0.1084469  0.0128430  0.1374870  3.4032215 
+##         Min          Q1         Med          Q3         Max 
+## -8.94348308 -0.08755239  0.01523379  0.12984547  3.96700365 
 ## 
 ## Number of Observations: 622
 ## Number of Groups: 42
@@ -1491,7 +2701,8 @@ fixed <- formula(logValue ~
                    metabolite +
                    genotype * chow +
                    genotype * metabolite +
-                   chow * metabolite)
+                   chow * metabolite +
+                   chow * metabolite * genotype)
 cs <-
   corSymm(form = random, fixed = FALSE) %>%
   Initialize(data = D2)
@@ -1547,14 +2758,15 @@ anova(M)
 ```
 
 ```
-##                     numDF denDF      F-value p-value
-## (Intercept)             1   560 1.495067e+06  <.0001
-## genotype                1    39 2.360281e+13  <.0001
-## chow                    1    39 3.881290e+11  <.0001
-## metabolite             14   560 6.164543e+12  <.0001
-## genotype:chow           1    39 0.000000e+00  0.5853
-## genotype:metabolite    14   560 6.000000e+00  <.0001
-## chow:metabolite        14   560 3.000000e+00  0.0001
+##                          numDF denDF      F-value p-value
+## (Intercept)                  1   546     11108818  <.0001
+## genotype                     1    39 858664163314  <.0001
+## chow                         1    39  40260488735  <.0001
+## metabolite                  14   546 289717015158  <.0001
+## genotype:chow                1    39            2  0.2069
+## genotype:metabolite         14   546            4  <.0001
+## chow:metabolite             14   546            3  <.0001
+## genotype:chow:metabolite    14   546            1  0.1949
 ```
 
 ```r
@@ -1565,32 +2777,32 @@ summary(M)
 ## Linear mixed-effects model fit by REML
 ##  Data: D2 
 ##        AIC      BIC    logLik
-##   1377.217 2049.692 -535.6084
+##   1409.398 2139.458 -537.6992
 ## 
 ## Random effects:
 ##  Formula: ~1 | id
 ##         (Intercept)  Residual
-## StdDev:   0.1011938 0.5108908
+## StdDev:  0.07226382 0.5209843
 ## 
 ## Correlation Structure: General
 ##  Formula: ~1 | id 
 ##  Parameter estimate(s):
 ##  Correlation: 
 ##    1      2      3      4      5      6      7      8      9      10    
-## 2   0.047                                                               
-## 3   0.152  0.075                                                        
-## 4   0.063  0.029 -0.032                                                 
-## 5  -0.021  0.073  0.071 -0.016                                          
-## 6   0.054  0.014  0.012 -0.090  0.032                                   
-## 7   0.138  0.139  0.055 -0.045  0.021  0.004                            
-## 8   0.082  0.076  0.077 -0.054  0.013  0.002  0.010                     
-## 9  -0.046  0.039  0.051 -0.004  0.047 -0.034  0.013 -0.047              
-## 10 -0.004 -0.050 -0.007 -0.253  0.043 -0.219 -0.025 -0.030  0.083       
-## 11 -0.078 -0.014 -0.001 -0.017  0.025  0.060  0.003  0.018  0.021  0.053
-## 12  0.070  0.083  0.028 -0.044 -0.001 -0.033  0.060  0.038  0.043  0.010
-## 13 -0.103 -0.017  0.001 -0.285  0.006 -0.176 -0.003 -0.061  0.006 -0.050
-## 14 -0.247 -0.174 -0.058 -0.039 -0.010  0.044 -0.127 -0.025 -0.033  0.137
-## 15  0.318  0.238  0.180  0.097  0.128 -0.013  0.112  0.287  0.060 -0.215
+## 2   0.026                                                               
+## 3   0.010  0.009                                                        
+## 4  -0.004  0.032 -0.007                                                 
+## 5   0.009  0.062  0.014  0.023                                          
+## 6  -0.124 -0.011  0.025 -0.112 -0.003                                   
+## 7  -0.039 -0.002  0.009  0.022  0.026 -0.001                            
+## 8   0.039 -0.001  0.023 -0.039  0.019 -0.069  0.007                     
+## 9   0.012  0.043 -0.002  0.011  0.033  0.000  0.004 -0.003              
+## 10 -0.028 -0.005  0.021 -0.172 -0.012 -0.246  0.006 -0.045  0.009       
+## 11 -0.053  0.029 -0.003 -0.003 -0.007  0.034  0.040 -0.006  0.009  0.043
+## 12  0.062 -0.021 -0.001 -0.042  0.012 -0.133  0.025  0.079  0.018  0.011
+## 13 -0.023 -0.001 -0.008 -0.257  0.000 -0.225 -0.002 -0.107 -0.004 -0.083
+## 14 -0.358 -0.031  0.000  0.025 -0.096  0.226 -0.028 -0.021  0.015  0.033
+## 15  0.091  0.022  0.092 -0.027  0.024  0.018  0.084  0.132  0.002 -0.072
 ##    11     12     13     14    
 ## 2                             
 ## 3                             
@@ -1602,291 +2814,556 @@ summary(M)
 ## 9                             
 ## 10                            
 ## 11                            
-## 12  0.042                     
-## 13 -0.016 -0.079              
-## 14  0.379  0.038 -0.154       
-## 15  0.023  0.048 -0.060 -0.290
+## 12  0.052                     
+## 13 -0.008 -0.090              
+## 14  0.160 -0.016 -0.047       
+## 15 -0.022  0.034 -0.005 -0.037
 ## Fixed effects: list(fixed) 
-##                                                 Value Std.Error  DF
-## (Intercept)                                 0.3804304 0.1338167 560
-## genotypeKO                                  0.4132004 0.1493635  39
-## chowYellow (C8)                             0.2559378 0.1466806  39
-## metabolitearginine                         -0.0866796 0.1837287 560
-## metaboliteCITRIC                           -0.0210452 0.1818259 560
-## metaboliteFUMARIC                          -1.1859464 0.1832035 560
-## metaboliteglutamine                         1.6520904 0.1820680 560
-## metaboliteisoleucine                       -0.2258870 0.1834171 560
-## metaboliteLACTIC                            2.0540483 0.1825703 560
-## metaboliteLC even AC total                  0.2802441 0.1828464 560
-## metaboliteLC odd AC total                  -0.5825606 0.1847896 560
-## metaboliteleucine                          -0.1073972 0.1838510 560
-## metaboliteMALIC                             0.6388126 0.1817697 560
-## metaboliteMCAC total                       -0.8465304 0.1850690 560
-## metaboliteMETHYLSUCCINIC                   -1.6865104 0.1847424 560
-## metaboliteSUCCINIC-2                        0.8553226 0.1834661 560
-## metabolitevaline                            0.0382429 0.1815215 560
-## genotypeKO:chowYellow (C8)                  0.0546717 0.0963259  39
-## genotypeKO:metabolitearginine              -0.2529326 0.2002809 560
-## genotypeKO:metaboliteCITRIC                 0.1301356 0.1932101 560
-## genotypeKO:metaboliteFUMARIC               -0.6107086 0.1983471 560
-## genotypeKO:metaboliteglutamine             -0.5019595 0.1941198 560
-## genotypeKO:metaboliteisoleucine            -0.3282557 0.1991353 560
-## genotypeKO:metaboliteLACTIC                -0.6285505 0.1959977 560
-## genotypeKO:metaboliteLC even AC total       0.1445959 0.1970245 560
-## genotypeKO:metaboliteLC odd AC total        0.1196305 0.2041478 560
-## genotypeKO:metaboliteleucine               -0.2930849 0.2007294 560
-## genotypeKO:metaboliteMALIC                 -0.5853944 0.1929982 560
-## genotypeKO:metaboliteMCAC total            -0.2831915 0.2051575 560
-## genotypeKO:metaboliteMETHYLSUCCINIC        -0.5405962 0.2039766 560
-## genotypeKO:metaboliteSUCCINIC-2            -0.5507818 0.1993155 560
-## genotypeKO:metabolitevaline                -0.4998860 0.1920618 560
-## chowYellow (C8):metabolitearginine         -0.5971881 0.1984089 560
-## chowYellow (C8):metaboliteCITRIC           -0.1146199 0.1905589 560
-## chowYellow (C8):metaboliteFUMARIC          -0.3666861 0.1935204 560
-## chowYellow (C8):metaboliteglutamine        -0.2605192 0.1925106 560
-## chowYellow (C8):metaboliteisoleucine       -0.4832110 0.1995500 560
-## chowYellow (C8):metaboliteLACTIC           -0.3800258 0.1934636 560
-## chowYellow (C8):metaboliteLC even AC total -0.2521383 0.1961389 560
-## chowYellow (C8):metaboliteLC odd AC total  -0.7688645 0.1985949 560
-## chowYellow (C8):metaboliteleucine          -0.4609447 0.2005267 560
-## chowYellow (C8):metaboliteMALIC            -0.4063418 0.1910524 560
-## chowYellow (C8):metaboliteMCAC total       -0.3194601 0.1987676 560
-## chowYellow (C8):metaboliteMETHYLSUCCINIC    0.2928661 0.2017272 560
-## chowYellow (C8):metaboliteSUCCINIC-2       -0.3319469 0.1967629 560
-## chowYellow (C8):metabolitevaline           -0.0846998 0.1907487 560
-##                                              t-value p-value
-## (Intercept)                                 2.842923  0.0046
-## genotypeKO                                  2.766407  0.0086
-## chowYellow (C8)                             1.744864  0.0889
-## metabolitearginine                         -0.471780  0.6373
-## metaboliteCITRIC                           -0.115743  0.9079
-## metaboliteFUMARIC                          -6.473383  0.0000
-## metaboliteglutamine                         9.074030  0.0000
-## metaboliteisoleucine                       -1.231548  0.2186
-## metaboliteLACTIC                           11.250726  0.0000
-## metaboliteLC even AC total                  1.532675  0.1259
-## metaboliteLC odd AC total                  -3.152561  0.0017
-## metaboliteleucine                          -0.584153  0.5594
-## metaboliteMALIC                             3.514408  0.0005
-## metaboliteMCAC total                       -4.574134  0.0000
-## metaboliteMETHYLSUCCINIC                   -9.128986  0.0000
-## metaboliteSUCCINIC-2                        4.662021  0.0000
-## metabolitevaline                            0.210679  0.8332
-## genotypeKO:chowYellow (C8)                  0.567570  0.5736
-## genotypeKO:metabolitearginine              -1.262890  0.2072
-## genotypeKO:metaboliteCITRIC                 0.673544  0.5009
-## genotypeKO:metaboliteFUMARIC               -3.078989  0.0022
-## genotypeKO:metaboliteglutamine             -2.585824  0.0100
-## genotypeKO:metaboliteisoleucine            -1.648406  0.0998
-## genotypeKO:metaboliteLACTIC                -3.206927  0.0014
-## genotypeKO:metaboliteLC even AC total       0.733898  0.4633
-## genotypeKO:metaboliteLC odd AC total        0.586000  0.5581
-## genotypeKO:metaboliteleucine               -1.460100  0.1448
-## genotypeKO:metaboliteMALIC                 -3.033160  0.0025
-## genotypeKO:metaboliteMCAC total            -1.380361  0.1680
-## genotypeKO:metaboliteMETHYLSUCCINIC        -2.650286  0.0083
-## genotypeKO:metaboliteSUCCINIC-2            -2.763366  0.0059
-## genotypeKO:metabolitevaline                -2.602734  0.0095
-## chowYellow (C8):metabolitearginine         -3.009885  0.0027
-## chowYellow (C8):metaboliteCITRIC           -0.601493  0.5478
-## chowYellow (C8):metaboliteFUMARIC          -1.894819  0.0586
-## chowYellow (C8):metaboliteglutamine        -1.353272  0.1765
-## chowYellow (C8):metaboliteisoleucine       -2.421504  0.0158
-## chowYellow (C8):metaboliteLACTIC           -1.964327  0.0500
-## chowYellow (C8):metaboliteLC even AC total -1.285509  0.1991
-## chowYellow (C8):metaboliteLC odd AC total  -3.871523  0.0001
-## chowYellow (C8):metaboliteleucine          -2.298670  0.0219
-## chowYellow (C8):metaboliteMALIC            -2.126861  0.0339
-## chowYellow (C8):metaboliteMCAC total       -1.607204  0.1086
-## chowYellow (C8):metaboliteMETHYLSUCCINIC    1.451793  0.1471
-## chowYellow (C8):metaboliteSUCCINIC-2       -1.687040  0.0922
-## chowYellow (C8):metabolitevaline           -0.444039  0.6572
+##                                                            Value Std.Error
+## (Intercept)                                            0.2557123 0.1585866
+## genotypeKO                                             0.6626366 0.2242753
+## chowYellow (C8)                                        0.7549455 0.2009892
+## metabolitearginine                                     0.1236579 0.2221485
+## metaboliteCITRIC                                       0.0395968 0.2221485
+## metaboliteFUMARIC                                     -1.0066586 0.2221485
+## metaboliteglutamine                                    1.7844750 0.2221485
+## metaboliteisoleucine                                  -0.0276526 0.2221485
+## metaboliteLACTIC                                       2.1516434 0.2221485
+## metaboliteLC even AC total                             0.4067190 0.2221485
+## metaboliteLC odd AC total                             -0.5647188 0.2221485
+## metaboliteleucine                                      0.0958975 0.2221485
+## metaboliteMALIC                                        0.7454015 0.2221485
+## metaboliteMCAC total                                  -0.7176324 0.2221485
+## metaboliteMETHYLSUCCINIC                              -1.4975941 0.2221485
+## metaboliteSUCCINIC-2                                   0.9674087 0.2221485
+## metabolitevaline                                       0.1464322 0.2221485
+## genotypeKO:chowYellow (C8)                            -0.6978098 0.3056066
+## genotypeKO:metabolitearginine                         -0.6736076 0.3141654
+## genotypeKO:metaboliteCITRIC                            0.0088516 0.3141654
+## genotypeKO:metaboliteFUMARIC                          -0.9692841 0.3141654
+## genotypeKO:metaboliteglutamine                        -0.7667286 0.3141654
+## genotypeKO:metaboliteisoleucine                       -0.7247245 0.3141654
+## genotypeKO:metaboliteLACTIC                           -0.8237407 0.3141654
+## genotypeKO:metaboliteLC even AC total                 -0.1083540 0.3141654
+## genotypeKO:metaboliteLC odd AC total                   0.0839471 0.3141654
+## genotypeKO:metaboliteleucine                          -0.6996743 0.3141654
+## genotypeKO:metaboliteMALIC                            -0.7985721 0.3141654
+## genotypeKO:metaboliteMCAC total                       -0.5409875 0.3141654
+## genotypeKO:metaboliteMETHYLSUCCINIC                   -0.9184289 0.3141654
+## genotypeKO:metaboliteSUCCINIC-2                       -0.7749538 0.3141654
+## genotypeKO:metabolitevaline                           -0.7162648 0.3141654
+## chowYellow (C8):metabolitearginine                    -1.2626957 0.2673925
+## chowYellow (C8):metaboliteCITRIC                      -0.5439097 0.2949119
+## chowYellow (C8):metaboliteFUMARIC                     -0.9714318 0.2891552
+## chowYellow (C8):metaboliteglutamine                   -0.9631569 0.2771722
+## chowYellow (C8):metaboliteisoleucine                  -1.1705246 0.2876369
+## chowYellow (C8):metaboliteLACTIC                      -0.8315275 0.2854145
+## chowYellow (C8):metaboliteLC even AC total            -0.7875069 0.2840107
+## chowYellow (C8):metaboliteLC odd AC total             -0.8928525 0.2937578
+## chowYellow (C8):metaboliteleucine                     -1.0879909 0.2979676
+## chowYellow (C8):metaboliteMALIC                       -0.8293624 0.2825788
+## chowYellow (C8):metaboliteMCAC total                  -0.9477404 0.2855944
+## chowYellow (C8):metaboliteMETHYLSUCCINIC              -0.3178135 0.3020975
+## chowYellow (C8):metaboliteSUCCINIC-2                  -0.7365276 0.2795860
+## chowYellow (C8):metabolitevaline                      -0.5978008 0.2843059
+## genotypeKO:chowYellow (C8):metabolitearginine          1.1183598 0.4199741
+## genotypeKO:chowYellow (C8):metaboliteCITRIC            0.5398332 0.4351838
+## genotypeKO:chowYellow (C8):metaboliteFUMARIC           0.9596491 0.4323726
+## genotypeKO:chowYellow (C8):metaboliteglutamine         0.9859728 0.4269021
+## genotypeKO:chowYellow (C8):metaboliteisoleucine        1.0857875 0.4296033
+## genotypeKO:chowYellow (C8):metaboliteLACTIC            0.6497277 0.4302308
+## genotypeKO:chowYellow (C8):metaboliteLC even AC total  0.7968450 0.4309968
+## genotypeKO:chowYellow (C8):metaboliteLC odd AC total   0.1361594 0.4360711
+## genotypeKO:chowYellow (C8):metaboliteleucine           1.0353980 0.4380953
+## genotypeKO:chowYellow (C8):metaboliteMALIC             0.6371135 0.4288386
+## genotypeKO:chowYellow (C8):metaboliteMCAC total        0.8934399 0.4326781
+## genotypeKO:chowYellow (C8):metaboliteMETHYLSUCCINIC    0.9976601 0.4415882
+## genotypeKO:chowYellow (C8):metaboliteSUCCINIC-2        0.6302176 0.4266922
+## genotypeKO:chowYellow (C8):metabolitevaline            0.7417809 0.4293746
+##                                                        DF   t-value
+## (Intercept)                                           546  1.612446
+## genotypeKO                                             39  2.954568
+## chowYellow (C8)                                        39  3.756150
+## metabolitearginine                                    546  0.556645
+## metaboliteCITRIC                                      546  0.178245
+## metaboliteFUMARIC                                     546 -4.531468
+## metaboliteglutamine                                   546  8.032804
+## metaboliteisoleucine                                  546 -0.124478
+## metaboliteLACTIC                                      546  9.685610
+## metaboliteLC even AC total                            546  1.830843
+## metaboliteLC odd AC total                             546 -2.542079
+## metaboliteleucine                                     546  0.431682
+## metaboliteMALIC                                       546  3.355421
+## metaboliteMCAC total                                  546 -3.230418
+## metaboliteMETHYLSUCCINIC                              546 -6.741411
+## metaboliteSUCCINIC-2                                  546  4.354784
+## metabolitevaline                                      546  0.659164
+## genotypeKO:chowYellow (C8)                             39 -2.283360
+## genotypeKO:metabolitearginine                         546 -2.144118
+## genotypeKO:metaboliteCITRIC                           546  0.028175
+## genotypeKO:metaboliteFUMARIC                          546 -3.085267
+## genotypeKO:metaboliteglutamine                        546 -2.440526
+## genotypeKO:metaboliteisoleucine                       546 -2.306825
+## genotypeKO:metaboliteLACTIC                           546 -2.621997
+## genotypeKO:metaboliteLC even AC total                 546 -0.344895
+## genotypeKO:metaboliteLC odd AC total                  546  0.267207
+## genotypeKO:metaboliteleucine                          546 -2.227089
+## genotypeKO:metaboliteMALIC                            546 -2.541885
+## genotypeKO:metaboliteMCAC total                       546 -1.721983
+## genotypeKO:metaboliteMETHYLSUCCINIC                   546 -2.923393
+## genotypeKO:metaboliteSUCCINIC-2                       546 -2.466707
+## genotypeKO:metabolitevaline                           546 -2.279897
+## chowYellow (C8):metabolitearginine                    546 -4.722255
+## chowYellow (C8):metaboliteCITRIC                      546 -1.844312
+## chowYellow (C8):metaboliteFUMARIC                     546 -3.359551
+## chowYellow (C8):metaboliteglutamine                   546 -3.474941
+## chowYellow (C8):metaboliteisoleucine                  546 -4.069452
+## chowYellow (C8):metaboliteLACTIC                      546 -2.913403
+## chowYellow (C8):metaboliteLC even AC total            546 -2.772807
+## chowYellow (C8):metaboliteLC odd AC total             546 -3.039417
+## chowYellow (C8):metaboliteleucine                     546 -3.651374
+## chowYellow (C8):metaboliteMALIC                       546 -2.934977
+## chowYellow (C8):metaboliteMCAC total                  546 -3.318483
+## chowYellow (C8):metaboliteMETHYLSUCCINIC              546 -1.052023
+## chowYellow (C8):metaboliteSUCCINIC-2                  546 -2.634351
+## chowYellow (C8):metabolitevaline                      546 -2.102668
+## genotypeKO:chowYellow (C8):metabolitearginine         546  2.662926
+## genotypeKO:chowYellow (C8):metaboliteCITRIC           546  1.240472
+## genotypeKO:chowYellow (C8):metaboliteFUMARIC          546  2.219496
+## genotypeKO:chowYellow (C8):metaboliteglutamine        546  2.309600
+## genotypeKO:chowYellow (C8):metaboliteisoleucine       546  2.527419
+## genotypeKO:chowYellow (C8):metaboliteLACTIC           546  1.510184
+## genotypeKO:chowYellow (C8):metaboliteLC even AC total 546  1.848842
+## genotypeKO:chowYellow (C8):metaboliteLC odd AC total  546  0.312241
+## genotypeKO:chowYellow (C8):metaboliteleucine          546  2.363408
+## genotypeKO:chowYellow (C8):metaboliteMALIC            546  1.485672
+## genotypeKO:chowYellow (C8):metaboliteMCAC total       546  2.064907
+## genotypeKO:chowYellow (C8):metaboliteMETHYLSUCCINIC   546  2.259255
+## genotypeKO:chowYellow (C8):metaboliteSUCCINIC-2       546  1.476984
+## genotypeKO:chowYellow (C8):metabolitevaline           546  1.727584
+##                                                       p-value
+## (Intercept)                                            0.1074
+## genotypeKO                                             0.0053
+## chowYellow (C8)                                        0.0006
+## metabolitearginine                                     0.5780
+## metaboliteCITRIC                                       0.8586
+## metaboliteFUMARIC                                      0.0000
+## metaboliteglutamine                                    0.0000
+## metaboliteisoleucine                                   0.9010
+## metaboliteLACTIC                                       0.0000
+## metaboliteLC even AC total                             0.0677
+## metaboliteLC odd AC total                              0.0113
+## metaboliteleucine                                      0.6661
+## metaboliteMALIC                                        0.0008
+## metaboliteMCAC total                                   0.0013
+## metaboliteMETHYLSUCCINIC                               0.0000
+## metaboliteSUCCINIC-2                                   0.0000
+## metabolitevaline                                       0.5101
+## genotypeKO:chowYellow (C8)                             0.0279
+## genotypeKO:metabolitearginine                          0.0325
+## genotypeKO:metaboliteCITRIC                            0.9775
+## genotypeKO:metaboliteFUMARIC                           0.0021
+## genotypeKO:metaboliteglutamine                         0.0150
+## genotypeKO:metaboliteisoleucine                        0.0214
+## genotypeKO:metaboliteLACTIC                            0.0090
+## genotypeKO:metaboliteLC even AC total                  0.7303
+## genotypeKO:metaboliteLC odd AC total                   0.7894
+## genotypeKO:metaboliteleucine                           0.0263
+## genotypeKO:metaboliteMALIC                             0.0113
+## genotypeKO:metaboliteMCAC total                        0.0856
+## genotypeKO:metaboliteMETHYLSUCCINIC                    0.0036
+## genotypeKO:metaboliteSUCCINIC-2                        0.0139
+## genotypeKO:metabolitevaline                            0.0230
+## chowYellow (C8):metabolitearginine                     0.0000
+## chowYellow (C8):metaboliteCITRIC                       0.0657
+## chowYellow (C8):metaboliteFUMARIC                      0.0008
+## chowYellow (C8):metaboliteglutamine                    0.0006
+## chowYellow (C8):metaboliteisoleucine                   0.0001
+## chowYellow (C8):metaboliteLACTIC                       0.0037
+## chowYellow (C8):metaboliteLC even AC total             0.0057
+## chowYellow (C8):metaboliteLC odd AC total              0.0025
+## chowYellow (C8):metaboliteleucine                      0.0003
+## chowYellow (C8):metaboliteMALIC                        0.0035
+## chowYellow (C8):metaboliteMCAC total                   0.0010
+## chowYellow (C8):metaboliteMETHYLSUCCINIC               0.2933
+## chowYellow (C8):metaboliteSUCCINIC-2                   0.0087
+## chowYellow (C8):metabolitevaline                       0.0360
+## genotypeKO:chowYellow (C8):metabolitearginine          0.0080
+## genotypeKO:chowYellow (C8):metaboliteCITRIC            0.2153
+## genotypeKO:chowYellow (C8):metaboliteFUMARIC           0.0269
+## genotypeKO:chowYellow (C8):metaboliteglutamine         0.0213
+## genotypeKO:chowYellow (C8):metaboliteisoleucine        0.0118
+## genotypeKO:chowYellow (C8):metaboliteLACTIC            0.1316
+## genotypeKO:chowYellow (C8):metaboliteLC even AC total  0.0650
+## genotypeKO:chowYellow (C8):metaboliteLC odd AC total   0.7550
+## genotypeKO:chowYellow (C8):metaboliteleucine           0.0185
+## genotypeKO:chowYellow (C8):metaboliteMALIC             0.1379
+## genotypeKO:chowYellow (C8):metaboliteMCAC total        0.0394
+## genotypeKO:chowYellow (C8):metaboliteMETHYLSUCCINIC    0.0243
+## genotypeKO:chowYellow (C8):metaboliteSUCCINIC-2        0.1403
+## genotypeKO:chowYellow (C8):metabolitevaline            0.0846
 ##  Correlation: 
-##                                            (Intr) gntyKO chY(C8) mtbltr
-## genotypeKO                                 -0.558                      
-## chowYellow (C8)                            -0.829  0.359               
-## metabolitearginine                         -0.676  0.346  0.521        
-## metaboliteCITRIC                           -0.667  0.321  0.563   0.477
-## metaboliteFUMARIC                          -0.676  0.343  0.553   0.484
-## metaboliteglutamine                        -0.669  0.326  0.573   0.498
-## metaboliteisoleucine                       -0.679  0.350  0.525   0.499
-## metaboliteLACTIC                           -0.676  0.340  0.554   0.500
-## metaboliteLC even AC total                 -0.670  0.332  0.567   0.490
-## metaboliteLC odd AC total                  -0.684  0.366  0.512   0.509
-## metaboliteleucine                          -0.666  0.329  0.545   0.481
-## metaboliteMALIC                            -0.670  0.327  0.567   0.492
-## metaboliteMCAC total                       -0.677  0.354  0.532   0.495
-## metaboliteMETHYLSUCCINIC                   -0.672  0.344  0.537   0.492
-## metaboliteSUCCINIC-2                       -0.671  0.336  0.558   0.491
-## metabolitevaline                           -0.667  0.320  0.574   0.494
-## genotypeKO:chowYellow (C8)                  0.178 -0.320 -0.302   0.040
-## genotypeKO:metabolitearginine               0.355 -0.635 -0.147  -0.545
-## genotypeKO:metaboliteCITRIC                 0.338 -0.605 -0.222  -0.229
-## genotypeKO:metaboliteFUMARIC                0.354 -0.634 -0.205  -0.242
-## genotypeKO:metaboliteglutamine              0.341 -0.611 -0.241  -0.268
-## genotypeKO:metaboliteisoleucine             0.360 -0.645 -0.155  -0.271
-## genotypeKO:metaboliteLACTIC                 0.354 -0.634 -0.207  -0.272
-## genotypeKO:metaboliteLC even AC total       0.344 -0.616 -0.231  -0.254
-## genotypeKO:metaboliteLC odd AC total        0.370 -0.663 -0.135  -0.289
-## genotypeKO:metaboliteleucine                0.337 -0.604 -0.192  -0.238
-## genotypeKO:metaboliteMALIC                  0.343 -0.615 -0.229  -0.259
-## genotypeKO:metaboliteMCAC total             0.356 -0.638 -0.170  -0.263
-## genotypeKO:metaboliteMETHYLSUCCINIC         0.348 -0.623 -0.179  -0.259
-## genotypeKO:metaboliteSUCCINIC-2             0.346 -0.619 -0.215  -0.257
-## genotypeKO:metabolitevaline                 0.337 -0.605 -0.243  -0.262
-## chowYellow (C8):metabolitearginine          0.551 -0.187 -0.667  -0.786
-## chowYellow (C8):metaboliteCITRIC            0.593 -0.228 -0.599  -0.443
-## chowYellow (C8):metaboliteFUMARIC           0.575 -0.209 -0.607  -0.434
-## chowYellow (C8):metaboliteglutamine         0.594 -0.239 -0.639  -0.404
-## chowYellow (C8):metaboliteisoleucine        0.531 -0.155 -0.679  -0.375
-## chowYellow (C8):metaboliteLACTIC            0.577 -0.213 -0.641  -0.404
-## chowYellow (C8):metaboliteLC even AC total  0.570 -0.211 -0.609  -0.391
-## chowYellow (C8):metaboliteLC odd AC total   0.543 -0.173 -0.631  -0.377
-## chowYellow (C8):metaboliteleucine           0.561 -0.213 -0.638  -0.413
-## chowYellow (C8):metaboliteMALIC             0.601 -0.245 -0.625  -0.427
-## chowYellow (C8):metaboliteMCAC total        0.556 -0.197 -0.633  -0.399
-## chowYellow (C8):metaboliteMETHYLSUCCINIC    0.545 -0.189 -0.633  -0.390
-## chowYellow (C8):metaboliteSUCCINIC-2        0.570 -0.213 -0.615  -0.408
-## chowYellow (C8):metabolitevaline            0.598 -0.239 -0.605  -0.415
-##                                            mCITRI mFUMAR mtbltg mtblts
-## genotypeKO                                                            
-## chowYellow (C8)                                                       
-## metabolitearginine                                                    
-## metaboliteCITRIC                                                      
-## metaboliteFUMARIC                           0.493                     
-## metaboliteglutamine                         0.484  0.494              
-## metaboliteisoleucine                        0.499  0.507  0.496       
-## metaboliteLACTIC                            0.497  0.485  0.491  0.493
-## metaboliteLC even AC total                  0.478  0.494  0.473  0.485
-## metaboliteLC odd AC total                   0.482  0.512  0.507  0.511
-## metaboliteleucine                           0.477  0.484  0.471  0.490
-## metaboliteMALIC                             0.484  0.492  0.488  0.486
-## metaboliteMCAC total                        0.492  0.493  0.480  0.497
-## metaboliteMETHYLSUCCINIC                    0.483  0.493  0.485  0.492
-## metaboliteSUCCINIC-2                        0.483  0.488  0.487  0.493
-## metabolitevaline                            0.483  0.483  0.477  0.488
-## genotypeKO:chowYellow (C8)                  0.010 -0.001  0.007  0.030
-## genotypeKO:metabolitearginine              -0.223 -0.240 -0.262 -0.270
-## genotypeKO:metaboliteCITRIC                -0.531 -0.258 -0.236 -0.269
-## genotypeKO:metaboliteFUMARIC               -0.254 -0.541 -0.255 -0.284
-## genotypeKO:metaboliteglutamine             -0.236 -0.259 -0.533 -0.263
-## genotypeKO:metaboliteisoleucine            -0.263 -0.283 -0.259 -0.543
-## genotypeKO:metaboliteLACTIC                -0.261 -0.243 -0.250 -0.259
-## genotypeKO:metaboliteLC even AC total      -0.226 -0.259 -0.217 -0.243
-## genotypeKO:metaboliteLC odd AC total       -0.233 -0.293 -0.279 -0.291
-## genotypeKO:metaboliteleucine               -0.223 -0.241 -0.214 -0.253
-## genotypeKO:metaboliteMALIC                 -0.235 -0.257 -0.245 -0.245
-## genotypeKO:metaboliteMCAC total            -0.252 -0.258 -0.231 -0.266
-## genotypeKO:metaboliteMETHYLSUCCINIC        -0.235 -0.258 -0.239 -0.258
-## genotypeKO:metaboliteSUCCINIC-2            -0.234 -0.248 -0.243 -0.259
-## genotypeKO:metabolitevaline                -0.233 -0.239 -0.223 -0.250
-## chowYellow (C8):metabolitearginine         -0.433 -0.424 -0.405 -0.391
-## chowYellow (C8):metaboliteCITRIC           -0.839 -0.411 -0.454 -0.408
-## chowYellow (C8):metaboliteFUMARIC          -0.414 -0.821 -0.431 -0.397
-## chowYellow (C8):metaboliteglutamine        -0.441 -0.423 -0.863 -0.412
-## chowYellow (C8):metaboliteisoleucine       -0.379 -0.367 -0.408 -0.770
-## chowYellow (C8):metaboliteLACTIC           -0.415 -0.440 -0.436 -0.420
-## chowYellow (C8):metaboliteLC even AC total -0.439 -0.416 -0.458 -0.416
-## chowYellow (C8):metaboliteLC odd AC total  -0.435 -0.365 -0.410 -0.388
-## chowYellow (C8):metaboliteleucine          -0.433 -0.413 -0.442 -0.399
-## chowYellow (C8):metaboliteMALIC            -0.451 -0.433 -0.451 -0.444
-## chowYellow (C8):metaboliteMCAC total       -0.414 -0.401 -0.442 -0.410
-## chowYellow (C8):metaboliteMETHYLSUCCINIC   -0.414 -0.394 -0.419 -0.393
-## chowYellow (C8):metaboliteSUCCINIC-2       -0.431 -0.421 -0.432 -0.408
-## chowYellow (C8):metabolitevaline           -0.444 -0.446 -0.467 -0.433
-##                                            mLACTI mLCeAt mLCoAt mtbltl
-## genotypeKO                                                            
-## chowYellow (C8)                                                       
-## metabolitearginine                                                    
-## metaboliteCITRIC                                                      
-## metaboliteFUMARIC                                                     
-## metaboliteglutamine                                                   
-## metaboliteisoleucine                                                  
-## metaboliteLACTIC                                                      
-## metaboliteLC even AC total                  0.490                     
-## metaboliteLC odd AC total                   0.501  0.504              
-## metaboliteleucine                           0.489  0.483  0.499       
-## metaboliteMALIC                             0.487  0.498  0.488  0.486
-## metaboliteMCAC total                        0.493  0.486  0.500  0.486
-## metaboliteMETHYLSUCCINIC                    0.490  0.487  0.493  0.492
-## metaboliteSUCCINIC-2                        0.501  0.490  0.490  0.475
-## metabolitevaline                            0.486  0.487  0.497  0.483
-## genotypeKO:chowYellow (C8)                  0.010  0.000  0.016  0.022
-## genotypeKO:metabolitearginine              -0.268 -0.252 -0.293 -0.239
-## genotypeKO:metaboliteCITRIC                -0.264 -0.229 -0.242 -0.230
-## genotypeKO:metaboliteFUMARIC               -0.241 -0.258 -0.299 -0.243
-## genotypeKO:metaboliteglutamine             -0.252 -0.219 -0.289 -0.219
-## genotypeKO:metaboliteisoleucine            -0.256 -0.241 -0.296 -0.254
-## genotypeKO:metaboliteLACTIC                -0.537 -0.252 -0.278 -0.253
-## genotypeKO:metaboliteLC even AC total      -0.251 -0.539 -0.285 -0.241
-## genotypeKO:metaboliteLC odd AC total       -0.270 -0.278 -0.552 -0.270
-## genotypeKO:metaboliteleucine               -0.248 -0.238 -0.274 -0.546
-## genotypeKO:metaboliteMALIC                 -0.243 -0.265 -0.255 -0.246
-## genotypeKO:metaboliteMCAC total            -0.256 -0.244 -0.276 -0.248
-## genotypeKO:metaboliteMETHYLSUCCINIC        -0.250 -0.245 -0.264 -0.258
-## genotypeKO:metaboliteSUCCINIC-2            -0.270 -0.251 -0.258 -0.228
-## genotypeKO:metabolitevaline                -0.241 -0.244 -0.271 -0.241
-## chowYellow (C8):metabolitearginine         -0.402 -0.401 -0.364 -0.421
-## chowYellow (C8):metaboliteCITRIC           -0.425 -0.453 -0.428 -0.452
-## chowYellow (C8):metaboliteFUMARIC          -0.448 -0.426 -0.361 -0.431
-## chowYellow (C8):metaboliteglutamine        -0.433 -0.462 -0.400 -0.456
-## chowYellow (C8):metaboliteisoleucine       -0.399 -0.404 -0.340 -0.393
-## chowYellow (C8):metaboliteLACTIC           -0.834 -0.431 -0.396 -0.423
-## chowYellow (C8):metaboliteLC even AC total -0.428 -0.811 -0.385 -0.423
-## chowYellow (C8):metaboliteLC odd AC total  -0.410 -0.399 -0.733 -0.404
-## chowYellow (C8):metaboliteleucine          -0.409 -0.417 -0.387 -0.763
-## chowYellow (C8):metaboliteMALIC            -0.452 -0.426 -0.431 -0.438
-## chowYellow (C8):metaboliteMCAC total       -0.414 -0.430 -0.391 -0.415
-## chowYellow (C8):metaboliteMETHYLSUCCINIC   -0.407 -0.410 -0.383 -0.388
-## chowYellow (C8):metaboliteSUCCINIC-2       -0.402 -0.420 -0.406 -0.436
-## chowYellow (C8):metabolitevaline           -0.446 -0.439 -0.405 -0.441
-##                                            mMALIC mMCACt mMETHY mSUCCI
-## genotypeKO                                                            
-## chowYellow (C8)                                                       
-## metabolitearginine                                                    
-## metaboliteCITRIC                                                      
-## metaboliteFUMARIC                                                     
-## metaboliteglutamine                                                   
-## metaboliteisoleucine                                                  
-## metaboliteLACTIC                                                      
-## metaboliteLC even AC total                                            
-## metaboliteLC odd AC total                                             
-## metaboliteleucine                                                     
-## metaboliteMALIC                                                       
-## metaboliteMCAC total                        0.496                     
-## metaboliteMETHYLSUCCINIC                    0.483  0.495              
-## metaboliteSUCCINIC-2                        0.485  0.496  0.495       
-## metabolitevaline                            0.480  0.499  0.478  0.477
-## genotypeKO:chowYellow (C8)                  0.015  0.003  0.019  0.007
-## genotypeKO:metabolitearginine              -0.252 -0.268 -0.262 -0.256
-## genotypeKO:metaboliteCITRIC                -0.235 -0.263 -0.244 -0.240
-## genotypeKO:metaboliteFUMARIC               -0.252 -0.264 -0.263 -0.249
-## genotypeKO:metaboliteglutamine             -0.244 -0.240 -0.248 -0.248
-## genotypeKO:metaboliteisoleucine            -0.239 -0.272 -0.262 -0.259
-## genotypeKO:metaboliteLACTIC                -0.240 -0.264 -0.257 -0.273
-## genotypeKO:metaboliteLC even AC total      -0.261 -0.251 -0.251 -0.253
-## genotypeKO:metaboliteLC odd AC total       -0.245 -0.277 -0.264 -0.254
-## genotypeKO:metaboliteleucine               -0.239 -0.252 -0.261 -0.227
-## genotypeKO:metaboliteMALIC                 -0.531 -0.269 -0.245 -0.244
-## genotypeKO:metaboliteMCAC total            -0.258 -0.554 -0.267 -0.264
-## genotypeKO:metaboliteMETHYLSUCCINIC        -0.235 -0.268 -0.552 -0.262
-## genotypeKO:metaboliteSUCCINIC-2            -0.238 -0.269 -0.266 -0.543
-## genotypeKO:metabolitevaline                -0.228 -0.276 -0.235 -0.227
-## chowYellow (C8):metabolitearginine         -0.416 -0.391 -0.395 -0.406
-## chowYellow (C8):metaboliteCITRIC           -0.451 -0.416 -0.428 -0.441
-## chowYellow (C8):metaboliteFUMARIC          -0.432 -0.410 -0.410 -0.428
-## chowYellow (C8):metaboliteglutamine        -0.445 -0.440 -0.436 -0.440
-## chowYellow (C8):metaboliteisoleucine       -0.396 -0.383 -0.389 -0.398
-## chowYellow (C8):metaboliteLACTIC           -0.445 -0.410 -0.420 -0.408
-## chowYellow (C8):metaboliteLC even AC total -0.407 -0.413 -0.411 -0.417
-## chowYellow (C8):metaboliteLC odd AC total  -0.420 -0.398 -0.383 -0.400
-## chowYellow (C8):metaboliteleucine          -0.420 -0.400 -0.395 -0.432
-## chowYellow (C8):metaboliteMALIC            -0.864 -0.415 -0.443 -0.448
-## chowYellow (C8):metaboliteMCAC total       -0.422 -0.760 -0.392 -0.399
-## chowYellow (C8):metaboliteMETHYLSUCCINIC   -0.423 -0.378 -0.748 -0.391
-## chowYellow (C8):metaboliteSUCCINIC-2       -0.436 -0.393 -0.399 -0.799
-## chowYellow (C8):metabolitevaline           -0.463 -0.406 -0.443 -0.454
-##                                            mtbltv gKO:Y( gntypKO:mtbltr
+##                                                       (Intr) gntyKO
+## genotypeKO                                            -0.707       
+## chowYellow (C8)                                       -0.789  0.558
+## metabolitearginine                                    -0.700  0.495
+## metaboliteCITRIC                                      -0.700  0.495
+## metaboliteFUMARIC                                     -0.700  0.495
+## metaboliteglutamine                                   -0.700  0.495
+## metaboliteisoleucine                                  -0.700  0.495
+## metaboliteLACTIC                                      -0.700  0.495
+## metaboliteLC even AC total                            -0.700  0.495
+## metaboliteLC odd AC total                             -0.700  0.495
+## metaboliteleucine                                     -0.700  0.495
+## metaboliteMALIC                                       -0.700  0.495
+## metaboliteMCAC total                                  -0.700  0.495
+## metaboliteMETHYLSUCCINIC                              -0.700  0.495
+## metaboliteSUCCINIC-2                                  -0.700  0.495
+## metabolitevaline                                      -0.700  0.495
+## genotypeKO:chowYellow (C8)                             0.519 -0.734
+## genotypeKO:metabolitearginine                          0.495 -0.700
+## genotypeKO:metaboliteCITRIC                            0.495 -0.700
+## genotypeKO:metaboliteFUMARIC                           0.495 -0.700
+## genotypeKO:metaboliteglutamine                         0.495 -0.700
+## genotypeKO:metaboliteisoleucine                        0.495 -0.700
+## genotypeKO:metaboliteLACTIC                            0.495 -0.700
+## genotypeKO:metaboliteLC even AC total                  0.495 -0.700
+## genotypeKO:metaboliteLC odd AC total                   0.495 -0.700
+## genotypeKO:metaboliteleucine                           0.495 -0.700
+## genotypeKO:metaboliteMALIC                             0.495 -0.700
+## genotypeKO:metaboliteMCAC total                        0.495 -0.700
+## genotypeKO:metaboliteMETHYLSUCCINIC                    0.495 -0.700
+## genotypeKO:metaboliteSUCCINIC-2                        0.495 -0.700
+## genotypeKO:metabolitevaline                            0.495 -0.700
+## chowYellow (C8):metabolitearginine                     0.582 -0.411
+## chowYellow (C8):metaboliteCITRIC                       0.528 -0.373
+## chowYellow (C8):metaboliteFUMARIC                      0.538 -0.380
+## chowYellow (C8):metaboliteglutamine                    0.561 -0.397
+## chowYellow (C8):metaboliteisoleucine                   0.541 -0.382
+## chowYellow (C8):metaboliteLACTIC                       0.545 -0.385
+## chowYellow (C8):metaboliteLC even AC total             0.548 -0.387
+## chowYellow (C8):metaboliteLC odd AC total              0.530 -0.375
+## chowYellow (C8):metaboliteleucine                      0.522 -0.369
+## chowYellow (C8):metaboliteMALIC                        0.551 -0.389
+## chowYellow (C8):metaboliteMCAC total                   0.545 -0.385
+## chowYellow (C8):metaboliteMETHYLSUCCINIC               0.515 -0.364
+## chowYellow (C8):metaboliteSUCCINIC-2                   0.557 -0.394
+## chowYellow (C8):metabolitevaline                       0.547 -0.387
+## genotypeKO:chowYellow (C8):metabolitearginine         -0.370  0.524
+## genotypeKO:chowYellow (C8):metaboliteCITRIC           -0.358  0.506
+## genotypeKO:chowYellow (C8):metaboliteFUMARIC          -0.360  0.509
+## genotypeKO:chowYellow (C8):metaboliteglutamine        -0.364  0.515
+## genotypeKO:chowYellow (C8):metaboliteisoleucine       -0.362  0.512
+## genotypeKO:chowYellow (C8):metaboliteLACTIC           -0.362  0.511
+## genotypeKO:chowYellow (C8):metaboliteLC even AC total -0.361  0.511
+## genotypeKO:chowYellow (C8):metaboliteLC odd AC total  -0.357  0.505
+## genotypeKO:chowYellow (C8):metaboliteleucine          -0.355  0.502
+## genotypeKO:chowYellow (C8):metaboliteMALIC            -0.363  0.513
+## genotypeKO:chowYellow (C8):metaboliteMCAC total       -0.360  0.509
+## genotypeKO:chowYellow (C8):metaboliteMETHYLSUCCINIC   -0.352  0.498
+## genotypeKO:chowYellow (C8):metaboliteSUCCINIC-2       -0.365  0.516
+## genotypeKO:chowYellow (C8):metabolitevaline           -0.362  0.512
+##                                                       chY(C8) mtbltr
+## genotypeKO                                                          
+## chowYellow (C8)                                                     
+## metabolitearginine                                     0.553        
+## metaboliteCITRIC                                       0.553   0.500
+## metaboliteFUMARIC                                      0.553   0.500
+## metaboliteglutamine                                    0.553   0.500
+## metaboliteisoleucine                                   0.553   0.500
+## metaboliteLACTIC                                       0.553   0.500
+## metaboliteLC even AC total                             0.553   0.500
+## metaboliteLC odd AC total                              0.553   0.500
+## metaboliteleucine                                      0.553   0.500
+## metaboliteMALIC                                        0.553   0.500
+## metaboliteMCAC total                                   0.553   0.500
+## metaboliteMETHYLSUCCINIC                               0.553   0.500
+## metaboliteSUCCINIC-2                                   0.553   0.500
+## metabolitevaline                                       0.553   0.500
+## genotypeKO:chowYellow (C8)                            -0.659  -0.363
+## genotypeKO:metabolitearginine                         -0.391  -0.707
+## genotypeKO:metaboliteCITRIC                           -0.391  -0.354
+## genotypeKO:metaboliteFUMARIC                          -0.391  -0.354
+## genotypeKO:metaboliteglutamine                        -0.391  -0.354
+## genotypeKO:metaboliteisoleucine                       -0.391  -0.354
+## genotypeKO:metaboliteLACTIC                           -0.391  -0.354
+## genotypeKO:metaboliteLC even AC total                 -0.391  -0.354
+## genotypeKO:metaboliteLC odd AC total                  -0.391  -0.354
+## genotypeKO:metaboliteleucine                          -0.391  -0.354
+## genotypeKO:metaboliteMALIC                            -0.391  -0.354
+## genotypeKO:metaboliteMCAC total                       -0.391  -0.354
+## genotypeKO:metaboliteMETHYLSUCCINIC                   -0.391  -0.354
+## genotypeKO:metaboliteSUCCINIC-2                       -0.391  -0.354
+## genotypeKO:metabolitevaline                           -0.391  -0.354
+## chowYellow (C8):metabolitearginine                    -0.711  -0.831
+## chowYellow (C8):metaboliteCITRIC                      -0.710  -0.377
+## chowYellow (C8):metaboliteFUMARIC                     -0.668  -0.384
+## chowYellow (C8):metaboliteglutamine                   -0.643  -0.401
+## chowYellow (C8):metaboliteisoleucine                  -0.724  -0.386
+## chowYellow (C8):metaboliteLACTIC                      -0.684  -0.389
+## chowYellow (C8):metaboliteLC even AC total            -0.657  -0.391
+## chowYellow (C8):metaboliteLC odd AC total             -0.714  -0.378
+## chowYellow (C8):metaboliteleucine                     -0.683  -0.373
+## chowYellow (C8):metaboliteMALIC                       -0.668  -0.393
+## chowYellow (C8):metaboliteMCAC total                  -0.695  -0.389
+## chowYellow (C8):metaboliteMETHYLSUCCINIC              -0.691  -0.368
+## chowYellow (C8):metaboliteSUCCINIC-2                  -0.654  -0.397
+## chowYellow (C8):metabolitevaline                      -0.632  -0.391
+## genotypeKO:chowYellow (C8):metabolitearginine          0.455   0.529
+## genotypeKO:chowYellow (C8):metaboliteCITRIC            0.483   0.255
+## genotypeKO:chowYellow (C8):metaboliteFUMARIC           0.451   0.257
+## genotypeKO:chowYellow (C8):metaboliteglutamine         0.418   0.260
+## genotypeKO:chowYellow (C8):metaboliteisoleucine        0.482   0.259
+## genotypeKO:chowYellow (C8):metaboliteLACTIC            0.456   0.258
+## genotypeKO:chowYellow (C8):metaboliteLC even AC total  0.436   0.258
+## genotypeKO:chowYellow (C8):metaboliteLC odd AC total   0.488   0.255
+## genotypeKO:chowYellow (C8):metaboliteleucine           0.463   0.254
+## genotypeKO:chowYellow (C8):metaboliteMALIC             0.442   0.259
+## genotypeKO:chowYellow (C8):metaboliteMCAC total        0.463   0.257
+## genotypeKO:chowYellow (C8):metaboliteMETHYLSUCCINIC    0.475   0.252
+## genotypeKO:chowYellow (C8):metaboliteSUCCINIC-2        0.431   0.260
+## genotypeKO:chowYellow (C8):metabolitevaline            0.420   0.259
+##                                                       mCITRI mFUMAR mtbltg
+## genotypeKO                                                                
+## chowYellow (C8)                                                           
+## metabolitearginine                                                        
+## metaboliteCITRIC                                                          
+## metaboliteFUMARIC                                      0.500              
+## metaboliteglutamine                                    0.500  0.500       
+## metaboliteisoleucine                                   0.500  0.500  0.500
+## metaboliteLACTIC                                       0.500  0.500  0.500
+## metaboliteLC even AC total                             0.500  0.500  0.500
+## metaboliteLC odd AC total                              0.500  0.500  0.500
+## metaboliteleucine                                      0.500  0.500  0.500
+## metaboliteMALIC                                        0.500  0.500  0.500
+## metaboliteMCAC total                                   0.500  0.500  0.500
+## metaboliteMETHYLSUCCINIC                               0.500  0.500  0.500
+## metaboliteSUCCINIC-2                                   0.500  0.500  0.500
+## metabolitevaline                                       0.500  0.500  0.500
+## genotypeKO:chowYellow (C8)                            -0.363 -0.363 -0.363
+## genotypeKO:metabolitearginine                         -0.354 -0.354 -0.354
+## genotypeKO:metaboliteCITRIC                           -0.707 -0.354 -0.354
+## genotypeKO:metaboliteFUMARIC                          -0.354 -0.707 -0.354
+## genotypeKO:metaboliteglutamine                        -0.354 -0.354 -0.707
+## genotypeKO:metaboliteisoleucine                       -0.354 -0.354 -0.354
+## genotypeKO:metaboliteLACTIC                           -0.354 -0.354 -0.354
+## genotypeKO:metaboliteLC even AC total                 -0.354 -0.354 -0.354
+## genotypeKO:metaboliteLC odd AC total                  -0.354 -0.354 -0.354
+## genotypeKO:metaboliteleucine                          -0.354 -0.354 -0.354
+## genotypeKO:metaboliteMALIC                            -0.354 -0.354 -0.354
+## genotypeKO:metaboliteMCAC total                       -0.354 -0.354 -0.354
+## genotypeKO:metaboliteMETHYLSUCCINIC                   -0.354 -0.354 -0.354
+## genotypeKO:metaboliteSUCCINIC-2                       -0.354 -0.354 -0.354
+## genotypeKO:metabolitevaline                           -0.354 -0.354 -0.354
+## chowYellow (C8):metabolitearginine                    -0.415 -0.415 -0.415
+## chowYellow (C8):metaboliteCITRIC                      -0.753 -0.377 -0.377
+## chowYellow (C8):metaboliteFUMARIC                     -0.384 -0.768 -0.384
+## chowYellow (C8):metaboliteglutamine                   -0.401 -0.401 -0.801
+## chowYellow (C8):metaboliteisoleucine                  -0.386 -0.386 -0.386
+## chowYellow (C8):metaboliteLACTIC                      -0.389 -0.389 -0.389
+## chowYellow (C8):metaboliteLC even AC total            -0.391 -0.391 -0.391
+## chowYellow (C8):metaboliteLC odd AC total             -0.378 -0.378 -0.378
+## chowYellow (C8):metaboliteleucine                     -0.373 -0.373 -0.373
+## chowYellow (C8):metaboliteMALIC                       -0.393 -0.393 -0.393
+## chowYellow (C8):metaboliteMCAC total                  -0.389 -0.389 -0.389
+## chowYellow (C8):metaboliteMETHYLSUCCINIC              -0.368 -0.368 -0.368
+## chowYellow (C8):metaboliteSUCCINIC-2                  -0.397 -0.397 -0.397
+## chowYellow (C8):metabolitevaline                      -0.391 -0.391 -0.391
+## genotypeKO:chowYellow (C8):metabolitearginine          0.264  0.264  0.264
+## genotypeKO:chowYellow (C8):metaboliteCITRIC            0.510  0.255  0.255
+## genotypeKO:chowYellow (C8):metaboliteFUMARIC           0.257  0.514  0.257
+## genotypeKO:chowYellow (C8):metaboliteglutamine         0.260  0.260  0.520
+## genotypeKO:chowYellow (C8):metaboliteisoleucine        0.259  0.259  0.259
+## genotypeKO:chowYellow (C8):metaboliteLACTIC            0.258  0.258  0.258
+## genotypeKO:chowYellow (C8):metaboliteLC even AC total  0.258  0.258  0.258
+## genotypeKO:chowYellow (C8):metaboliteLC odd AC total   0.255  0.255  0.255
+## genotypeKO:chowYellow (C8):metaboliteleucine           0.254  0.254  0.254
+## genotypeKO:chowYellow (C8):metaboliteMALIC             0.259  0.259  0.259
+## genotypeKO:chowYellow (C8):metaboliteMCAC total        0.257  0.257  0.257
+## genotypeKO:chowYellow (C8):metaboliteMETHYLSUCCINIC    0.252  0.252  0.252
+## genotypeKO:chowYellow (C8):metaboliteSUCCINIC-2        0.260  0.260  0.260
+## genotypeKO:chowYellow (C8):metabolitevaline            0.259  0.259  0.259
+##                                                       mtblts mLACTI mLCeAt
+## genotypeKO                                                                
+## chowYellow (C8)                                                           
+## metabolitearginine                                                        
+## metaboliteCITRIC                                                          
+## metaboliteFUMARIC                                                         
+## metaboliteglutamine                                                       
+## metaboliteisoleucine                                                      
+## metaboliteLACTIC                                       0.500              
+## metaboliteLC even AC total                             0.500  0.500       
+## metaboliteLC odd AC total                              0.500  0.500  0.500
+## metaboliteleucine                                      0.500  0.500  0.500
+## metaboliteMALIC                                        0.500  0.500  0.500
+## metaboliteMCAC total                                   0.500  0.500  0.500
+## metaboliteMETHYLSUCCINIC                               0.500  0.500  0.500
+## metaboliteSUCCINIC-2                                   0.500  0.500  0.500
+## metabolitevaline                                       0.500  0.500  0.500
+## genotypeKO:chowYellow (C8)                            -0.363 -0.363 -0.363
+## genotypeKO:metabolitearginine                         -0.354 -0.354 -0.354
+## genotypeKO:metaboliteCITRIC                           -0.354 -0.354 -0.354
+## genotypeKO:metaboliteFUMARIC                          -0.354 -0.354 -0.354
+## genotypeKO:metaboliteglutamine                        -0.354 -0.354 -0.354
+## genotypeKO:metaboliteisoleucine                       -0.707 -0.354 -0.354
+## genotypeKO:metaboliteLACTIC                           -0.354 -0.707 -0.354
+## genotypeKO:metaboliteLC even AC total                 -0.354 -0.354 -0.707
+## genotypeKO:metaboliteLC odd AC total                  -0.354 -0.354 -0.354
+## genotypeKO:metaboliteleucine                          -0.354 -0.354 -0.354
+## genotypeKO:metaboliteMALIC                            -0.354 -0.354 -0.354
+## genotypeKO:metaboliteMCAC total                       -0.354 -0.354 -0.354
+## genotypeKO:metaboliteMETHYLSUCCINIC                   -0.354 -0.354 -0.354
+## genotypeKO:metaboliteSUCCINIC-2                       -0.354 -0.354 -0.354
+## genotypeKO:metabolitevaline                           -0.354 -0.354 -0.354
+## chowYellow (C8):metabolitearginine                    -0.415 -0.415 -0.415
+## chowYellow (C8):metaboliteCITRIC                      -0.377 -0.377 -0.377
+## chowYellow (C8):metaboliteFUMARIC                     -0.384 -0.384 -0.384
+## chowYellow (C8):metaboliteglutamine                   -0.401 -0.401 -0.401
+## chowYellow (C8):metaboliteisoleucine                  -0.772 -0.386 -0.386
+## chowYellow (C8):metaboliteLACTIC                      -0.389 -0.778 -0.389
+## chowYellow (C8):metaboliteLC even AC total            -0.391 -0.391 -0.782
+## chowYellow (C8):metaboliteLC odd AC total             -0.378 -0.378 -0.378
+## chowYellow (C8):metaboliteleucine                     -0.373 -0.373 -0.373
+## chowYellow (C8):metaboliteMALIC                       -0.393 -0.393 -0.393
+## chowYellow (C8):metaboliteMCAC total                  -0.389 -0.389 -0.389
+## chowYellow (C8):metaboliteMETHYLSUCCINIC              -0.368 -0.368 -0.368
+## chowYellow (C8):metaboliteSUCCINIC-2                  -0.397 -0.397 -0.397
+## chowYellow (C8):metabolitevaline                      -0.391 -0.391 -0.391
+## genotypeKO:chowYellow (C8):metabolitearginine          0.264  0.264  0.264
+## genotypeKO:chowYellow (C8):metaboliteCITRIC            0.255  0.255  0.255
+## genotypeKO:chowYellow (C8):metaboliteFUMARIC           0.257  0.257  0.257
+## genotypeKO:chowYellow (C8):metaboliteglutamine         0.260  0.260  0.260
+## genotypeKO:chowYellow (C8):metaboliteisoleucine        0.517  0.259  0.259
+## genotypeKO:chowYellow (C8):metaboliteLACTIC            0.258  0.516  0.258
+## genotypeKO:chowYellow (C8):metaboliteLC even AC total  0.258  0.258  0.515
+## genotypeKO:chowYellow (C8):metaboliteLC odd AC total   0.255  0.255  0.255
+## genotypeKO:chowYellow (C8):metaboliteleucine           0.254  0.254  0.254
+## genotypeKO:chowYellow (C8):metaboliteMALIC             0.259  0.259  0.259
+## genotypeKO:chowYellow (C8):metaboliteMCAC total        0.257  0.257  0.257
+## genotypeKO:chowYellow (C8):metaboliteMETHYLSUCCINIC    0.252  0.252  0.252
+## genotypeKO:chowYellow (C8):metaboliteSUCCINIC-2        0.260  0.260  0.260
+## genotypeKO:chowYellow (C8):metabolitevaline            0.259  0.259  0.259
+##                                                       mLCoAt mtbltl mMALIC
+## genotypeKO                                                                
+## chowYellow (C8)                                                           
+## metabolitearginine                                                        
+## metaboliteCITRIC                                                          
+## metaboliteFUMARIC                                                         
+## metaboliteglutamine                                                       
+## metaboliteisoleucine                                                      
+## metaboliteLACTIC                                                          
+## metaboliteLC even AC total                                                
+## metaboliteLC odd AC total                                                 
+## metaboliteleucine                                      0.500              
+## metaboliteMALIC                                        0.500  0.500       
+## metaboliteMCAC total                                   0.500  0.500  0.500
+## metaboliteMETHYLSUCCINIC                               0.500  0.500  0.500
+## metaboliteSUCCINIC-2                                   0.500  0.500  0.500
+## metabolitevaline                                       0.500  0.500  0.500
+## genotypeKO:chowYellow (C8)                            -0.363 -0.363 -0.363
+## genotypeKO:metabolitearginine                         -0.354 -0.354 -0.354
+## genotypeKO:metaboliteCITRIC                           -0.354 -0.354 -0.354
+## genotypeKO:metaboliteFUMARIC                          -0.354 -0.354 -0.354
+## genotypeKO:metaboliteglutamine                        -0.354 -0.354 -0.354
+## genotypeKO:metaboliteisoleucine                       -0.354 -0.354 -0.354
+## genotypeKO:metaboliteLACTIC                           -0.354 -0.354 -0.354
+## genotypeKO:metaboliteLC even AC total                 -0.354 -0.354 -0.354
+## genotypeKO:metaboliteLC odd AC total                  -0.707 -0.354 -0.354
+## genotypeKO:metaboliteleucine                          -0.354 -0.707 -0.354
+## genotypeKO:metaboliteMALIC                            -0.354 -0.354 -0.707
+## genotypeKO:metaboliteMCAC total                       -0.354 -0.354 -0.354
+## genotypeKO:metaboliteMETHYLSUCCINIC                   -0.354 -0.354 -0.354
+## genotypeKO:metaboliteSUCCINIC-2                       -0.354 -0.354 -0.354
+## genotypeKO:metabolitevaline                           -0.354 -0.354 -0.354
+## chowYellow (C8):metabolitearginine                    -0.415 -0.415 -0.415
+## chowYellow (C8):metaboliteCITRIC                      -0.377 -0.377 -0.377
+## chowYellow (C8):metaboliteFUMARIC                     -0.384 -0.384 -0.384
+## chowYellow (C8):metaboliteglutamine                   -0.401 -0.401 -0.401
+## chowYellow (C8):metaboliteisoleucine                  -0.386 -0.386 -0.386
+## chowYellow (C8):metaboliteLACTIC                      -0.389 -0.389 -0.389
+## chowYellow (C8):metaboliteLC even AC total            -0.391 -0.391 -0.391
+## chowYellow (C8):metaboliteLC odd AC total             -0.756 -0.378 -0.378
+## chowYellow (C8):metaboliteleucine                     -0.373 -0.746 -0.373
+## chowYellow (C8):metaboliteMALIC                       -0.393 -0.393 -0.786
+## chowYellow (C8):metaboliteMCAC total                  -0.389 -0.389 -0.389
+## chowYellow (C8):metaboliteMETHYLSUCCINIC              -0.368 -0.368 -0.368
+## chowYellow (C8):metaboliteSUCCINIC-2                  -0.397 -0.397 -0.397
+## chowYellow (C8):metabolitevaline                      -0.391 -0.391 -0.391
+## genotypeKO:chowYellow (C8):metabolitearginine          0.264  0.264  0.264
+## genotypeKO:chowYellow (C8):metaboliteCITRIC            0.255  0.255  0.255
+## genotypeKO:chowYellow (C8):metaboliteFUMARIC           0.257  0.257  0.257
+## genotypeKO:chowYellow (C8):metaboliteglutamine         0.260  0.260  0.260
+## genotypeKO:chowYellow (C8):metaboliteisoleucine        0.259  0.259  0.259
+## genotypeKO:chowYellow (C8):metaboliteLACTIC            0.258  0.258  0.258
+## genotypeKO:chowYellow (C8):metaboliteLC even AC total  0.258  0.258  0.258
+## genotypeKO:chowYellow (C8):metaboliteLC odd AC total   0.509  0.255  0.255
+## genotypeKO:chowYellow (C8):metaboliteleucine           0.254  0.507  0.254
+## genotypeKO:chowYellow (C8):metaboliteMALIC             0.259  0.259  0.518
+## genotypeKO:chowYellow (C8):metaboliteMCAC total        0.257  0.257  0.257
+## genotypeKO:chowYellow (C8):metaboliteMETHYLSUCCINIC    0.252  0.252  0.252
+## genotypeKO:chowYellow (C8):metaboliteSUCCINIC-2        0.260  0.260  0.260
+## genotypeKO:chowYellow (C8):metabolitevaline            0.259  0.259  0.259
+##                                                       mMCACt mMETHY mSUCCI
+## genotypeKO                                                                
+## chowYellow (C8)                                                           
+## metabolitearginine                                                        
+## metaboliteCITRIC                                                          
+## metaboliteFUMARIC                                                         
+## metaboliteglutamine                                                       
+## metaboliteisoleucine                                                      
+## metaboliteLACTIC                                                          
+## metaboliteLC even AC total                                                
+## metaboliteLC odd AC total                                                 
+## metaboliteleucine                                                         
+## metaboliteMALIC                                                           
+## metaboliteMCAC total                                                      
+## metaboliteMETHYLSUCCINIC                               0.500              
+## metaboliteSUCCINIC-2                                   0.500  0.500       
+## metabolitevaline                                       0.500  0.500  0.500
+## genotypeKO:chowYellow (C8)                            -0.363 -0.363 -0.363
+## genotypeKO:metabolitearginine                         -0.354 -0.354 -0.354
+## genotypeKO:metaboliteCITRIC                           -0.354 -0.354 -0.354
+## genotypeKO:metaboliteFUMARIC                          -0.354 -0.354 -0.354
+## genotypeKO:metaboliteglutamine                        -0.354 -0.354 -0.354
+## genotypeKO:metaboliteisoleucine                       -0.354 -0.354 -0.354
+## genotypeKO:metaboliteLACTIC                           -0.354 -0.354 -0.354
+## genotypeKO:metaboliteLC even AC total                 -0.354 -0.354 -0.354
+## genotypeKO:metaboliteLC odd AC total                  -0.354 -0.354 -0.354
+## genotypeKO:metaboliteleucine                          -0.354 -0.354 -0.354
+## genotypeKO:metaboliteMALIC                            -0.354 -0.354 -0.354
+## genotypeKO:metaboliteMCAC total                       -0.707 -0.354 -0.354
+## genotypeKO:metaboliteMETHYLSUCCINIC                   -0.354 -0.707 -0.354
+## genotypeKO:metaboliteSUCCINIC-2                       -0.354 -0.354 -0.707
+## genotypeKO:metabolitevaline                           -0.354 -0.354 -0.354
+## chowYellow (C8):metabolitearginine                    -0.415 -0.415 -0.415
+## chowYellow (C8):metaboliteCITRIC                      -0.377 -0.377 -0.377
+## chowYellow (C8):metaboliteFUMARIC                     -0.384 -0.384 -0.384
+## chowYellow (C8):metaboliteglutamine                   -0.401 -0.401 -0.401
+## chowYellow (C8):metaboliteisoleucine                  -0.386 -0.386 -0.386
+## chowYellow (C8):metaboliteLACTIC                      -0.389 -0.389 -0.389
+## chowYellow (C8):metaboliteLC even AC total            -0.391 -0.391 -0.391
+## chowYellow (C8):metaboliteLC odd AC total             -0.378 -0.378 -0.378
+## chowYellow (C8):metaboliteleucine                     -0.373 -0.373 -0.373
+## chowYellow (C8):metaboliteMALIC                       -0.393 -0.393 -0.393
+## chowYellow (C8):metaboliteMCAC total                  -0.778 -0.389 -0.389
+## chowYellow (C8):metaboliteMETHYLSUCCINIC              -0.368 -0.735 -0.368
+## chowYellow (C8):metaboliteSUCCINIC-2                  -0.397 -0.397 -0.795
+## chowYellow (C8):metabolitevaline                      -0.391 -0.391 -0.391
+## genotypeKO:chowYellow (C8):metabolitearginine          0.264  0.264  0.264
+## genotypeKO:chowYellow (C8):metaboliteCITRIC            0.255  0.255  0.255
+## genotypeKO:chowYellow (C8):metaboliteFUMARIC           0.257  0.257  0.257
+## genotypeKO:chowYellow (C8):metaboliteglutamine         0.260  0.260  0.260
+## genotypeKO:chowYellow (C8):metaboliteisoleucine        0.259  0.259  0.259
+## genotypeKO:chowYellow (C8):metaboliteLACTIC            0.258  0.258  0.258
+## genotypeKO:chowYellow (C8):metaboliteLC even AC total  0.258  0.258  0.258
+## genotypeKO:chowYellow (C8):metaboliteLC odd AC total   0.255  0.255  0.255
+## genotypeKO:chowYellow (C8):metaboliteleucine           0.254  0.254  0.254
+## genotypeKO:chowYellow (C8):metaboliteMALIC             0.259  0.259  0.259
+## genotypeKO:chowYellow (C8):metaboliteMCAC total        0.513  0.257  0.257
+## genotypeKO:chowYellow (C8):metaboliteMETHYLSUCCINIC    0.252  0.503  0.252
+## genotypeKO:chowYellow (C8):metaboliteSUCCINIC-2        0.260  0.260  0.521
+## genotypeKO:chowYellow (C8):metabolitevaline            0.259  0.259  0.259
+##                                                       mtbltv gnKO:Y(C8)
 ## genotypeKO                                                             
 ## chowYellow (C8)                                                        
 ## metabolitearginine                                                     
@@ -1903,128 +3380,650 @@ summary(M)
 ## metaboliteMETHYLSUCCINIC                                               
 ## metaboliteSUCCINIC-2                                                   
 ## metabolitevaline                                                       
-## genotypeKO:chowYellow (C8)                  0.005                      
-## genotypeKO:metabolitearginine              -0.254 -0.073               
-## genotypeKO:metaboliteCITRIC                -0.232 -0.019  0.419        
-## genotypeKO:metaboliteFUMARIC               -0.233  0.002  0.444        
-## genotypeKO:metaboliteglutamine             -0.221 -0.013  0.492        
-## genotypeKO:metaboliteisoleucine            -0.243 -0.055  0.498        
-## genotypeKO:metaboliteLACTIC                -0.238 -0.019  0.500        
-## genotypeKO:metaboliteLC even AC total      -0.240 -0.001  0.467        
-## genotypeKO:metaboliteLC odd AC total       -0.259 -0.028  0.530        
-## genotypeKO:metaboliteleucine               -0.234 -0.040  0.438        
-## genotypeKO:metaboliteMALIC                 -0.228 -0.029  0.474        
-## genotypeKO:metaboliteMCAC total            -0.263 -0.006  0.483        
-## genotypeKO:metaboliteMETHYLSUCCINIC        -0.225 -0.035  0.475        
-## genotypeKO:metaboliteSUCCINIC-2            -0.222 -0.012  0.471        
-## genotypeKO:metabolitevaline                -0.529 -0.009  0.480        
-## chowYellow (C8):metabolitearginine         -0.408  0.041  0.247        
-## chowYellow (C8):metaboliteCITRIC           -0.449 -0.025  0.190        
-## chowYellow (C8):metaboliteFUMARIC          -0.454 -0.058  0.184        
-## chowYellow (C8):metaboliteglutamine        -0.457  0.027  0.126        
-## chowYellow (C8):metaboliteisoleucine       -0.420  0.029  0.095        
-## chowYellow (C8):metaboliteLACTIC           -0.443  0.002  0.128        
-## chowYellow (C8):metaboliteLC even AC total -0.428 -0.031  0.113        
-## chowYellow (C8):metaboliteLC odd AC total  -0.424 -0.050  0.096        
-## chowYellow (C8):metaboliteleucine          -0.423  0.049  0.167        
-## chowYellow (C8):metaboliteMALIC            -0.464  0.006  0.164        
-## chowYellow (C8):metaboliteMCAC total       -0.402  0.005  0.137        
-## chowYellow (C8):metaboliteMETHYLSUCCINIC   -0.430  0.014  0.128        
-## chowYellow (C8):metaboliteSUCCINIC-2       -0.450 -0.011  0.147        
-## chowYellow (C8):metabolitevaline           -0.856 -0.003  0.141        
-##                                            gKO:CI gKO:FU gntypKO:mtbltg
-## genotypeKO                                                             
-## chowYellow (C8)                                                        
-## metabolitearginine                                                     
-## metaboliteCITRIC                                                       
-## metaboliteFUMARIC                                                      
-## metaboliteglutamine                                                    
-## metaboliteisoleucine                                                   
-## metaboliteLACTIC                                                       
-## metaboliteLC even AC total                                             
-## metaboliteLC odd AC total                                              
-## metaboliteleucine                                                      
-## metaboliteMALIC                                                        
-## metaboliteMCAC total                                                   
-## metaboliteMETHYLSUCCINIC                                               
-## metaboliteSUCCINIC-2                                                   
-## metabolitevaline                                                       
-## genotypeKO:chowYellow (C8)                                             
-## genotypeKO:metabolitearginine                                          
-## genotypeKO:metaboliteCITRIC                                            
-## genotypeKO:metaboliteFUMARIC                0.477                      
-## genotypeKO:metaboliteglutamine              0.443  0.478               
-## genotypeKO:metaboliteisoleucine             0.495  0.523  0.485        
-## genotypeKO:metaboliteLACTIC                 0.491  0.448  0.469        
-## genotypeKO:metaboliteLC even AC total       0.425  0.479  0.407        
-## genotypeKO:metaboliteLC odd AC total        0.438  0.541  0.524        
-## genotypeKO:metaboliteleucine                0.421  0.446  0.402        
-## genotypeKO:metaboliteMALIC                  0.442  0.474  0.459        
-## genotypeKO:metaboliteMCAC total             0.475  0.476  0.433        
-## genotypeKO:metaboliteMETHYLSUCCINIC         0.442  0.476  0.449        
-## genotypeKO:metaboliteSUCCINIC-2             0.441  0.459  0.456        
-## genotypeKO:metabolitevaline                 0.439  0.441  0.417        
-## chowYellow (C8):metabolitearginine          0.196  0.181  0.143        
-## chowYellow (C8):metaboliteCITRIC            0.291  0.132  0.210        
-## chowYellow (C8):metaboliteFUMARIC           0.144  0.280  0.177        
-## chowYellow (C8):metaboliteglutamine         0.191  0.159  0.349        
-## chowYellow (C8):metaboliteisoleucine        0.097  0.078  0.152        
-## chowYellow (C8):metaboliteLACTIC            0.147  0.194  0.186        
-## chowYellow (C8):metaboliteLC even AC total  0.200  0.159  0.236        
-## chowYellow (C8):metaboliteLC odd AC total   0.200  0.072  0.154        
-## chowYellow (C8):metaboliteleucine           0.203  0.166  0.220        
-## chowYellow (C8):metaboliteMALIC             0.207  0.174  0.207        
-## chowYellow (C8):metaboliteMCAC total        0.161  0.139  0.215        
-## chowYellow (C8):metaboliteMETHYLSUCCINIC    0.171  0.136  0.180        
-## chowYellow (C8):metaboliteSUCCINIC-2        0.186  0.169  0.189        
-## chowYellow (C8):metabolitevaline            0.191  0.197  0.235        
-##                                            gntypKO:mtblts gKO:LA gKOeAt
-## genotypeKO                                                             
-## chowYellow (C8)                                                        
-## metabolitearginine                                                     
-## metaboliteCITRIC                                                       
-## metaboliteFUMARIC                                                      
-## metaboliteglutamine                                                    
-## metaboliteisoleucine                                                   
-## metaboliteLACTIC                                                       
-## metaboliteLC even AC total                                             
-## metaboliteLC odd AC total                                              
-## metaboliteleucine                                                      
-## metaboliteMALIC                                                        
-## metaboliteMCAC total                                                   
-## metaboliteMETHYLSUCCINIC                                               
-## metaboliteSUCCINIC-2                                                   
-## metabolitevaline                                                       
-## genotypeKO:chowYellow (C8)                                             
-## genotypeKO:metabolitearginine                                          
-## genotypeKO:metaboliteCITRIC                                            
-## genotypeKO:metaboliteFUMARIC                                           
-## genotypeKO:metaboliteglutamine                                         
-## genotypeKO:metaboliteisoleucine                                        
-## genotypeKO:metaboliteLACTIC                 0.477                      
-## genotypeKO:metaboliteLC even AC total       0.447          0.467       
-## genotypeKO:metaboliteLC odd AC total        0.535          0.504  0.515
-## genotypeKO:metaboliteleucine                0.466          0.463  0.442
-## genotypeKO:metaboliteMALIC                  0.451          0.453  0.492
-## genotypeKO:metaboliteMCAC total             0.491          0.477  0.452
-## genotypeKO:metaboliteMETHYLSUCCINIC         0.475          0.465  0.455
-## genotypeKO:metaboliteSUCCINIC-2             0.477          0.502  0.465
-## genotypeKO:metabolitevaline                 0.460          0.450  0.453
-## chowYellow (C8):metabolitearginine          0.119          0.138  0.138
-## chowYellow (C8):metaboliteCITRIC            0.126          0.156  0.208
-## chowYellow (C8):metaboliteFUMARIC           0.115          0.210  0.169
-## chowYellow (C8):metaboliteglutamine         0.140          0.177  0.232
-## chowYellow (C8):metaboliteisoleucine        0.225          0.137  0.146
-## chowYellow (C8):metaboliteLACTIC            0.157          0.303  0.177
-## chowYellow (C8):metaboliteLC even AC total  0.159          0.180  0.277
-## chowYellow (C8):metaboliteLC odd AC total   0.114          0.154  0.134
-## chowYellow (C8):metaboliteleucine           0.141          0.158  0.173
-## chowYellow (C8):metaboliteMALIC             0.195          0.208  0.161
-## chowYellow (C8):metaboliteMCAC total        0.156          0.161  0.192
-## chowYellow (C8):metaboliteMETHYLSUCCINIC    0.133          0.158  0.164
-## chowYellow (C8):metaboliteSUCCINIC-2        0.146          0.134  0.168
-## chowYellow (C8):metabolitevaline            0.174          0.197  0.184
-##                                            gKOoAt gntypKO:mtbltl gKO:MA
+## genotypeKO:chowYellow (C8)                            -0.363           
+## genotypeKO:metabolitearginine                         -0.354  0.514    
+## genotypeKO:metaboliteCITRIC                           -0.354  0.514    
+## genotypeKO:metaboliteFUMARIC                          -0.354  0.514    
+## genotypeKO:metaboliteglutamine                        -0.354  0.514    
+## genotypeKO:metaboliteisoleucine                       -0.354  0.514    
+## genotypeKO:metaboliteLACTIC                           -0.354  0.514    
+## genotypeKO:metaboliteLC even AC total                 -0.354  0.514    
+## genotypeKO:metaboliteLC odd AC total                  -0.354  0.514    
+## genotypeKO:metaboliteleucine                          -0.354  0.514    
+## genotypeKO:metaboliteMALIC                            -0.354  0.514    
+## genotypeKO:metaboliteMCAC total                       -0.354  0.514    
+## genotypeKO:metaboliteMETHYLSUCCINIC                   -0.354  0.514    
+## genotypeKO:metaboliteSUCCINIC-2                       -0.354  0.514    
+## genotypeKO:metabolitevaline                           -0.707  0.514    
+## chowYellow (C8):metabolitearginine                    -0.415  0.473    
+## chowYellow (C8):metaboliteCITRIC                      -0.377  0.472    
+## chowYellow (C8):metaboliteFUMARIC                     -0.384  0.440    
+## chowYellow (C8):metaboliteglutamine                   -0.401  0.425    
+## chowYellow (C8):metaboliteisoleucine                  -0.386  0.474    
+## chowYellow (C8):metaboliteLACTIC                      -0.389  0.451    
+## chowYellow (C8):metaboliteLC even AC total            -0.391  0.434    
+## chowYellow (C8):metaboliteLC odd AC total             -0.378  0.470    
+## chowYellow (C8):metaboliteleucine                     -0.373  0.451    
+## chowYellow (C8):metaboliteMALIC                       -0.393  0.442    
+## chowYellow (C8):metaboliteMCAC total                  -0.389  0.461    
+## chowYellow (C8):metaboliteMETHYLSUCCINIC              -0.368  0.455    
+## chowYellow (C8):metaboliteSUCCINIC-2                  -0.397  0.432    
+## chowYellow (C8):metabolitevaline                      -0.781  0.418    
+## genotypeKO:chowYellow (C8):metabolitearginine          0.264 -0.707    
+## genotypeKO:chowYellow (C8):metaboliteCITRIC            0.255 -0.709    
+## genotypeKO:chowYellow (C8):metaboliteFUMARIC           0.257 -0.689    
+## genotypeKO:chowYellow (C8):metaboliteglutamine         0.260 -0.675    
+## genotypeKO:chowYellow (C8):metaboliteisoleucine        0.259 -0.711    
+## genotypeKO:chowYellow (C8):metaboliteLACTIC            0.258 -0.695    
+## genotypeKO:chowYellow (C8):metaboliteLC even AC total  0.258 -0.681    
+## genotypeKO:chowYellow (C8):metaboliteLC odd AC total   0.255 -0.710    
+## genotypeKO:chowYellow (C8):metaboliteleucine           0.254 -0.691    
+## genotypeKO:chowYellow (C8):metaboliteMALIC             0.259 -0.688    
+## genotypeKO:chowYellow (C8):metaboliteMCAC total        0.257 -0.694    
+## genotypeKO:chowYellow (C8):metaboliteMETHYLSUCCINIC    0.252 -0.697    
+## genotypeKO:chowYellow (C8):metaboliteSUCCINIC-2        0.260 -0.682    
+## genotypeKO:chowYellow (C8):metabolitevaline            0.517 -0.671    
+##                                                       gntypKO:mtbltr
+## genotypeKO                                                          
+## chowYellow (C8)                                                     
+## metabolitearginine                                                  
+## metaboliteCITRIC                                                    
+## metaboliteFUMARIC                                                   
+## metaboliteglutamine                                                 
+## metaboliteisoleucine                                                
+## metaboliteLACTIC                                                    
+## metaboliteLC even AC total                                          
+## metaboliteLC odd AC total                                           
+## metaboliteleucine                                                   
+## metaboliteMALIC                                                     
+## metaboliteMCAC total                                                
+## metaboliteMETHYLSUCCINIC                                            
+## metaboliteSUCCINIC-2                                                
+## metabolitevaline                                                    
+## genotypeKO:chowYellow (C8)                                          
+## genotypeKO:metabolitearginine                                       
+## genotypeKO:metaboliteCITRIC                            0.500        
+## genotypeKO:metaboliteFUMARIC                           0.500        
+## genotypeKO:metaboliteglutamine                         0.500        
+## genotypeKO:metaboliteisoleucine                        0.500        
+## genotypeKO:metaboliteLACTIC                            0.500        
+## genotypeKO:metaboliteLC even AC total                  0.500        
+## genotypeKO:metaboliteLC odd AC total                   0.500        
+## genotypeKO:metaboliteleucine                           0.500        
+## genotypeKO:metaboliteMALIC                             0.500        
+## genotypeKO:metaboliteMCAC total                        0.500        
+## genotypeKO:metaboliteMETHYLSUCCINIC                    0.500        
+## genotypeKO:metaboliteSUCCINIC-2                        0.500        
+## genotypeKO:metabolitevaline                            0.500        
+## chowYellow (C8):metabolitearginine                     0.587        
+## chowYellow (C8):metaboliteCITRIC                       0.266        
+## chowYellow (C8):metaboliteFUMARIC                      0.272        
+## chowYellow (C8):metaboliteglutamine                    0.283        
+## chowYellow (C8):metaboliteisoleucine                   0.273        
+## chowYellow (C8):metaboliteLACTIC                       0.275        
+## chowYellow (C8):metaboliteLC even AC total             0.277        
+## chowYellow (C8):metaboliteLC odd AC total              0.267        
+## chowYellow (C8):metaboliteleucine                      0.264        
+## chowYellow (C8):metaboliteMALIC                        0.278        
+## chowYellow (C8):metaboliteMCAC total                   0.275        
+## chowYellow (C8):metaboliteMETHYLSUCCINIC               0.260        
+## chowYellow (C8):metaboliteSUCCINIC-2                   0.281        
+## chowYellow (C8):metabolitevaline                       0.276        
+## genotypeKO:chowYellow (C8):metabolitearginine         -0.748        
+## genotypeKO:chowYellow (C8):metaboliteCITRIC           -0.361        
+## genotypeKO:chowYellow (C8):metaboliteFUMARIC          -0.363        
+## genotypeKO:chowYellow (C8):metaboliteglutamine        -0.368        
+## genotypeKO:chowYellow (C8):metaboliteisoleucine       -0.366        
+## genotypeKO:chowYellow (C8):metaboliteLACTIC           -0.365        
+## genotypeKO:chowYellow (C8):metaboliteLC even AC total -0.364        
+## genotypeKO:chowYellow (C8):metaboliteLC odd AC total  -0.360        
+## genotypeKO:chowYellow (C8):metaboliteleucine          -0.359        
+## genotypeKO:chowYellow (C8):metaboliteMALIC            -0.366        
+## genotypeKO:chowYellow (C8):metaboliteMCAC total       -0.363        
+## genotypeKO:chowYellow (C8):metaboliteMETHYLSUCCINIC   -0.356        
+## genotypeKO:chowYellow (C8):metaboliteSUCCINIC-2       -0.368        
+## genotypeKO:chowYellow (C8):metabolitevaline           -0.366        
+##                                                       gKO:CI gKO:FU
+## genotypeKO                                                         
+## chowYellow (C8)                                                    
+## metabolitearginine                                                 
+## metaboliteCITRIC                                                   
+## metaboliteFUMARIC                                                  
+## metaboliteglutamine                                                
+## metaboliteisoleucine                                               
+## metaboliteLACTIC                                                   
+## metaboliteLC even AC total                                         
+## metaboliteLC odd AC total                                          
+## metaboliteleucine                                                  
+## metaboliteMALIC                                                    
+## metaboliteMCAC total                                               
+## metaboliteMETHYLSUCCINIC                                           
+## metaboliteSUCCINIC-2                                               
+## metabolitevaline                                                   
+## genotypeKO:chowYellow (C8)                                         
+## genotypeKO:metabolitearginine                                      
+## genotypeKO:metaboliteCITRIC                                        
+## genotypeKO:metaboliteFUMARIC                           0.500       
+## genotypeKO:metaboliteglutamine                         0.500  0.500
+## genotypeKO:metaboliteisoleucine                        0.500  0.500
+## genotypeKO:metaboliteLACTIC                            0.500  0.500
+## genotypeKO:metaboliteLC even AC total                  0.500  0.500
+## genotypeKO:metaboliteLC odd AC total                   0.500  0.500
+## genotypeKO:metaboliteleucine                           0.500  0.500
+## genotypeKO:metaboliteMALIC                             0.500  0.500
+## genotypeKO:metaboliteMCAC total                        0.500  0.500
+## genotypeKO:metaboliteMETHYLSUCCINIC                    0.500  0.500
+## genotypeKO:metaboliteSUCCINIC-2                        0.500  0.500
+## genotypeKO:metabolitevaline                            0.500  0.500
+## chowYellow (C8):metabolitearginine                     0.294  0.294
+## chowYellow (C8):metaboliteCITRIC                       0.533  0.266
+## chowYellow (C8):metaboliteFUMARIC                      0.272  0.543
+## chowYellow (C8):metaboliteglutamine                    0.283  0.283
+## chowYellow (C8):metaboliteisoleucine                   0.273  0.273
+## chowYellow (C8):metaboliteLACTIC                       0.275  0.275
+## chowYellow (C8):metaboliteLC even AC total             0.277  0.277
+## chowYellow (C8):metaboliteLC odd AC total              0.267  0.267
+## chowYellow (C8):metaboliteleucine                      0.264  0.264
+## chowYellow (C8):metaboliteMALIC                        0.278  0.278
+## chowYellow (C8):metaboliteMCAC total                   0.275  0.275
+## chowYellow (C8):metaboliteMETHYLSUCCINIC               0.260  0.260
+## chowYellow (C8):metaboliteSUCCINIC-2                   0.281  0.281
+## chowYellow (C8):metabolitevaline                       0.276  0.276
+## genotypeKO:chowYellow (C8):metabolitearginine         -0.374 -0.374
+## genotypeKO:chowYellow (C8):metaboliteCITRIC           -0.722 -0.361
+## genotypeKO:chowYellow (C8):metaboliteFUMARIC          -0.363 -0.727
+## genotypeKO:chowYellow (C8):metaboliteglutamine        -0.368 -0.368
+## genotypeKO:chowYellow (C8):metaboliteisoleucine       -0.366 -0.366
+## genotypeKO:chowYellow (C8):metaboliteLACTIC           -0.365 -0.365
+## genotypeKO:chowYellow (C8):metaboliteLC even AC total -0.364 -0.364
+## genotypeKO:chowYellow (C8):metaboliteLC odd AC total  -0.360 -0.360
+## genotypeKO:chowYellow (C8):metaboliteleucine          -0.359 -0.359
+## genotypeKO:chowYellow (C8):metaboliteMALIC            -0.366 -0.366
+## genotypeKO:chowYellow (C8):metaboliteMCAC total       -0.363 -0.363
+## genotypeKO:chowYellow (C8):metaboliteMETHYLSUCCINIC   -0.356 -0.356
+## genotypeKO:chowYellow (C8):metaboliteSUCCINIC-2       -0.368 -0.368
+## genotypeKO:chowYellow (C8):metabolitevaline           -0.366 -0.366
+##                                                       gntypKO:mtbltg
+## genotypeKO                                                          
+## chowYellow (C8)                                                     
+## metabolitearginine                                                  
+## metaboliteCITRIC                                                    
+## metaboliteFUMARIC                                                   
+## metaboliteglutamine                                                 
+## metaboliteisoleucine                                                
+## metaboliteLACTIC                                                    
+## metaboliteLC even AC total                                          
+## metaboliteLC odd AC total                                           
+## metaboliteleucine                                                   
+## metaboliteMALIC                                                     
+## metaboliteMCAC total                                                
+## metaboliteMETHYLSUCCINIC                                            
+## metaboliteSUCCINIC-2                                                
+## metabolitevaline                                                    
+## genotypeKO:chowYellow (C8)                                          
+## genotypeKO:metabolitearginine                                       
+## genotypeKO:metaboliteCITRIC                                         
+## genotypeKO:metaboliteFUMARIC                                        
+## genotypeKO:metaboliteglutamine                                      
+## genotypeKO:metaboliteisoleucine                        0.500        
+## genotypeKO:metaboliteLACTIC                            0.500        
+## genotypeKO:metaboliteLC even AC total                  0.500        
+## genotypeKO:metaboliteLC odd AC total                   0.500        
+## genotypeKO:metaboliteleucine                           0.500        
+## genotypeKO:metaboliteMALIC                             0.500        
+## genotypeKO:metaboliteMCAC total                        0.500        
+## genotypeKO:metaboliteMETHYLSUCCINIC                    0.500        
+## genotypeKO:metaboliteSUCCINIC-2                        0.500        
+## genotypeKO:metabolitevaline                            0.500        
+## chowYellow (C8):metabolitearginine                     0.294        
+## chowYellow (C8):metaboliteCITRIC                       0.266        
+## chowYellow (C8):metaboliteFUMARIC                      0.272        
+## chowYellow (C8):metaboliteglutamine                    0.567        
+## chowYellow (C8):metaboliteisoleucine                   0.273        
+## chowYellow (C8):metaboliteLACTIC                       0.275        
+## chowYellow (C8):metaboliteLC even AC total             0.277        
+## chowYellow (C8):metaboliteLC odd AC total              0.267        
+## chowYellow (C8):metaboliteleucine                      0.264        
+## chowYellow (C8):metaboliteMALIC                        0.278        
+## chowYellow (C8):metaboliteMCAC total                   0.275        
+## chowYellow (C8):metaboliteMETHYLSUCCINIC               0.260        
+## chowYellow (C8):metaboliteSUCCINIC-2                   0.281        
+## chowYellow (C8):metabolitevaline                       0.276        
+## genotypeKO:chowYellow (C8):metabolitearginine         -0.374        
+## genotypeKO:chowYellow (C8):metaboliteCITRIC           -0.361        
+## genotypeKO:chowYellow (C8):metaboliteFUMARIC          -0.363        
+## genotypeKO:chowYellow (C8):metaboliteglutamine        -0.736        
+## genotypeKO:chowYellow (C8):metaboliteisoleucine       -0.366        
+## genotypeKO:chowYellow (C8):metaboliteLACTIC           -0.365        
+## genotypeKO:chowYellow (C8):metaboliteLC even AC total -0.364        
+## genotypeKO:chowYellow (C8):metaboliteLC odd AC total  -0.360        
+## genotypeKO:chowYellow (C8):metaboliteleucine          -0.359        
+## genotypeKO:chowYellow (C8):metaboliteMALIC            -0.366        
+## genotypeKO:chowYellow (C8):metaboliteMCAC total       -0.363        
+## genotypeKO:chowYellow (C8):metaboliteMETHYLSUCCINIC   -0.356        
+## genotypeKO:chowYellow (C8):metaboliteSUCCINIC-2       -0.368        
+## genotypeKO:chowYellow (C8):metabolitevaline           -0.366        
+##                                                       gntypKO:mtblts
+## genotypeKO                                                          
+## chowYellow (C8)                                                     
+## metabolitearginine                                                  
+## metaboliteCITRIC                                                    
+## metaboliteFUMARIC                                                   
+## metaboliteglutamine                                                 
+## metaboliteisoleucine                                                
+## metaboliteLACTIC                                                    
+## metaboliteLC even AC total                                          
+## metaboliteLC odd AC total                                           
+## metaboliteleucine                                                   
+## metaboliteMALIC                                                     
+## metaboliteMCAC total                                                
+## metaboliteMETHYLSUCCINIC                                            
+## metaboliteSUCCINIC-2                                                
+## metabolitevaline                                                    
+## genotypeKO:chowYellow (C8)                                          
+## genotypeKO:metabolitearginine                                       
+## genotypeKO:metaboliteCITRIC                                         
+## genotypeKO:metaboliteFUMARIC                                        
+## genotypeKO:metaboliteglutamine                                      
+## genotypeKO:metaboliteisoleucine                                     
+## genotypeKO:metaboliteLACTIC                            0.500        
+## genotypeKO:metaboliteLC even AC total                  0.500        
+## genotypeKO:metaboliteLC odd AC total                   0.500        
+## genotypeKO:metaboliteleucine                           0.500        
+## genotypeKO:metaboliteMALIC                             0.500        
+## genotypeKO:metaboliteMCAC total                        0.500        
+## genotypeKO:metaboliteMETHYLSUCCINIC                    0.500        
+## genotypeKO:metaboliteSUCCINIC-2                        0.500        
+## genotypeKO:metabolitevaline                            0.500        
+## chowYellow (C8):metabolitearginine                     0.294        
+## chowYellow (C8):metaboliteCITRIC                       0.266        
+## chowYellow (C8):metaboliteFUMARIC                      0.272        
+## chowYellow (C8):metaboliteglutamine                    0.283        
+## chowYellow (C8):metaboliteisoleucine                   0.546        
+## chowYellow (C8):metaboliteLACTIC                       0.275        
+## chowYellow (C8):metaboliteLC even AC total             0.277        
+## chowYellow (C8):metaboliteLC odd AC total              0.267        
+## chowYellow (C8):metaboliteleucine                      0.264        
+## chowYellow (C8):metaboliteMALIC                        0.278        
+## chowYellow (C8):metaboliteMCAC total                   0.275        
+## chowYellow (C8):metaboliteMETHYLSUCCINIC               0.260        
+## chowYellow (C8):metaboliteSUCCINIC-2                   0.281        
+## chowYellow (C8):metabolitevaline                       0.276        
+## genotypeKO:chowYellow (C8):metabolitearginine         -0.374        
+## genotypeKO:chowYellow (C8):metaboliteCITRIC           -0.361        
+## genotypeKO:chowYellow (C8):metaboliteFUMARIC          -0.363        
+## genotypeKO:chowYellow (C8):metaboliteglutamine        -0.368        
+## genotypeKO:chowYellow (C8):metaboliteisoleucine       -0.731        
+## genotypeKO:chowYellow (C8):metaboliteLACTIC           -0.365        
+## genotypeKO:chowYellow (C8):metaboliteLC even AC total -0.364        
+## genotypeKO:chowYellow (C8):metaboliteLC odd AC total  -0.360        
+## genotypeKO:chowYellow (C8):metaboliteleucine          -0.359        
+## genotypeKO:chowYellow (C8):metaboliteMALIC            -0.366        
+## genotypeKO:chowYellow (C8):metaboliteMCAC total       -0.363        
+## genotypeKO:chowYellow (C8):metaboliteMETHYLSUCCINIC   -0.356        
+## genotypeKO:chowYellow (C8):metaboliteSUCCINIC-2       -0.368        
+## genotypeKO:chowYellow (C8):metabolitevaline           -0.366        
+##                                                       gKO:LA gKOeAt gKOoAt
+## genotypeKO                                                                
+## chowYellow (C8)                                                           
+## metabolitearginine                                                        
+## metaboliteCITRIC                                                          
+## metaboliteFUMARIC                                                         
+## metaboliteglutamine                                                       
+## metaboliteisoleucine                                                      
+## metaboliteLACTIC                                                          
+## metaboliteLC even AC total                                                
+## metaboliteLC odd AC total                                                 
+## metaboliteleucine                                                         
+## metaboliteMALIC                                                           
+## metaboliteMCAC total                                                      
+## metaboliteMETHYLSUCCINIC                                                  
+## metaboliteSUCCINIC-2                                                      
+## metabolitevaline                                                          
+## genotypeKO:chowYellow (C8)                                                
+## genotypeKO:metabolitearginine                                             
+## genotypeKO:metaboliteCITRIC                                               
+## genotypeKO:metaboliteFUMARIC                                              
+## genotypeKO:metaboliteglutamine                                            
+## genotypeKO:metaboliteisoleucine                                           
+## genotypeKO:metaboliteLACTIC                                               
+## genotypeKO:metaboliteLC even AC total                  0.500              
+## genotypeKO:metaboliteLC odd AC total                   0.500  0.500       
+## genotypeKO:metaboliteleucine                           0.500  0.500  0.500
+## genotypeKO:metaboliteMALIC                             0.500  0.500  0.500
+## genotypeKO:metaboliteMCAC total                        0.500  0.500  0.500
+## genotypeKO:metaboliteMETHYLSUCCINIC                    0.500  0.500  0.500
+## genotypeKO:metaboliteSUCCINIC-2                        0.500  0.500  0.500
+## genotypeKO:metabolitevaline                            0.500  0.500  0.500
+## chowYellow (C8):metabolitearginine                     0.294  0.294  0.294
+## chowYellow (C8):metaboliteCITRIC                       0.266  0.266  0.266
+## chowYellow (C8):metaboliteFUMARIC                      0.272  0.272  0.272
+## chowYellow (C8):metaboliteglutamine                    0.283  0.283  0.283
+## chowYellow (C8):metaboliteisoleucine                   0.273  0.273  0.273
+## chowYellow (C8):metaboliteLACTIC                       0.550  0.275  0.275
+## chowYellow (C8):metaboliteLC even AC total             0.277  0.553  0.277
+## chowYellow (C8):metaboliteLC odd AC total              0.267  0.267  0.535
+## chowYellow (C8):metaboliteleucine                      0.264  0.264  0.264
+## chowYellow (C8):metaboliteMALIC                        0.278  0.278  0.278
+## chowYellow (C8):metaboliteMCAC total                   0.275  0.275  0.275
+## chowYellow (C8):metaboliteMETHYLSUCCINIC               0.260  0.260  0.260
+## chowYellow (C8):metaboliteSUCCINIC-2                   0.281  0.281  0.281
+## chowYellow (C8):metabolitevaline                       0.276  0.276  0.276
+## genotypeKO:chowYellow (C8):metabolitearginine         -0.374 -0.374 -0.374
+## genotypeKO:chowYellow (C8):metaboliteCITRIC           -0.361 -0.361 -0.361
+## genotypeKO:chowYellow (C8):metaboliteFUMARIC          -0.363 -0.363 -0.363
+## genotypeKO:chowYellow (C8):metaboliteglutamine        -0.368 -0.368 -0.368
+## genotypeKO:chowYellow (C8):metaboliteisoleucine       -0.366 -0.366 -0.366
+## genotypeKO:chowYellow (C8):metaboliteLACTIC           -0.730 -0.365 -0.365
+## genotypeKO:chowYellow (C8):metaboliteLC even AC total -0.364 -0.729 -0.364
+## genotypeKO:chowYellow (C8):metaboliteLC odd AC total  -0.360 -0.360 -0.720
+## genotypeKO:chowYellow (C8):metaboliteleucine          -0.359 -0.359 -0.359
+## genotypeKO:chowYellow (C8):metaboliteMALIC            -0.366 -0.366 -0.366
+## genotypeKO:chowYellow (C8):metaboliteMCAC total       -0.363 -0.363 -0.363
+## genotypeKO:chowYellow (C8):metaboliteMETHYLSUCCINIC   -0.356 -0.356 -0.356
+## genotypeKO:chowYellow (C8):metaboliteSUCCINIC-2       -0.368 -0.368 -0.368
+## genotypeKO:chowYellow (C8):metabolitevaline           -0.366 -0.366 -0.366
+##                                                       gntypKO:mtbltl
+## genotypeKO                                                          
+## chowYellow (C8)                                                     
+## metabolitearginine                                                  
+## metaboliteCITRIC                                                    
+## metaboliteFUMARIC                                                   
+## metaboliteglutamine                                                 
+## metaboliteisoleucine                                                
+## metaboliteLACTIC                                                    
+## metaboliteLC even AC total                                          
+## metaboliteLC odd AC total                                           
+## metaboliteleucine                                                   
+## metaboliteMALIC                                                     
+## metaboliteMCAC total                                                
+## metaboliteMETHYLSUCCINIC                                            
+## metaboliteSUCCINIC-2                                                
+## metabolitevaline                                                    
+## genotypeKO:chowYellow (C8)                                          
+## genotypeKO:metabolitearginine                                       
+## genotypeKO:metaboliteCITRIC                                         
+## genotypeKO:metaboliteFUMARIC                                        
+## genotypeKO:metaboliteglutamine                                      
+## genotypeKO:metaboliteisoleucine                                     
+## genotypeKO:metaboliteLACTIC                                         
+## genotypeKO:metaboliteLC even AC total                               
+## genotypeKO:metaboliteLC odd AC total                                
+## genotypeKO:metaboliteleucine                                        
+## genotypeKO:metaboliteMALIC                             0.500        
+## genotypeKO:metaboliteMCAC total                        0.500        
+## genotypeKO:metaboliteMETHYLSUCCINIC                    0.500        
+## genotypeKO:metaboliteSUCCINIC-2                        0.500        
+## genotypeKO:metabolitevaline                            0.500        
+## chowYellow (C8):metabolitearginine                     0.294        
+## chowYellow (C8):metaboliteCITRIC                       0.266        
+## chowYellow (C8):metaboliteFUMARIC                      0.272        
+## chowYellow (C8):metaboliteglutamine                    0.283        
+## chowYellow (C8):metaboliteisoleucine                   0.273        
+## chowYellow (C8):metaboliteLACTIC                       0.275        
+## chowYellow (C8):metaboliteLC even AC total             0.277        
+## chowYellow (C8):metaboliteLC odd AC total              0.267        
+## chowYellow (C8):metaboliteleucine                      0.527        
+## chowYellow (C8):metaboliteMALIC                        0.278        
+## chowYellow (C8):metaboliteMCAC total                   0.275        
+## chowYellow (C8):metaboliteMETHYLSUCCINIC               0.260        
+## chowYellow (C8):metaboliteSUCCINIC-2                   0.281        
+## chowYellow (C8):metabolitevaline                       0.276        
+## genotypeKO:chowYellow (C8):metabolitearginine         -0.374        
+## genotypeKO:chowYellow (C8):metaboliteCITRIC           -0.361        
+## genotypeKO:chowYellow (C8):metaboliteFUMARIC          -0.363        
+## genotypeKO:chowYellow (C8):metaboliteglutamine        -0.368        
+## genotypeKO:chowYellow (C8):metaboliteisoleucine       -0.366        
+## genotypeKO:chowYellow (C8):metaboliteLACTIC           -0.365        
+## genotypeKO:chowYellow (C8):metaboliteLC even AC total -0.364        
+## genotypeKO:chowYellow (C8):metaboliteLC odd AC total  -0.360        
+## genotypeKO:chowYellow (C8):metaboliteleucine          -0.717        
+## genotypeKO:chowYellow (C8):metaboliteMALIC            -0.366        
+## genotypeKO:chowYellow (C8):metaboliteMCAC total       -0.363        
+## genotypeKO:chowYellow (C8):metaboliteMETHYLSUCCINIC   -0.356        
+## genotypeKO:chowYellow (C8):metaboliteSUCCINIC-2       -0.368        
+## genotypeKO:chowYellow (C8):metabolitevaline           -0.366        
+##                                                       gKO:MA gKO:Mt gKO:ME
+## genotypeKO                                                                
+## chowYellow (C8)                                                           
+## metabolitearginine                                                        
+## metaboliteCITRIC                                                          
+## metaboliteFUMARIC                                                         
+## metaboliteglutamine                                                       
+## metaboliteisoleucine                                                      
+## metaboliteLACTIC                                                          
+## metaboliteLC even AC total                                                
+## metaboliteLC odd AC total                                                 
+## metaboliteleucine                                                         
+## metaboliteMALIC                                                           
+## metaboliteMCAC total                                                      
+## metaboliteMETHYLSUCCINIC                                                  
+## metaboliteSUCCINIC-2                                                      
+## metabolitevaline                                                          
+## genotypeKO:chowYellow (C8)                                                
+## genotypeKO:metabolitearginine                                             
+## genotypeKO:metaboliteCITRIC                                               
+## genotypeKO:metaboliteFUMARIC                                              
+## genotypeKO:metaboliteglutamine                                            
+## genotypeKO:metaboliteisoleucine                                           
+## genotypeKO:metaboliteLACTIC                                               
+## genotypeKO:metaboliteLC even AC total                                     
+## genotypeKO:metaboliteLC odd AC total                                      
+## genotypeKO:metaboliteleucine                                              
+## genotypeKO:metaboliteMALIC                                                
+## genotypeKO:metaboliteMCAC total                        0.500              
+## genotypeKO:metaboliteMETHYLSUCCINIC                    0.500  0.500       
+## genotypeKO:metaboliteSUCCINIC-2                        0.500  0.500  0.500
+## genotypeKO:metabolitevaline                            0.500  0.500  0.500
+## chowYellow (C8):metabolitearginine                     0.294  0.294  0.294
+## chowYellow (C8):metaboliteCITRIC                       0.266  0.266  0.266
+## chowYellow (C8):metaboliteFUMARIC                      0.272  0.272  0.272
+## chowYellow (C8):metaboliteglutamine                    0.283  0.283  0.283
+## chowYellow (C8):metaboliteisoleucine                   0.273  0.273  0.273
+## chowYellow (C8):metaboliteLACTIC                       0.275  0.275  0.275
+## chowYellow (C8):metaboliteLC even AC total             0.277  0.277  0.277
+## chowYellow (C8):metaboliteLC odd AC total              0.267  0.267  0.267
+## chowYellow (C8):metaboliteleucine                      0.264  0.264  0.264
+## chowYellow (C8):metaboliteMALIC                        0.556  0.278  0.278
+## chowYellow (C8):metaboliteMCAC total                   0.275  0.550  0.275
+## chowYellow (C8):metaboliteMETHYLSUCCINIC               0.260  0.260  0.520
+## chowYellow (C8):metaboliteSUCCINIC-2                   0.281  0.281  0.281
+## chowYellow (C8):metabolitevaline                       0.276  0.276  0.276
+## genotypeKO:chowYellow (C8):metabolitearginine         -0.374 -0.374 -0.374
+## genotypeKO:chowYellow (C8):metaboliteCITRIC           -0.361 -0.361 -0.361
+## genotypeKO:chowYellow (C8):metaboliteFUMARIC          -0.363 -0.363 -0.363
+## genotypeKO:chowYellow (C8):metaboliteglutamine        -0.368 -0.368 -0.368
+## genotypeKO:chowYellow (C8):metaboliteisoleucine       -0.366 -0.366 -0.366
+## genotypeKO:chowYellow (C8):metaboliteLACTIC           -0.365 -0.365 -0.365
+## genotypeKO:chowYellow (C8):metaboliteLC even AC total -0.364 -0.364 -0.364
+## genotypeKO:chowYellow (C8):metaboliteLC odd AC total  -0.360 -0.360 -0.360
+## genotypeKO:chowYellow (C8):metaboliteleucine          -0.359 -0.359 -0.359
+## genotypeKO:chowYellow (C8):metaboliteMALIC            -0.733 -0.366 -0.366
+## genotypeKO:chowYellow (C8):metaboliteMCAC total       -0.363 -0.726 -0.363
+## genotypeKO:chowYellow (C8):metaboliteMETHYLSUCCINIC   -0.356 -0.356 -0.711
+## genotypeKO:chowYellow (C8):metaboliteSUCCINIC-2       -0.368 -0.368 -0.368
+## genotypeKO:chowYellow (C8):metabolitevaline           -0.366 -0.366 -0.366
+##                                                       gKO:SU
+## genotypeKO                                                  
+## chowYellow (C8)                                             
+## metabolitearginine                                          
+## metaboliteCITRIC                                            
+## metaboliteFUMARIC                                           
+## metaboliteglutamine                                         
+## metaboliteisoleucine                                        
+## metaboliteLACTIC                                            
+## metaboliteLC even AC total                                  
+## metaboliteLC odd AC total                                   
+## metaboliteleucine                                           
+## metaboliteMALIC                                             
+## metaboliteMCAC total                                        
+## metaboliteMETHYLSUCCINIC                                    
+## metaboliteSUCCINIC-2                                        
+## metabolitevaline                                            
+## genotypeKO:chowYellow (C8)                                  
+## genotypeKO:metabolitearginine                               
+## genotypeKO:metaboliteCITRIC                                 
+## genotypeKO:metaboliteFUMARIC                                
+## genotypeKO:metaboliteglutamine                              
+## genotypeKO:metaboliteisoleucine                             
+## genotypeKO:metaboliteLACTIC                                 
+## genotypeKO:metaboliteLC even AC total                       
+## genotypeKO:metaboliteLC odd AC total                        
+## genotypeKO:metaboliteleucine                                
+## genotypeKO:metaboliteMALIC                                  
+## genotypeKO:metaboliteMCAC total                             
+## genotypeKO:metaboliteMETHYLSUCCINIC                         
+## genotypeKO:metaboliteSUCCINIC-2                             
+## genotypeKO:metabolitevaline                            0.500
+## chowYellow (C8):metabolitearginine                     0.294
+## chowYellow (C8):metaboliteCITRIC                       0.266
+## chowYellow (C8):metaboliteFUMARIC                      0.272
+## chowYellow (C8):metaboliteglutamine                    0.283
+## chowYellow (C8):metaboliteisoleucine                   0.273
+## chowYellow (C8):metaboliteLACTIC                       0.275
+## chowYellow (C8):metaboliteLC even AC total             0.277
+## chowYellow (C8):metaboliteLC odd AC total              0.267
+## chowYellow (C8):metaboliteleucine                      0.264
+## chowYellow (C8):metaboliteMALIC                        0.278
+## chowYellow (C8):metaboliteMCAC total                   0.275
+## chowYellow (C8):metaboliteMETHYLSUCCINIC               0.260
+## chowYellow (C8):metaboliteSUCCINIC-2                   0.562
+## chowYellow (C8):metabolitevaline                       0.276
+## genotypeKO:chowYellow (C8):metabolitearginine         -0.374
+## genotypeKO:chowYellow (C8):metaboliteCITRIC           -0.361
+## genotypeKO:chowYellow (C8):metaboliteFUMARIC          -0.363
+## genotypeKO:chowYellow (C8):metaboliteglutamine        -0.368
+## genotypeKO:chowYellow (C8):metaboliteisoleucine       -0.366
+## genotypeKO:chowYellow (C8):metaboliteLACTIC           -0.365
+## genotypeKO:chowYellow (C8):metaboliteLC even AC total -0.364
+## genotypeKO:chowYellow (C8):metaboliteLC odd AC total  -0.360
+## genotypeKO:chowYellow (C8):metaboliteleucine          -0.359
+## genotypeKO:chowYellow (C8):metaboliteMALIC            -0.366
+## genotypeKO:chowYellow (C8):metaboliteMCAC total       -0.363
+## genotypeKO:chowYellow (C8):metaboliteMETHYLSUCCINIC   -0.356
+## genotypeKO:chowYellow (C8):metaboliteSUCCINIC-2       -0.736
+## genotypeKO:chowYellow (C8):metabolitevaline           -0.366
+##                                                       gntypKO:mtbltv
+## genotypeKO                                                          
+## chowYellow (C8)                                                     
+## metabolitearginine                                                  
+## metaboliteCITRIC                                                    
+## metaboliteFUMARIC                                                   
+## metaboliteglutamine                                                 
+## metaboliteisoleucine                                                
+## metaboliteLACTIC                                                    
+## metaboliteLC even AC total                                          
+## metaboliteLC odd AC total                                           
+## metaboliteleucine                                                   
+## metaboliteMALIC                                                     
+## metaboliteMCAC total                                                
+## metaboliteMETHYLSUCCINIC                                            
+## metaboliteSUCCINIC-2                                                
+## metabolitevaline                                                    
+## genotypeKO:chowYellow (C8)                                          
+## genotypeKO:metabolitearginine                                       
+## genotypeKO:metaboliteCITRIC                                         
+## genotypeKO:metaboliteFUMARIC                                        
+## genotypeKO:metaboliteglutamine                                      
+## genotypeKO:metaboliteisoleucine                                     
+## genotypeKO:metaboliteLACTIC                                         
+## genotypeKO:metaboliteLC even AC total                               
+## genotypeKO:metaboliteLC odd AC total                                
+## genotypeKO:metaboliteleucine                                        
+## genotypeKO:metaboliteMALIC                                          
+## genotypeKO:metaboliteMCAC total                                     
+## genotypeKO:metaboliteMETHYLSUCCINIC                                 
+## genotypeKO:metaboliteSUCCINIC-2                                     
+## genotypeKO:metabolitevaline                                         
+## chowYellow (C8):metabolitearginine                     0.294        
+## chowYellow (C8):metaboliteCITRIC                       0.266        
+## chowYellow (C8):metaboliteFUMARIC                      0.272        
+## chowYellow (C8):metaboliteglutamine                    0.283        
+## chowYellow (C8):metaboliteisoleucine                   0.273        
+## chowYellow (C8):metaboliteLACTIC                       0.275        
+## chowYellow (C8):metaboliteLC even AC total             0.277        
+## chowYellow (C8):metaboliteLC odd AC total              0.267        
+## chowYellow (C8):metaboliteleucine                      0.264        
+## chowYellow (C8):metaboliteMALIC                        0.278        
+## chowYellow (C8):metaboliteMCAC total                   0.275        
+## chowYellow (C8):metaboliteMETHYLSUCCINIC               0.260        
+## chowYellow (C8):metaboliteSUCCINIC-2                   0.281        
+## chowYellow (C8):metabolitevaline                       0.553        
+## genotypeKO:chowYellow (C8):metabolitearginine         -0.374        
+## genotypeKO:chowYellow (C8):metaboliteCITRIC           -0.361        
+## genotypeKO:chowYellow (C8):metaboliteFUMARIC          -0.363        
+## genotypeKO:chowYellow (C8):metaboliteglutamine        -0.368        
+## genotypeKO:chowYellow (C8):metaboliteisoleucine       -0.366        
+## genotypeKO:chowYellow (C8):metaboliteLACTIC           -0.365        
+## genotypeKO:chowYellow (C8):metaboliteLC even AC total -0.364        
+## genotypeKO:chowYellow (C8):metaboliteLC odd AC total  -0.360        
+## genotypeKO:chowYellow (C8):metaboliteleucine          -0.359        
+## genotypeKO:chowYellow (C8):metaboliteMALIC            -0.366        
+## genotypeKO:chowYellow (C8):metaboliteMCAC total       -0.363        
+## genotypeKO:chowYellow (C8):metaboliteMETHYLSUCCINIC   -0.356        
+## genotypeKO:chowYellow (C8):metaboliteSUCCINIC-2       -0.368        
+## genotypeKO:chowYellow (C8):metabolitevaline           -0.732        
+##                                                       chwYllw(C8):mtbltr
+## genotypeKO                                                              
+## chowYellow (C8)                                                         
+## metabolitearginine                                                      
+## metaboliteCITRIC                                                        
+## metaboliteFUMARIC                                                       
+## metaboliteglutamine                                                     
+## metaboliteisoleucine                                                    
+## metaboliteLACTIC                                                        
+## metaboliteLC even AC total                                              
+## metaboliteLC odd AC total                                               
+## metaboliteleucine                                                       
+## metaboliteMALIC                                                         
+## metaboliteMCAC total                                                    
+## metaboliteMETHYLSUCCINIC                                                
+## metaboliteSUCCINIC-2                                                    
+## metabolitevaline                                                        
+## genotypeKO:chowYellow (C8)                                              
+## genotypeKO:metabolitearginine                                           
+## genotypeKO:metaboliteCITRIC                                             
+## genotypeKO:metaboliteFUMARIC                                            
+## genotypeKO:metaboliteglutamine                                          
+## genotypeKO:metaboliteisoleucine                                         
+## genotypeKO:metaboliteLACTIC                                             
+## genotypeKO:metaboliteLC even AC total                                   
+## genotypeKO:metaboliteLC odd AC total                                    
+## genotypeKO:metaboliteleucine                                            
+## genotypeKO:metaboliteMALIC                                              
+## genotypeKO:metaboliteMCAC total                                         
+## genotypeKO:metaboliteMETHYLSUCCINIC                                     
+## genotypeKO:metaboliteSUCCINIC-2                                         
+## genotypeKO:metabolitevaline                                             
+## chowYellow (C8):metabolitearginine                                      
+## chowYellow (C8):metaboliteCITRIC                       0.534            
+## chowYellow (C8):metaboliteFUMARIC                      0.416            
+## chowYellow (C8):metaboliteglutamine                    0.460            
+## chowYellow (C8):metaboliteisoleucine                   0.497            
+## chowYellow (C8):metaboliteLACTIC                       0.490            
+## chowYellow (C8):metaboliteLC even AC total             0.494            
+## chowYellow (C8):metaboliteLC odd AC total              0.555            
+## chowYellow (C8):metaboliteleucine                      0.410            
+## chowYellow (C8):metaboliteMALIC                        0.530            
+## chowYellow (C8):metaboliteMCAC total                   0.471            
+## chowYellow (C8):metaboliteMETHYLSUCCINIC               0.524            
+## chowYellow (C8):metaboliteSUCCINIC-2                   0.514            
+## chowYellow (C8):metabolitevaline                       0.454            
+## genotypeKO:chowYellow (C8):metabolitearginine         -0.638            
+## genotypeKO:chowYellow (C8):metaboliteCITRIC           -0.364            
+## genotypeKO:chowYellow (C8):metaboliteFUMARIC          -0.284            
+## genotypeKO:chowYellow (C8):metaboliteglutamine        -0.297            
+## genotypeKO:chowYellow (C8):metaboliteisoleucine       -0.332            
+## genotypeKO:chowYellow (C8):metaboliteLACTIC           -0.328            
+## genotypeKO:chowYellow (C8):metaboliteLC even AC total -0.329            
+## genotypeKO:chowYellow (C8):metaboliteLC odd AC total  -0.380            
+## genotypeKO:chowYellow (C8):metaboliteleucine          -0.278            
+## genotypeKO:chowYellow (C8):metaboliteMALIC            -0.352            
+## genotypeKO:chowYellow (C8):metaboliteMCAC total       -0.320            
+## genotypeKO:chowYellow (C8):metaboliteMETHYLSUCCINIC   -0.361            
+## genotypeKO:chowYellow (C8):metaboliteSUCCINIC-2       -0.340            
+## genotypeKO:chowYellow (C8):metabolitevaline           -0.304            
+##                                                       cY(C8):C cY(C8):F
 ## genotypeKO                                                             
 ## chowYellow (C8)                                                        
 ## metabolitearginine                                                     
@@ -2050,211 +4049,341 @@ summary(M)
 ## genotypeKO:metaboliteLACTIC                                            
 ## genotypeKO:metaboliteLC even AC total                                  
 ## genotypeKO:metaboliteLC odd AC total                                   
-## genotypeKO:metaboliteleucine                0.495                      
-## genotypeKO:metaboliteMALIC                  0.461  0.451               
-## genotypeKO:metaboliteMCAC total             0.499  0.454          0.486
-## genotypeKO:metaboliteMETHYLSUCCINIC         0.478  0.473          0.443
-## genotypeKO:metaboliteSUCCINIC-2             0.468  0.417          0.449
-## genotypeKO:metabolitevaline                 0.490  0.442          0.430
-## chowYellow (C8):metabolitearginine          0.073  0.175          0.165
-## chowYellow (C8):metaboliteCITRIC            0.164  0.208          0.204
-## chowYellow (C8):metaboliteFUMARIC           0.052  0.179          0.179
-## chowYellow (C8):metaboliteglutamine         0.121  0.221          0.200
-## chowYellow (C8):metaboliteisoleucine        0.032  0.127          0.129
-## chowYellow (C8):metaboliteLACTIC            0.117  0.163          0.203
-## chowYellow (C8):metaboliteLC even AC total  0.105  0.172          0.140
-## chowYellow (C8):metaboliteLC odd AC total   0.157  0.145          0.173
-## chowYellow (C8):metaboliteleucine           0.121  0.219          0.178
-## chowYellow (C8):metaboliteMALIC             0.171  0.183          0.341
-## chowYellow (C8):metaboliteMCAC total        0.122  0.165          0.177
-## chowYellow (C8):metaboliteMETHYLSUCCINIC    0.118  0.124          0.187
-## chowYellow (C8):metaboliteSUCCINIC-2        0.144  0.199          0.196
-## chowYellow (C8):metabolitevaline            0.124  0.189          0.227
-##                                            gKO:Mt gKO:ME gKO:SU
-## genotypeKO                                                     
-## chowYellow (C8)                                                
-## metabolitearginine                                             
-## metaboliteCITRIC                                               
-## metaboliteFUMARIC                                              
-## metaboliteglutamine                                            
-## metaboliteisoleucine                                           
-## metaboliteLACTIC                                               
-## metaboliteLC even AC total                                     
-## metaboliteLC odd AC total                                      
-## metaboliteleucine                                              
-## metaboliteMALIC                                                
-## metaboliteMCAC total                                           
-## metaboliteMETHYLSUCCINIC                                       
-## metaboliteSUCCINIC-2                                           
-## metabolitevaline                                               
-## genotypeKO:chowYellow (C8)                                     
-## genotypeKO:metabolitearginine                                  
-## genotypeKO:metaboliteCITRIC                                    
-## genotypeKO:metaboliteFUMARIC                                   
-## genotypeKO:metaboliteglutamine                                 
-## genotypeKO:metaboliteisoleucine                                
-## genotypeKO:metaboliteLACTIC                                    
-## genotypeKO:metaboliteLC even AC total                          
-## genotypeKO:metaboliteLC odd AC total                           
-## genotypeKO:metaboliteleucine                                   
-## genotypeKO:metaboliteMALIC                                     
-## genotypeKO:metaboliteMCAC total                                
-## genotypeKO:metaboliteMETHYLSUCCINIC         0.484              
-## genotypeKO:metaboliteSUCCINIC-2             0.486  0.482       
-## genotypeKO:metabolitevaline                 0.497  0.425  0.419
-## chowYellow (C8):metabolitearginine          0.123  0.128  0.147
-## chowYellow (C8):metaboliteCITRIC            0.143  0.165  0.188
-## chowYellow (C8):metaboliteFUMARIC           0.142  0.141  0.173
-## chowYellow (C8):metaboliteglutamine         0.194  0.186  0.191
-## chowYellow (C8):metaboliteisoleucine        0.111  0.121  0.135
-## chowYellow (C8):metaboliteLACTIC            0.141  0.159  0.136
-## chowYellow (C8):metaboliteLC even AC total  0.155  0.152  0.161
-## chowYellow (C8):metaboliteLC odd AC total   0.136  0.108  0.137
-## chowYellow (C8):metaboliteleucine           0.144  0.135  0.202
-## chowYellow (C8):metaboliteMALIC             0.143  0.194  0.202
-## chowYellow (C8):metaboliteMCAC total        0.207  0.125  0.135
-## chowYellow (C8):metaboliteMETHYLSUCCINIC    0.109  0.201  0.130
-## chowYellow (C8):metaboliteSUCCINIC-2        0.122  0.131  0.260
-## chowYellow (C8):metabolitevaline            0.126  0.193  0.213
-##                                            gntypKO:mtbltv
-## genotypeKO                                               
-## chowYellow (C8)                                          
-## metabolitearginine                                       
-## metaboliteCITRIC                                         
-## metaboliteFUMARIC                                        
-## metaboliteglutamine                                      
-## metaboliteisoleucine                                     
-## metaboliteLACTIC                                         
-## metaboliteLC even AC total                               
-## metaboliteLC odd AC total                                
-## metaboliteleucine                                        
-## metaboliteMALIC                                          
-## metaboliteMCAC total                                     
-## metaboliteMETHYLSUCCINIC                                 
-## metaboliteSUCCINIC-2                                     
-## metabolitevaline                                         
-## genotypeKO:chowYellow (C8)                               
-## genotypeKO:metabolitearginine                            
-## genotypeKO:metaboliteCITRIC                              
-## genotypeKO:metaboliteFUMARIC                             
-## genotypeKO:metaboliteglutamine                           
-## genotypeKO:metaboliteisoleucine                          
-## genotypeKO:metaboliteLACTIC                              
-## genotypeKO:metaboliteLC even AC total                    
-## genotypeKO:metaboliteLC odd AC total                     
-## genotypeKO:metaboliteleucine                             
-## genotypeKO:metaboliteMALIC                               
-## genotypeKO:metaboliteMCAC total                          
-## genotypeKO:metaboliteMETHYLSUCCINIC                      
-## genotypeKO:metaboliteSUCCINIC-2                          
-## genotypeKO:metabolitevaline                              
-## chowYellow (C8):metabolitearginine          0.148        
-## chowYellow (C8):metaboliteCITRIC            0.200        
-## chowYellow (C8):metaboliteFUMARIC           0.219        
-## chowYellow (C8):metaboliteglutamine         0.222        
-## chowYellow (C8):metaboliteisoleucine        0.175        
-## chowYellow (C8):metaboliteLACTIC            0.199        
-## chowYellow (C8):metaboliteLC even AC total  0.180        
-## chowYellow (C8):metaboliteLC odd AC total   0.179        
-## chowYellow (C8):metaboliteleucine           0.184        
-## chowYellow (C8):metaboliteMALIC             0.231        
-## chowYellow (C8):metaboliteMCAC total        0.138        
-## chowYellow (C8):metaboliteMETHYLSUCCINIC    0.200        
-## chowYellow (C8):metaboliteSUCCINIC-2        0.222        
-## chowYellow (C8):metabolitevaline            0.322        
-##                                            chwYllw(C8):mtbltr cY(C8):C
-## genotypeKO                                                            
-## chowYellow (C8)                                                       
-## metabolitearginine                                                    
-## metaboliteCITRIC                                                      
-## metaboliteFUMARIC                                                     
-## metaboliteglutamine                                                   
-## metaboliteisoleucine                                                  
-## metaboliteLACTIC                                                      
-## metaboliteLC even AC total                                            
-## metaboliteLC odd AC total                                             
-## metaboliteleucine                                                     
-## metaboliteMALIC                                                       
-## metaboliteMCAC total                                                  
-## metaboliteMETHYLSUCCINIC                                              
-## metaboliteSUCCINIC-2                                                  
-## metabolitevaline                                                      
-## genotypeKO:chowYellow (C8)                                            
-## genotypeKO:metabolitearginine                                         
-## genotypeKO:metaboliteCITRIC                                           
-## genotypeKO:metaboliteFUMARIC                                          
-## genotypeKO:metaboliteglutamine                                        
-## genotypeKO:metaboliteisoleucine                                       
-## genotypeKO:metaboliteLACTIC                                           
-## genotypeKO:metaboliteLC even AC total                                 
-## genotypeKO:metaboliteLC odd AC total                                  
-## genotypeKO:metaboliteleucine                                          
-## genotypeKO:metaboliteMALIC                                            
-## genotypeKO:metaboliteMCAC total                                       
-## genotypeKO:metaboliteMETHYLSUCCINIC                                   
-## genotypeKO:metaboliteSUCCINIC-2                                       
-## genotypeKO:metabolitevaline                                           
-## chowYellow (C8):metabolitearginine                                    
-## chowYellow (C8):metaboliteCITRIC            0.408                     
-## chowYellow (C8):metaboliteFUMARIC           0.422              0.470  
-## chowYellow (C8):metaboliteglutamine         0.512              0.454  
-## chowYellow (C8):metaboliteisoleucine        0.502              0.500  
-## chowYellow (C8):metaboliteLACTIC            0.492              0.486  
-## chowYellow (C8):metaboliteLC even AC total  0.485              0.414  
-## chowYellow (C8):metaboliteLC odd AC total   0.504              0.396  
-## chowYellow (C8):metaboliteleucine           0.436              0.424  
-## chowYellow (C8):metaboliteMALIC             0.471              0.440  
-## chowYellow (C8):metaboliteMCAC total        0.459              0.447  
-## chowYellow (C8):metaboliteMETHYLSUCCINIC    0.476              0.447  
-## chowYellow (C8):metaboliteSUCCINIC-2        0.471              0.438  
-## chowYellow (C8):metabolitevaline            0.481              0.435  
-##                                            cY(C8):F chwYllw(C8):mtbltg
-## genotypeKO                                                            
-## chowYellow (C8)                                                       
-## metabolitearginine                                                    
-## metaboliteCITRIC                                                      
-## metaboliteFUMARIC                                                     
-## metaboliteglutamine                                                   
-## metaboliteisoleucine                                                  
-## metaboliteLACTIC                                                      
-## metaboliteLC even AC total                                            
-## metaboliteLC odd AC total                                             
-## metaboliteleucine                                                     
-## metaboliteMALIC                                                       
-## metaboliteMCAC total                                                  
-## metaboliteMETHYLSUCCINIC                                              
-## metaboliteSUCCINIC-2                                                  
-## metabolitevaline                                                      
-## genotypeKO:chowYellow (C8)                                            
-## genotypeKO:metabolitearginine                                         
-## genotypeKO:metaboliteCITRIC                                           
-## genotypeKO:metaboliteFUMARIC                                          
-## genotypeKO:metaboliteglutamine                                        
-## genotypeKO:metaboliteisoleucine                                       
-## genotypeKO:metaboliteLACTIC                                           
-## genotypeKO:metaboliteLC even AC total                                 
-## genotypeKO:metaboliteLC odd AC total                                  
-## genotypeKO:metaboliteleucine                                          
-## genotypeKO:metaboliteMALIC                                            
-## genotypeKO:metaboliteMCAC total                                       
-## genotypeKO:metaboliteMETHYLSUCCINIC                                   
-## genotypeKO:metaboliteSUCCINIC-2                                       
-## genotypeKO:metabolitevaline                                           
-## chowYellow (C8):metabolitearginine                                    
-## chowYellow (C8):metaboliteCITRIC                                      
-## chowYellow (C8):metaboliteFUMARIC                                     
-## chowYellow (C8):metaboliteglutamine         0.487                     
-## chowYellow (C8):metaboliteisoleucine        0.513    0.499            
-## chowYellow (C8):metaboliteLACTIC            0.434    0.478            
-## chowYellow (C8):metaboliteLC even AC total  0.460    0.407            
-## chowYellow (C8):metaboliteLC odd AC total   0.528    0.519            
-## chowYellow (C8):metaboliteleucine           0.447    0.405            
-## chowYellow (C8):metaboliteMALIC             0.472    0.463            
-## chowYellow (C8):metaboliteMCAC total        0.465    0.436            
-## chowYellow (C8):metaboliteMETHYLSUCCINIC    0.477    0.442            
-## chowYellow (C8):metaboliteSUCCINIC-2        0.459    0.452            
-## chowYellow (C8):metabolitevaline            0.422    0.426            
-##                                            chwYllw(C8):mtblts cY(C8):L
+## genotypeKO:metaboliteleucine                                           
+## genotypeKO:metaboliteMALIC                                             
+## genotypeKO:metaboliteMCAC total                                        
+## genotypeKO:metaboliteMETHYLSUCCINIC                                    
+## genotypeKO:metaboliteSUCCINIC-2                                        
+## genotypeKO:metabolitevaline                                            
+## chowYellow (C8):metabolitearginine                                     
+## chowYellow (C8):metaboliteCITRIC                                       
+## chowYellow (C8):metaboliteFUMARIC                      0.524           
+## chowYellow (C8):metaboliteglutamine                    0.444    0.464  
+## chowYellow (C8):metaboliteisoleucine                   0.547    0.526  
+## chowYellow (C8):metaboliteLACTIC                       0.513    0.494  
+## chowYellow (C8):metaboliteLC even AC total             0.465    0.459  
+## chowYellow (C8):metaboliteLC odd AC total              0.516    0.517  
+## chowYellow (C8):metaboliteleucine                      0.472    0.434  
+## chowYellow (C8):metaboliteMALIC                        0.440    0.532  
+## chowYellow (C8):metaboliteMCAC total                   0.445    0.511  
+## chowYellow (C8):metaboliteMETHYLSUCCINIC               0.504    0.470  
+## chowYellow (C8):metaboliteSUCCINIC-2                   0.457    0.454  
+## chowYellow (C8):metabolitevaline                       0.448    0.429  
+## genotypeKO:chowYellow (C8):metabolitearginine         -0.345   -0.267  
+## genotypeKO:chowYellow (C8):metaboliteCITRIC           -0.679   -0.355  
+## genotypeKO:chowYellow (C8):metaboliteFUMARIC          -0.357   -0.671  
+## genotypeKO:chowYellow (C8):metaboliteglutamine        -0.287   -0.302  
+## genotypeKO:chowYellow (C8):metaboliteisoleucine       -0.372   -0.348  
+## genotypeKO:chowYellow (C8):metaboliteLACTIC           -0.345   -0.329  
+## genotypeKO:chowYellow (C8):metaboliteLC even AC total -0.313   -0.308  
+## genotypeKO:chowYellow (C8):metaboliteLC odd AC total  -0.355   -0.351  
+## genotypeKO:chowYellow (C8):metaboliteleucine          -0.321   -0.295  
+## genotypeKO:chowYellow (C8):metaboliteMALIC            -0.294   -0.352  
+## genotypeKO:chowYellow (C8):metaboliteMCAC total       -0.304   -0.341  
+## genotypeKO:chowYellow (C8):metaboliteMETHYLSUCCINIC   -0.348   -0.323  
+## genotypeKO:chowYellow (C8):metaboliteSUCCINIC-2       -0.303   -0.299  
+## genotypeKO:chowYellow (C8):metabolitevaline           -0.300   -0.285  
+##                                                       chwYllw(C8):mtbltg
+## genotypeKO                                                              
+## chowYellow (C8)                                                         
+## metabolitearginine                                                      
+## metaboliteCITRIC                                                        
+## metaboliteFUMARIC                                                       
+## metaboliteglutamine                                                     
+## metaboliteisoleucine                                                    
+## metaboliteLACTIC                                                        
+## metaboliteLC even AC total                                              
+## metaboliteLC odd AC total                                               
+## metaboliteleucine                                                       
+## metaboliteMALIC                                                         
+## metaboliteMCAC total                                                    
+## metaboliteMETHYLSUCCINIC                                                
+## metaboliteSUCCINIC-2                                                    
+## metabolitevaline                                                        
+## genotypeKO:chowYellow (C8)                                              
+## genotypeKO:metabolitearginine                                           
+## genotypeKO:metaboliteCITRIC                                             
+## genotypeKO:metaboliteFUMARIC                                            
+## genotypeKO:metaboliteglutamine                                          
+## genotypeKO:metaboliteisoleucine                                         
+## genotypeKO:metaboliteLACTIC                                             
+## genotypeKO:metaboliteLC even AC total                                   
+## genotypeKO:metaboliteLC odd AC total                                    
+## genotypeKO:metaboliteleucine                                            
+## genotypeKO:metaboliteMALIC                                              
+## genotypeKO:metaboliteMCAC total                                         
+## genotypeKO:metaboliteMETHYLSUCCINIC                                     
+## genotypeKO:metaboliteSUCCINIC-2                                         
+## genotypeKO:metabolitevaline                                             
+## chowYellow (C8):metabolitearginine                                      
+## chowYellow (C8):metaboliteCITRIC                                        
+## chowYellow (C8):metaboliteFUMARIC                                       
+## chowYellow (C8):metaboliteglutamine                                     
+## chowYellow (C8):metaboliteisoleucine                   0.422            
+## chowYellow (C8):metaboliteLACTIC                       0.478            
+## chowYellow (C8):metaboliteLC even AC total             0.426            
+## chowYellow (C8):metaboliteLC odd AC total              0.535            
+## chowYellow (C8):metaboliteleucine                      0.440            
+## chowYellow (C8):metaboliteMALIC                        0.390            
+## chowYellow (C8):metaboliteMCAC total                   0.460            
+## chowYellow (C8):metaboliteMETHYLSUCCINIC               0.448            
+## chowYellow (C8):metaboliteSUCCINIC-2                   0.374            
+## chowYellow (C8):metabolitevaline                       0.368            
+## genotypeKO:chowYellow (C8):metabolitearginine         -0.293            
+## genotypeKO:chowYellow (C8):metaboliteCITRIC           -0.301            
+## genotypeKO:chowYellow (C8):metaboliteFUMARIC          -0.312            
+## genotypeKO:chowYellow (C8):metaboliteglutamine        -0.649            
+## genotypeKO:chowYellow (C8):metaboliteisoleucine       -0.286            
+## genotypeKO:chowYellow (C8):metaboliteLACTIC           -0.318            
+## genotypeKO:chowYellow (C8):metaboliteLC even AC total -0.281            
+## genotypeKO:chowYellow (C8):metaboliteLC odd AC total  -0.366            
+## genotypeKO:chowYellow (C8):metaboliteleucine          -0.299            
+## genotypeKO:chowYellow (C8):metaboliteMALIC            -0.258            
+## genotypeKO:chowYellow (C8):metaboliteMCAC total       -0.307            
+## genotypeKO:chowYellow (C8):metaboliteMETHYLSUCCINIC   -0.308            
+## genotypeKO:chowYellow (C8):metaboliteSUCCINIC-2       -0.246            
+## genotypeKO:chowYellow (C8):metabolitevaline           -0.244            
+##                                                       chwYllw(C8):mtblts
+## genotypeKO                                                              
+## chowYellow (C8)                                                         
+## metabolitearginine                                                      
+## metaboliteCITRIC                                                        
+## metaboliteFUMARIC                                                       
+## metaboliteglutamine                                                     
+## metaboliteisoleucine                                                    
+## metaboliteLACTIC                                                        
+## metaboliteLC even AC total                                              
+## metaboliteLC odd AC total                                               
+## metaboliteleucine                                                       
+## metaboliteMALIC                                                         
+## metaboliteMCAC total                                                    
+## metaboliteMETHYLSUCCINIC                                                
+## metaboliteSUCCINIC-2                                                    
+## metabolitevaline                                                        
+## genotypeKO:chowYellow (C8)                                              
+## genotypeKO:metabolitearginine                                           
+## genotypeKO:metaboliteCITRIC                                             
+## genotypeKO:metaboliteFUMARIC                                            
+## genotypeKO:metaboliteglutamine                                          
+## genotypeKO:metaboliteisoleucine                                         
+## genotypeKO:metaboliteLACTIC                                             
+## genotypeKO:metaboliteLC even AC total                                   
+## genotypeKO:metaboliteLC odd AC total                                    
+## genotypeKO:metaboliteleucine                                            
+## genotypeKO:metaboliteMALIC                                              
+## genotypeKO:metaboliteMCAC total                                         
+## genotypeKO:metaboliteMETHYLSUCCINIC                                     
+## genotypeKO:metaboliteSUCCINIC-2                                         
+## genotypeKO:metabolitevaline                                             
+## chowYellow (C8):metabolitearginine                                      
+## chowYellow (C8):metaboliteCITRIC                                        
+## chowYellow (C8):metaboliteFUMARIC                                       
+## chowYellow (C8):metaboliteglutamine                                     
+## chowYellow (C8):metaboliteisoleucine                                    
+## chowYellow (C8):metaboliteLACTIC                       0.473            
+## chowYellow (C8):metaboliteLC even AC total             0.470            
+## chowYellow (C8):metaboliteLC odd AC total              0.555            
+## chowYellow (C8):metaboliteleucine                      0.470            
+## chowYellow (C8):metaboliteMALIC                        0.481            
+## chowYellow (C8):metaboliteMCAC total                   0.451            
+## chowYellow (C8):metaboliteMETHYLSUCCINIC               0.489            
+## chowYellow (C8):metaboliteSUCCINIC-2                   0.478            
+## chowYellow (C8):metabolitevaline                       0.491            
+## genotypeKO:chowYellow (C8):metabolitearginine         -0.315            
+## genotypeKO:chowYellow (C8):metaboliteCITRIC           -0.370            
+## genotypeKO:chowYellow (C8):metaboliteFUMARIC          -0.348            
+## genotypeKO:chowYellow (C8):metaboliteglutamine        -0.276            
+## genotypeKO:chowYellow (C8):metaboliteisoleucine       -0.663            
+## genotypeKO:chowYellow (C8):metaboliteLACTIC           -0.312            
+## genotypeKO:chowYellow (C8):metaboliteLC even AC total -0.307            
+## genotypeKO:chowYellow (C8):metaboliteLC odd AC total  -0.380            
+## genotypeKO:chowYellow (C8):metaboliteleucine          -0.319            
+## genotypeKO:chowYellow (C8):metaboliteMALIC            -0.315            
+## genotypeKO:chowYellow (C8):metaboliteMCAC total       -0.292            
+## genotypeKO:chowYellow (C8):metaboliteMETHYLSUCCINIC   -0.333            
+## genotypeKO:chowYellow (C8):metaboliteSUCCINIC-2       -0.311            
+## genotypeKO:chowYellow (C8):metabolitevaline           -0.323            
+##                                                       cY(C8):L cY(eAt
+## genotypeKO                                                           
+## chowYellow (C8)                                                      
+## metabolitearginine                                                   
+## metaboliteCITRIC                                                     
+## metaboliteFUMARIC                                                    
+## metaboliteglutamine                                                  
+## metaboliteisoleucine                                                 
+## metaboliteLACTIC                                                     
+## metaboliteLC even AC total                                           
+## metaboliteLC odd AC total                                            
+## metaboliteleucine                                                    
+## metaboliteMALIC                                                      
+## metaboliteMCAC total                                                 
+## metaboliteMETHYLSUCCINIC                                             
+## metaboliteSUCCINIC-2                                                 
+## metabolitevaline                                                     
+## genotypeKO:chowYellow (C8)                                           
+## genotypeKO:metabolitearginine                                        
+## genotypeKO:metaboliteCITRIC                                          
+## genotypeKO:metaboliteFUMARIC                                         
+## genotypeKO:metaboliteglutamine                                       
+## genotypeKO:metaboliteisoleucine                                      
+## genotypeKO:metaboliteLACTIC                                          
+## genotypeKO:metaboliteLC even AC total                                
+## genotypeKO:metaboliteLC odd AC total                                 
+## genotypeKO:metaboliteleucine                                         
+## genotypeKO:metaboliteMALIC                                           
+## genotypeKO:metaboliteMCAC total                                      
+## genotypeKO:metaboliteMETHYLSUCCINIC                                  
+## genotypeKO:metaboliteSUCCINIC-2                                      
+## genotypeKO:metabolitevaline                                          
+## chowYellow (C8):metabolitearginine                                   
+## chowYellow (C8):metaboliteCITRIC                                     
+## chowYellow (C8):metaboliteFUMARIC                                    
+## chowYellow (C8):metaboliteglutamine                                  
+## chowYellow (C8):metaboliteisoleucine                                 
+## chowYellow (C8):metaboliteLACTIC                                     
+## chowYellow (C8):metaboliteLC even AC total             0.480         
+## chowYellow (C8):metaboliteLC odd AC total              0.471    0.483
+## chowYellow (C8):metaboliteleucine                      0.470    0.484
+## chowYellow (C8):metaboliteMALIC                        0.458    0.435
+## chowYellow (C8):metaboliteMCAC total                   0.455    0.445
+## chowYellow (C8):metaboliteMETHYLSUCCINIC               0.494    0.480
+## chowYellow (C8):metaboliteSUCCINIC-2                   0.476    0.427
+## chowYellow (C8):metabolitevaline                       0.476    0.432
+## genotypeKO:chowYellow (C8):metabolitearginine         -0.313   -0.317
+## genotypeKO:chowYellow (C8):metaboliteCITRIC           -0.350   -0.316
+## genotypeKO:chowYellow (C8):metaboliteFUMARIC          -0.332   -0.310
+## genotypeKO:chowYellow (C8):metaboliteglutamine        -0.314   -0.276
+## genotypeKO:chowYellow (C8):metaboliteisoleucine       -0.315   -0.316
+## genotypeKO:chowYellow (C8):metaboliteLACTIC           -0.664   -0.321
+## genotypeKO:chowYellow (C8):metaboliteLC even AC total -0.318   -0.661
+## genotypeKO:chowYellow (C8):metaboliteLC odd AC total  -0.315   -0.333
+## genotypeKO:chowYellow (C8):metaboliteleucine          -0.316   -0.328
+## genotypeKO:chowYellow (C8):metaboliteMALIC            -0.302   -0.289
+## genotypeKO:chowYellow (C8):metaboliteMCAC total       -0.299   -0.298
+## genotypeKO:chowYellow (C8):metaboliteMETHYLSUCCINIC   -0.338   -0.330
+## genotypeKO:chowYellow (C8):metaboliteSUCCINIC-2       -0.313   -0.282
+## genotypeKO:chowYellow (C8):metabolitevaline           -0.318   -0.286
+##                                                       cY(oAt
+## genotypeKO                                                  
+## chowYellow (C8)                                             
+## metabolitearginine                                          
+## metaboliteCITRIC                                            
+## metaboliteFUMARIC                                           
+## metaboliteglutamine                                         
+## metaboliteisoleucine                                        
+## metaboliteLACTIC                                            
+## metaboliteLC even AC total                                  
+## metaboliteLC odd AC total                                   
+## metaboliteleucine                                           
+## metaboliteMALIC                                             
+## metaboliteMCAC total                                        
+## metaboliteMETHYLSUCCINIC                                    
+## metaboliteSUCCINIC-2                                        
+## metabolitevaline                                            
+## genotypeKO:chowYellow (C8)                                  
+## genotypeKO:metabolitearginine                               
+## genotypeKO:metaboliteCITRIC                                 
+## genotypeKO:metaboliteFUMARIC                                
+## genotypeKO:metaboliteglutamine                              
+## genotypeKO:metaboliteisoleucine                             
+## genotypeKO:metaboliteLACTIC                                 
+## genotypeKO:metaboliteLC even AC total                       
+## genotypeKO:metaboliteLC odd AC total                        
+## genotypeKO:metaboliteleucine                                
+## genotypeKO:metaboliteMALIC                                  
+## genotypeKO:metaboliteMCAC total                             
+## genotypeKO:metaboliteMETHYLSUCCINIC                         
+## genotypeKO:metaboliteSUCCINIC-2                             
+## genotypeKO:metabolitevaline                                 
+## chowYellow (C8):metabolitearginine                          
+## chowYellow (C8):metaboliteCITRIC                            
+## chowYellow (C8):metaboliteFUMARIC                           
+## chowYellow (C8):metaboliteglutamine                         
+## chowYellow (C8):metaboliteisoleucine                        
+## chowYellow (C8):metaboliteLACTIC                            
+## chowYellow (C8):metaboliteLC even AC total                  
+## chowYellow (C8):metaboliteLC odd AC total                   
+## chowYellow (C8):metaboliteleucine                      0.519
+## chowYellow (C8):metaboliteMALIC                        0.515
+## chowYellow (C8):metaboliteMCAC total                   0.440
+## chowYellow (C8):metaboliteMETHYLSUCCINIC               0.525
+## chowYellow (C8):metaboliteSUCCINIC-2                   0.556
+## chowYellow (C8):metabolitevaline                       0.495
+## genotypeKO:chowYellow (C8):metabolitearginine         -0.356
+## genotypeKO:chowYellow (C8):metaboliteCITRIC           -0.352
+## genotypeKO:chowYellow (C8):metaboliteFUMARIC          -0.349
+## genotypeKO:chowYellow (C8):metaboliteglutamine        -0.348
+## genotypeKO:chowYellow (C8):metaboliteisoleucine       -0.366
+## genotypeKO:chowYellow (C8):metaboliteLACTIC           -0.314
+## genotypeKO:chowYellow (C8):metaboliteLC even AC total -0.319
+## genotypeKO:chowYellow (C8):metaboliteLC odd AC total  -0.677
+## genotypeKO:chowYellow (C8):metaboliteleucine          -0.352
+## genotypeKO:chowYellow (C8):metaboliteMALIC            -0.341
+## genotypeKO:chowYellow (C8):metaboliteMCAC total       -0.292
+## genotypeKO:chowYellow (C8):metaboliteMETHYLSUCCINIC   -0.360
+## genotypeKO:chowYellow (C8):metaboliteSUCCINIC-2       -0.365
+## genotypeKO:chowYellow (C8):metabolitevaline           -0.330
+##                                                       chwYllw(C8):mtbltl
+## genotypeKO                                                              
+## chowYellow (C8)                                                         
+## metabolitearginine                                                      
+## metaboliteCITRIC                                                        
+## metaboliteFUMARIC                                                       
+## metaboliteglutamine                                                     
+## metaboliteisoleucine                                                    
+## metaboliteLACTIC                                                        
+## metaboliteLC even AC total                                              
+## metaboliteLC odd AC total                                               
+## metaboliteleucine                                                       
+## metaboliteMALIC                                                         
+## metaboliteMCAC total                                                    
+## metaboliteMETHYLSUCCINIC                                                
+## metaboliteSUCCINIC-2                                                    
+## metabolitevaline                                                        
+## genotypeKO:chowYellow (C8)                                              
+## genotypeKO:metabolitearginine                                           
+## genotypeKO:metaboliteCITRIC                                             
+## genotypeKO:metaboliteFUMARIC                                            
+## genotypeKO:metaboliteglutamine                                          
+## genotypeKO:metaboliteisoleucine                                         
+## genotypeKO:metaboliteLACTIC                                             
+## genotypeKO:metaboliteLC even AC total                                   
+## genotypeKO:metaboliteLC odd AC total                                    
+## genotypeKO:metaboliteleucine                                            
+## genotypeKO:metaboliteMALIC                                              
+## genotypeKO:metaboliteMCAC total                                         
+## genotypeKO:metaboliteMETHYLSUCCINIC                                     
+## genotypeKO:metaboliteSUCCINIC-2                                         
+## genotypeKO:metabolitevaline                                             
+## chowYellow (C8):metabolitearginine                                      
+## chowYellow (C8):metaboliteCITRIC                                        
+## chowYellow (C8):metaboliteFUMARIC                                       
+## chowYellow (C8):metaboliteglutamine                                     
+## chowYellow (C8):metaboliteisoleucine                                    
+## chowYellow (C8):metaboliteLACTIC                                        
+## chowYellow (C8):metaboliteLC even AC total                              
+## chowYellow (C8):metaboliteLC odd AC total                               
+## chowYellow (C8):metaboliteleucine                                       
+## chowYellow (C8):metaboliteMALIC                        0.482            
+## chowYellow (C8):metaboliteMCAC total                   0.489            
+## chowYellow (C8):metaboliteMETHYLSUCCINIC               0.464            
+## chowYellow (C8):metaboliteSUCCINIC-2                   0.459            
+## chowYellow (C8):metabolitevaline                       0.447            
+## genotypeKO:chowYellow (C8):metabolitearginine         -0.264            
+## genotypeKO:chowYellow (C8):metaboliteCITRIC           -0.321            
+## genotypeKO:chowYellow (C8):metaboliteFUMARIC          -0.293            
+## genotypeKO:chowYellow (C8):metaboliteglutamine        -0.287            
+## genotypeKO:chowYellow (C8):metaboliteisoleucine       -0.311            
+## genotypeKO:chowYellow (C8):metaboliteLACTIC           -0.313            
+## genotypeKO:chowYellow (C8):metaboliteLC even AC total -0.324            
+## genotypeKO:chowYellow (C8):metaboliteLC odd AC total  -0.354            
+## genotypeKO:chowYellow (C8):metaboliteleucine          -0.679            
+## genotypeKO:chowYellow (C8):metaboliteMALIC            -0.319            
+## genotypeKO:chowYellow (C8):metaboliteMCAC total       -0.326            
+## genotypeKO:chowYellow (C8):metaboliteMETHYLSUCCINIC   -0.319            
+## genotypeKO:chowYellow (C8):metaboliteSUCCINIC-2       -0.302            
+## genotypeKO:chowYellow (C8):metabolitevaline           -0.297            
+##                                                       cY(C8):MA cY(C8t
 ## genotypeKO                                                            
 ## chowYellow (C8)                                                       
 ## metabolitearginine                                                    
@@ -2291,157 +4420,813 @@ summary(M)
 ## chowYellow (C8):metaboliteFUMARIC                                     
 ## chowYellow (C8):metaboliteglutamine                                   
 ## chowYellow (C8):metaboliteisoleucine                                  
-## chowYellow (C8):metaboliteLACTIC            0.484                     
-## chowYellow (C8):metaboliteLC even AC total  0.475              0.455  
-## chowYellow (C8):metaboliteLC odd AC total   0.488              0.478  
-## chowYellow (C8):metaboliteleucine           0.478              0.468  
-## chowYellow (C8):metaboliteMALIC             0.498              0.450  
-## chowYellow (C8):metaboliteMCAC total        0.489              0.467  
-## chowYellow (C8):metaboliteMETHYLSUCCINIC    0.472              0.461  
-## chowYellow (C8):metaboliteSUCCINIC-2        0.472              0.501  
-## chowYellow (C8):metabolitevaline            0.447              0.444  
-##                                            cY(eAt cY(oAt
-## genotypeKO                                              
-## chowYellow (C8)                                         
-## metabolitearginine                                      
-## metaboliteCITRIC                                        
-## metaboliteFUMARIC                                       
-## metaboliteglutamine                                     
-## metaboliteisoleucine                                    
-## metaboliteLACTIC                                        
-## metaboliteLC even AC total                              
-## metaboliteLC odd AC total                               
-## metaboliteleucine                                       
-## metaboliteMALIC                                         
-## metaboliteMCAC total                                    
-## metaboliteMETHYLSUCCINIC                                
-## metaboliteSUCCINIC-2                                    
-## metabolitevaline                                        
-## genotypeKO:chowYellow (C8)                              
-## genotypeKO:metabolitearginine                           
-## genotypeKO:metaboliteCITRIC                             
-## genotypeKO:metaboliteFUMARIC                            
-## genotypeKO:metaboliteglutamine                          
-## genotypeKO:metaboliteisoleucine                         
-## genotypeKO:metaboliteLACTIC                             
-## genotypeKO:metaboliteLC even AC total                   
-## genotypeKO:metaboliteLC odd AC total                    
-## genotypeKO:metaboliteleucine                            
-## genotypeKO:metaboliteMALIC                              
-## genotypeKO:metaboliteMCAC total                         
-## genotypeKO:metaboliteMETHYLSUCCINIC                     
-## genotypeKO:metaboliteSUCCINIC-2                         
-## genotypeKO:metabolitevaline                             
-## chowYellow (C8):metabolitearginine                      
-## chowYellow (C8):metaboliteCITRIC                        
-## chowYellow (C8):metaboliteFUMARIC                       
-## chowYellow (C8):metaboliteglutamine                     
-## chowYellow (C8):metaboliteisoleucine                    
-## chowYellow (C8):metaboliteLACTIC                        
-## chowYellow (C8):metaboliteLC even AC total              
-## chowYellow (C8):metaboliteLC odd AC total   0.487       
-## chowYellow (C8):metaboliteleucine           0.444  0.483
-## chowYellow (C8):metaboliteMALIC             0.505  0.464
-## chowYellow (C8):metaboliteMCAC total        0.436  0.463
-## chowYellow (C8):metaboliteMETHYLSUCCINIC    0.457  0.498
-## chowYellow (C8):metaboliteSUCCINIC-2        0.463  0.483
-## chowYellow (C8):metabolitevaline            0.455  0.448
-##                                            chwYllw(C8):mtbltl cY(C8):MA
-## genotypeKO                                                             
-## chowYellow (C8)                                                        
-## metabolitearginine                                                     
-## metaboliteCITRIC                                                       
-## metaboliteFUMARIC                                                      
-## metaboliteglutamine                                                    
-## metaboliteisoleucine                                                   
-## metaboliteLACTIC                                                       
-## metaboliteLC even AC total                                             
-## metaboliteLC odd AC total                                              
-## metaboliteleucine                                                      
-## metaboliteMALIC                                                        
-## metaboliteMCAC total                                                   
-## metaboliteMETHYLSUCCINIC                                               
-## metaboliteSUCCINIC-2                                                   
-## metabolitevaline                                                       
-## genotypeKO:chowYellow (C8)                                             
-## genotypeKO:metabolitearginine                                          
-## genotypeKO:metaboliteCITRIC                                            
-## genotypeKO:metaboliteFUMARIC                                           
-## genotypeKO:metaboliteglutamine                                         
-## genotypeKO:metaboliteisoleucine                                        
-## genotypeKO:metaboliteLACTIC                                            
-## genotypeKO:metaboliteLC even AC total                                  
-## genotypeKO:metaboliteLC odd AC total                                   
-## genotypeKO:metaboliteleucine                                           
-## genotypeKO:metaboliteMALIC                                             
-## genotypeKO:metaboliteMCAC total                                        
-## genotypeKO:metaboliteMETHYLSUCCINIC                                    
-## genotypeKO:metaboliteSUCCINIC-2                                        
-## genotypeKO:metabolitevaline                                            
-## chowYellow (C8):metabolitearginine                                     
-## chowYellow (C8):metaboliteCITRIC                                       
-## chowYellow (C8):metaboliteFUMARIC                                      
-## chowYellow (C8):metaboliteglutamine                                    
-## chowYellow (C8):metaboliteisoleucine                                   
-## chowYellow (C8):metaboliteLACTIC                                       
-## chowYellow (C8):metaboliteLC even AC total                             
-## chowYellow (C8):metaboliteLC odd AC total                              
-## chowYellow (C8):metaboliteleucine                                      
-## chowYellow (C8):metaboliteMALIC             0.452                      
-## chowYellow (C8):metaboliteMCAC total        0.447              0.458   
-## chowYellow (C8):metaboliteMETHYLSUCCINIC    0.464              0.437   
-## chowYellow (C8):metaboliteSUCCINIC-2        0.408              0.444   
-## chowYellow (C8):metabolitevaline            0.443              0.420   
-##                                            cY(C8t cY(C8):ME cY(C8):S
-## genotypeKO                                                          
-## chowYellow (C8)                                                     
-## metabolitearginine                                                  
-## metaboliteCITRIC                                                    
-## metaboliteFUMARIC                                                   
-## metaboliteglutamine                                                 
-## metaboliteisoleucine                                                
-## metaboliteLACTIC                                                    
-## metaboliteLC even AC total                                          
-## metaboliteLC odd AC total                                           
-## metaboliteleucine                                                   
-## metaboliteMALIC                                                     
-## metaboliteMCAC total                                                
-## metaboliteMETHYLSUCCINIC                                            
-## metaboliteSUCCINIC-2                                                
-## metabolitevaline                                                    
-## genotypeKO:chowYellow (C8)                                          
-## genotypeKO:metabolitearginine                                       
-## genotypeKO:metaboliteCITRIC                                         
-## genotypeKO:metaboliteFUMARIC                                        
-## genotypeKO:metaboliteglutamine                                      
-## genotypeKO:metaboliteisoleucine                                     
-## genotypeKO:metaboliteLACTIC                                         
-## genotypeKO:metaboliteLC even AC total                               
-## genotypeKO:metaboliteLC odd AC total                                
-## genotypeKO:metaboliteleucine                                        
-## genotypeKO:metaboliteMALIC                                          
-## genotypeKO:metaboliteMCAC total                                     
-## genotypeKO:metaboliteMETHYLSUCCINIC                                 
-## genotypeKO:metaboliteSUCCINIC-2                                     
-## genotypeKO:metabolitevaline                                         
-## chowYellow (C8):metabolitearginine                                  
-## chowYellow (C8):metaboliteCITRIC                                    
-## chowYellow (C8):metaboliteFUMARIC                                   
-## chowYellow (C8):metaboliteglutamine                                 
-## chowYellow (C8):metaboliteisoleucine                                
-## chowYellow (C8):metaboliteLACTIC                                    
-## chowYellow (C8):metaboliteLC even AC total                          
-## chowYellow (C8):metaboliteLC odd AC total                           
-## chowYellow (C8):metaboliteleucine                                   
-## chowYellow (C8):metaboliteMALIC                                     
-## chowYellow (C8):metaboliteMCAC total                                
-## chowYellow (C8):metaboliteMETHYLSUCCINIC    0.478                   
-## chowYellow (C8):metaboliteSUCCINIC-2        0.483  0.478            
-## chowYellow (C8):metabolitevaline            0.494  0.421     0.416  
+## chowYellow (C8):metaboliteLACTIC                                      
+## chowYellow (C8):metaboliteLC even AC total                            
+## chowYellow (C8):metaboliteLC odd AC total                             
+## chowYellow (C8):metaboliteleucine                                     
+## chowYellow (C8):metaboliteMALIC                                       
+## chowYellow (C8):metaboliteMCAC total                   0.451          
+## chowYellow (C8):metaboliteMETHYLSUCCINIC               0.461     0.506
+## chowYellow (C8):metaboliteSUCCINIC-2                   0.420     0.489
+## chowYellow (C8):metabolitevaline                       0.429     0.467
+## genotypeKO:chowYellow (C8):metabolitearginine         -0.339    -0.302
+## genotypeKO:chowYellow (C8):metaboliteCITRIC           -0.298    -0.302
+## genotypeKO:chowYellow (C8):metaboliteFUMARIC          -0.358    -0.346
+## genotypeKO:chowYellow (C8):metaboliteglutamine        -0.251    -0.297
+## genotypeKO:chowYellow (C8):metaboliteisoleucine       -0.308    -0.304
+## genotypeKO:chowYellow (C8):metaboliteLACTIC           -0.306    -0.305
+## genotypeKO:chowYellow (C8):metaboliteLC even AC total -0.289    -0.294
+## genotypeKO:chowYellow (C8):metaboliteLC odd AC total  -0.352    -0.305
+## genotypeKO:chowYellow (C8):metaboliteleucine          -0.328    -0.333
+## genotypeKO:chowYellow (C8):metaboliteMALIC            -0.661    -0.299
+## genotypeKO:chowYellow (C8):metaboliteMCAC total       -0.303    -0.667
+## genotypeKO:chowYellow (C8):metaboliteMETHYLSUCCINIC   -0.317    -0.348
+## genotypeKO:chowYellow (C8):metaboliteSUCCINIC-2       -0.277    -0.323
+## genotypeKO:chowYellow (C8):metabolitevaline           -0.283    -0.311
+##                                                       cY(C8):ME cY(C8):S
+## genotypeKO                                                              
+## chowYellow (C8)                                                         
+## metabolitearginine                                                      
+## metaboliteCITRIC                                                        
+## metaboliteFUMARIC                                                       
+## metaboliteglutamine                                                     
+## metaboliteisoleucine                                                    
+## metaboliteLACTIC                                                        
+## metaboliteLC even AC total                                              
+## metaboliteLC odd AC total                                               
+## metaboliteleucine                                                       
+## metaboliteMALIC                                                         
+## metaboliteMCAC total                                                    
+## metaboliteMETHYLSUCCINIC                                                
+## metaboliteSUCCINIC-2                                                    
+## metabolitevaline                                                        
+## genotypeKO:chowYellow (C8)                                              
+## genotypeKO:metabolitearginine                                           
+## genotypeKO:metaboliteCITRIC                                             
+## genotypeKO:metaboliteFUMARIC                                            
+## genotypeKO:metaboliteglutamine                                          
+## genotypeKO:metaboliteisoleucine                                         
+## genotypeKO:metaboliteLACTIC                                             
+## genotypeKO:metaboliteLC even AC total                                   
+## genotypeKO:metaboliteLC odd AC total                                    
+## genotypeKO:metaboliteleucine                                            
+## genotypeKO:metaboliteMALIC                                              
+## genotypeKO:metaboliteMCAC total                                         
+## genotypeKO:metaboliteMETHYLSUCCINIC                                     
+## genotypeKO:metaboliteSUCCINIC-2                                         
+## genotypeKO:metabolitevaline                                             
+## chowYellow (C8):metabolitearginine                                      
+## chowYellow (C8):metaboliteCITRIC                                        
+## chowYellow (C8):metaboliteFUMARIC                                       
+## chowYellow (C8):metaboliteglutamine                                     
+## chowYellow (C8):metaboliteisoleucine                                    
+## chowYellow (C8):metaboliteLACTIC                                        
+## chowYellow (C8):metaboliteLC even AC total                              
+## chowYellow (C8):metaboliteLC odd AC total                               
+## chowYellow (C8):metaboliteleucine                                       
+## chowYellow (C8):metaboliteMALIC                                         
+## chowYellow (C8):metaboliteMCAC total                                    
+## chowYellow (C8):metaboliteMETHYLSUCCINIC                                
+## chowYellow (C8):metaboliteSUCCINIC-2                   0.442            
+## chowYellow (C8):metabolitevaline                       0.461     0.401  
+## genotypeKO:chowYellow (C8):metabolitearginine         -0.333    -0.330  
+## genotypeKO:chowYellow (C8):metaboliteCITRIC           -0.343    -0.313  
+## genotypeKO:chowYellow (C8):metaboliteFUMARIC          -0.314    -0.309  
+## genotypeKO:chowYellow (C8):metaboliteglutamine        -0.293    -0.246  
+## genotypeKO:chowYellow (C8):metaboliteisoleucine       -0.326    -0.318  
+## genotypeKO:chowYellow (C8):metaboliteLACTIC           -0.328    -0.317  
+## genotypeKO:chowYellow (C8):metaboliteLC even AC total -0.315    -0.286  
+## genotypeKO:chowYellow (C8):metaboliteLC odd AC total  -0.362    -0.368  
+## genotypeKO:chowYellow (C8):metaboliteleucine          -0.313    -0.310  
+## genotypeKO:chowYellow (C8):metaboliteMALIC            -0.304    -0.278  
+## genotypeKO:chowYellow (C8):metaboliteMCAC total       -0.334    -0.324  
+## genotypeKO:chowYellow (C8):metaboliteMETHYLSUCCINIC   -0.685    -0.304  
+## genotypeKO:chowYellow (C8):metaboliteSUCCINIC-2       -0.290    -0.656  
+## genotypeKO:chowYellow (C8):metabolitevaline           -0.303    -0.273  
+##                                                       chwYllw(C8):mtbltv
+## genotypeKO                                                              
+## chowYellow (C8)                                                         
+## metabolitearginine                                                      
+## metaboliteCITRIC                                                        
+## metaboliteFUMARIC                                                       
+## metaboliteglutamine                                                     
+## metaboliteisoleucine                                                    
+## metaboliteLACTIC                                                        
+## metaboliteLC even AC total                                              
+## metaboliteLC odd AC total                                               
+## metaboliteleucine                                                       
+## metaboliteMALIC                                                         
+## metaboliteMCAC total                                                    
+## metaboliteMETHYLSUCCINIC                                                
+## metaboliteSUCCINIC-2                                                    
+## metabolitevaline                                                        
+## genotypeKO:chowYellow (C8)                                              
+## genotypeKO:metabolitearginine                                           
+## genotypeKO:metaboliteCITRIC                                             
+## genotypeKO:metaboliteFUMARIC                                            
+## genotypeKO:metaboliteglutamine                                          
+## genotypeKO:metaboliteisoleucine                                         
+## genotypeKO:metaboliteLACTIC                                             
+## genotypeKO:metaboliteLC even AC total                                   
+## genotypeKO:metaboliteLC odd AC total                                    
+## genotypeKO:metaboliteleucine                                            
+## genotypeKO:metaboliteMALIC                                              
+## genotypeKO:metaboliteMCAC total                                         
+## genotypeKO:metaboliteMETHYLSUCCINIC                                     
+## genotypeKO:metaboliteSUCCINIC-2                                         
+## genotypeKO:metabolitevaline                                             
+## chowYellow (C8):metabolitearginine                                      
+## chowYellow (C8):metaboliteCITRIC                                        
+## chowYellow (C8):metaboliteFUMARIC                                       
+## chowYellow (C8):metaboliteglutamine                                     
+## chowYellow (C8):metaboliteisoleucine                                    
+## chowYellow (C8):metaboliteLACTIC                                        
+## chowYellow (C8):metaboliteLC even AC total                              
+## chowYellow (C8):metaboliteLC odd AC total                               
+## chowYellow (C8):metaboliteleucine                                       
+## chowYellow (C8):metaboliteMALIC                                         
+## chowYellow (C8):metaboliteMCAC total                                    
+## chowYellow (C8):metaboliteMETHYLSUCCINIC                                
+## chowYellow (C8):metaboliteSUCCINIC-2                                    
+## chowYellow (C8):metabolitevaline                                        
+## genotypeKO:chowYellow (C8):metabolitearginine         -0.291            
+## genotypeKO:chowYellow (C8):metaboliteCITRIC           -0.305            
+## genotypeKO:chowYellow (C8):metaboliteFUMARIC          -0.290            
+## genotypeKO:chowYellow (C8):metaboliteglutamine        -0.240            
+## genotypeKO:chowYellow (C8):metaboliteisoleucine       -0.329            
+## genotypeKO:chowYellow (C8):metaboliteLACTIC           -0.318            
+## genotypeKO:chowYellow (C8):metaboliteLC even AC total -0.288            
+## genotypeKO:chowYellow (C8):metaboliteLC odd AC total  -0.338            
+## genotypeKO:chowYellow (C8):metaboliteleucine          -0.303            
+## genotypeKO:chowYellow (C8):metaboliteMALIC            -0.284            
+## genotypeKO:chowYellow (C8):metaboliteMCAC total       -0.313            
+## genotypeKO:chowYellow (C8):metaboliteMETHYLSUCCINIC   -0.317            
+## genotypeKO:chowYellow (C8):metaboliteSUCCINIC-2       -0.265            
+## genotypeKO:chowYellow (C8):metabolitevaline           -0.664            
+##                                                       gntypKO:chwYllw(C8):mtbltr
+## genotypeKO                                                                      
+## chowYellow (C8)                                                                 
+## metabolitearginine                                                              
+## metaboliteCITRIC                                                                
+## metaboliteFUMARIC                                                               
+## metaboliteglutamine                                                             
+## metaboliteisoleucine                                                            
+## metaboliteLACTIC                                                                
+## metaboliteLC even AC total                                                      
+## metaboliteLC odd AC total                                                       
+## metaboliteleucine                                                               
+## metaboliteMALIC                                                                 
+## metaboliteMCAC total                                                            
+## metaboliteMETHYLSUCCINIC                                                        
+## metaboliteSUCCINIC-2                                                            
+## metabolitevaline                                                                
+## genotypeKO:chowYellow (C8)                                                      
+## genotypeKO:metabolitearginine                                                   
+## genotypeKO:metaboliteCITRIC                                                     
+## genotypeKO:metaboliteFUMARIC                                                    
+## genotypeKO:metaboliteglutamine                                                  
+## genotypeKO:metaboliteisoleucine                                                 
+## genotypeKO:metaboliteLACTIC                                                     
+## genotypeKO:metaboliteLC even AC total                                           
+## genotypeKO:metaboliteLC odd AC total                                            
+## genotypeKO:metaboliteleucine                                                    
+## genotypeKO:metaboliteMALIC                                                      
+## genotypeKO:metaboliteMCAC total                                                 
+## genotypeKO:metaboliteMETHYLSUCCINIC                                             
+## genotypeKO:metaboliteSUCCINIC-2                                                 
+## genotypeKO:metabolitevaline                                                     
+## chowYellow (C8):metabolitearginine                                              
+## chowYellow (C8):metaboliteCITRIC                                                
+## chowYellow (C8):metaboliteFUMARIC                                               
+## chowYellow (C8):metaboliteglutamine                                             
+## chowYellow (C8):metaboliteisoleucine                                            
+## chowYellow (C8):metaboliteLACTIC                                                
+## chowYellow (C8):metaboliteLC even AC total                                      
+## chowYellow (C8):metaboliteLC odd AC total                                       
+## chowYellow (C8):metaboliteleucine                                               
+## chowYellow (C8):metaboliteMALIC                                                 
+## chowYellow (C8):metaboliteMCAC total                                            
+## chowYellow (C8):metaboliteMETHYLSUCCINIC                                        
+## chowYellow (C8):metaboliteSUCCINIC-2                                            
+## chowYellow (C8):metabolitevaline                                                
+## genotypeKO:chowYellow (C8):metabolitearginine                                   
+## genotypeKO:chowYellow (C8):metaboliteCITRIC            0.516                    
+## genotypeKO:chowYellow (C8):metaboliteFUMARIC           0.466                    
+## genotypeKO:chowYellow (C8):metaboliteglutamine         0.479                    
+## genotypeKO:chowYellow (C8):metaboliteisoleucine        0.498                    
+## genotypeKO:chowYellow (C8):metaboliteLACTIC            0.496                    
+## genotypeKO:chowYellow (C8):metaboliteLC even AC total  0.488                    
+## genotypeKO:chowYellow (C8):metaboliteLC odd AC total   0.525                    
+## genotypeKO:chowYellow (C8):metaboliteleucine           0.459                    
+## genotypeKO:chowYellow (C8):metaboliteMALIC             0.513                    
+## genotypeKO:chowYellow (C8):metaboliteMCAC total        0.488                    
+## genotypeKO:chowYellow (C8):metaboliteMETHYLSUCCINIC    0.509                    
+## genotypeKO:chowYellow (C8):metaboliteSUCCINIC-2        0.507                    
+## genotypeKO:chowYellow (C8):metabolitevaline            0.480                    
+##                                                       gKO:Y(C8):C
+## genotypeKO                                                       
+## chowYellow (C8)                                                  
+## metabolitearginine                                               
+## metaboliteCITRIC                                                 
+## metaboliteFUMARIC                                                
+## metaboliteglutamine                                              
+## metaboliteisoleucine                                             
+## metaboliteLACTIC                                                 
+## metaboliteLC even AC total                                       
+## metaboliteLC odd AC total                                        
+## metaboliteleucine                                                
+## metaboliteMALIC                                                  
+## metaboliteMCAC total                                             
+## metaboliteMETHYLSUCCINIC                                         
+## metaboliteSUCCINIC-2                                             
+## metabolitevaline                                                 
+## genotypeKO:chowYellow (C8)                                       
+## genotypeKO:metabolitearginine                                    
+## genotypeKO:metaboliteCITRIC                                      
+## genotypeKO:metaboliteFUMARIC                                     
+## genotypeKO:metaboliteglutamine                                   
+## genotypeKO:metaboliteisoleucine                                  
+## genotypeKO:metaboliteLACTIC                                      
+## genotypeKO:metaboliteLC even AC total                            
+## genotypeKO:metaboliteLC odd AC total                             
+## genotypeKO:metaboliteleucine                                     
+## genotypeKO:metaboliteMALIC                                       
+## genotypeKO:metaboliteMCAC total                                  
+## genotypeKO:metaboliteMETHYLSUCCINIC                              
+## genotypeKO:metaboliteSUCCINIC-2                                  
+## genotypeKO:metabolitevaline                                      
+## chowYellow (C8):metabolitearginine                               
+## chowYellow (C8):metaboliteCITRIC                                 
+## chowYellow (C8):metaboliteFUMARIC                                
+## chowYellow (C8):metaboliteglutamine                              
+## chowYellow (C8):metaboliteisoleucine                             
+## chowYellow (C8):metaboliteLACTIC                                 
+## chowYellow (C8):metaboliteLC even AC total                       
+## chowYellow (C8):metaboliteLC odd AC total                        
+## chowYellow (C8):metaboliteleucine                                
+## chowYellow (C8):metaboliteMALIC                                  
+## chowYellow (C8):metaboliteMCAC total                             
+## chowYellow (C8):metaboliteMETHYLSUCCINIC                         
+## chowYellow (C8):metaboliteSUCCINIC-2                             
+## chowYellow (C8):metabolitevaline                                 
+## genotypeKO:chowYellow (C8):metabolitearginine                    
+## genotypeKO:chowYellow (C8):metaboliteCITRIC                      
+## genotypeKO:chowYellow (C8):metaboliteFUMARIC           0.505     
+## genotypeKO:chowYellow (C8):metaboliteglutamine         0.471     
+## genotypeKO:chowYellow (C8):metaboliteisoleucine        0.529     
+## genotypeKO:chowYellow (C8):metaboliteLACTIC            0.512     
+## genotypeKO:chowYellow (C8):metaboliteLC even AC total  0.487     
+## genotypeKO:chowYellow (C8):metaboliteLC odd AC total   0.515     
+## genotypeKO:chowYellow (C8):metaboliteleucine           0.486     
+## genotypeKO:chowYellow (C8):metaboliteMALIC             0.476     
+## genotypeKO:chowYellow (C8):metaboliteMCAC total        0.477     
+## genotypeKO:chowYellow (C8):metaboliteMETHYLSUCCINIC    0.505     
+## genotypeKO:chowYellow (C8):metaboliteSUCCINIC-2        0.485     
+## genotypeKO:chowYellow (C8):metabolitevaline            0.478     
+##                                                       gKO:Y(C8):F
+## genotypeKO                                                       
+## chowYellow (C8)                                                  
+## metabolitearginine                                               
+## metaboliteCITRIC                                                 
+## metaboliteFUMARIC                                                
+## metaboliteglutamine                                              
+## metaboliteisoleucine                                             
+## metaboliteLACTIC                                                 
+## metaboliteLC even AC total                                       
+## metaboliteLC odd AC total                                        
+## metaboliteleucine                                                
+## metaboliteMALIC                                                  
+## metaboliteMCAC total                                             
+## metaboliteMETHYLSUCCINIC                                         
+## metaboliteSUCCINIC-2                                             
+## metabolitevaline                                                 
+## genotypeKO:chowYellow (C8)                                       
+## genotypeKO:metabolitearginine                                    
+## genotypeKO:metaboliteCITRIC                                      
+## genotypeKO:metaboliteFUMARIC                                     
+## genotypeKO:metaboliteglutamine                                   
+## genotypeKO:metaboliteisoleucine                                  
+## genotypeKO:metaboliteLACTIC                                      
+## genotypeKO:metaboliteLC even AC total                            
+## genotypeKO:metaboliteLC odd AC total                             
+## genotypeKO:metaboliteleucine                                     
+## genotypeKO:metaboliteMALIC                                       
+## genotypeKO:metaboliteMCAC total                                  
+## genotypeKO:metaboliteMETHYLSUCCINIC                              
+## genotypeKO:metaboliteSUCCINIC-2                                  
+## genotypeKO:metabolitevaline                                      
+## chowYellow (C8):metabolitearginine                               
+## chowYellow (C8):metaboliteCITRIC                                 
+## chowYellow (C8):metaboliteFUMARIC                                
+## chowYellow (C8):metaboliteglutamine                              
+## chowYellow (C8):metaboliteisoleucine                             
+## chowYellow (C8):metaboliteLACTIC                                 
+## chowYellow (C8):metaboliteLC even AC total                       
+## chowYellow (C8):metaboliteLC odd AC total                        
+## chowYellow (C8):metaboliteleucine                                
+## chowYellow (C8):metaboliteMALIC                                  
+## chowYellow (C8):metaboliteMCAC total                             
+## chowYellow (C8):metaboliteMETHYLSUCCINIC                         
+## chowYellow (C8):metaboliteSUCCINIC-2                             
+## chowYellow (C8):metabolitevaline                                 
+## genotypeKO:chowYellow (C8):metabolitearginine                    
+## genotypeKO:chowYellow (C8):metaboliteCITRIC                      
+## genotypeKO:chowYellow (C8):metaboliteFUMARIC                     
+## genotypeKO:chowYellow (C8):metaboliteglutamine         0.483     
+## genotypeKO:chowYellow (C8):metaboliteisoleucine        0.509     
+## genotypeKO:chowYellow (C8):metaboliteLACTIC            0.499     
+## genotypeKO:chowYellow (C8):metaboliteLC even AC total  0.485     
+## genotypeKO:chowYellow (C8):metaboliteLC odd AC total   0.512     
+## genotypeKO:chowYellow (C8):metaboliteleucine           0.471     
+## genotypeKO:chowYellow (C8):metaboliteMALIC             0.515     
+## genotypeKO:chowYellow (C8):metaboliteMCAC total        0.500     
+## genotypeKO:chowYellow (C8):metaboliteMETHYLSUCCINIC    0.486     
+## genotypeKO:chowYellow (C8):metaboliteSUCCINIC-2        0.483     
+## genotypeKO:chowYellow (C8):metabolitevaline            0.466     
+##                                                       gntypKO:chwYllw(C8):mtbltg
+## genotypeKO                                                                      
+## chowYellow (C8)                                                                 
+## metabolitearginine                                                              
+## metaboliteCITRIC                                                                
+## metaboliteFUMARIC                                                               
+## metaboliteglutamine                                                             
+## metaboliteisoleucine                                                            
+## metaboliteLACTIC                                                                
+## metaboliteLC even AC total                                                      
+## metaboliteLC odd AC total                                                       
+## metaboliteleucine                                                               
+## metaboliteMALIC                                                                 
+## metaboliteMCAC total                                                            
+## metaboliteMETHYLSUCCINIC                                                        
+## metaboliteSUCCINIC-2                                                            
+## metabolitevaline                                                                
+## genotypeKO:chowYellow (C8)                                                      
+## genotypeKO:metabolitearginine                                                   
+## genotypeKO:metaboliteCITRIC                                                     
+## genotypeKO:metaboliteFUMARIC                                                    
+## genotypeKO:metaboliteglutamine                                                  
+## genotypeKO:metaboliteisoleucine                                                 
+## genotypeKO:metaboliteLACTIC                                                     
+## genotypeKO:metaboliteLC even AC total                                           
+## genotypeKO:metaboliteLC odd AC total                                            
+## genotypeKO:metaboliteleucine                                                    
+## genotypeKO:metaboliteMALIC                                                      
+## genotypeKO:metaboliteMCAC total                                                 
+## genotypeKO:metaboliteMETHYLSUCCINIC                                             
+## genotypeKO:metaboliteSUCCINIC-2                                                 
+## genotypeKO:metabolitevaline                                                     
+## chowYellow (C8):metabolitearginine                                              
+## chowYellow (C8):metaboliteCITRIC                                                
+## chowYellow (C8):metaboliteFUMARIC                                               
+## chowYellow (C8):metaboliteglutamine                                             
+## chowYellow (C8):metaboliteisoleucine                                            
+## chowYellow (C8):metaboliteLACTIC                                                
+## chowYellow (C8):metaboliteLC even AC total                                      
+## chowYellow (C8):metaboliteLC odd AC total                                       
+## chowYellow (C8):metaboliteleucine                                               
+## chowYellow (C8):metaboliteMALIC                                                 
+## chowYellow (C8):metaboliteMCAC total                                            
+## chowYellow (C8):metaboliteMETHYLSUCCINIC                                        
+## chowYellow (C8):metaboliteSUCCINIC-2                                            
+## chowYellow (C8):metabolitevaline                                                
+## genotypeKO:chowYellow (C8):metabolitearginine                                   
+## genotypeKO:chowYellow (C8):metaboliteCITRIC                                     
+## genotypeKO:chowYellow (C8):metaboliteFUMARIC                                    
+## genotypeKO:chowYellow (C8):metaboliteglutamine                                  
+## genotypeKO:chowYellow (C8):metaboliteisoleucine        0.472                    
+## genotypeKO:chowYellow (C8):metaboliteLACTIC            0.493                    
+## genotypeKO:chowYellow (C8):metaboliteLC even AC total  0.464                    
+## genotypeKO:chowYellow (C8):metaboliteLC odd AC total   0.518                    
+## genotypeKO:chowYellow (C8):metaboliteleucine           0.472                    
+## genotypeKO:chowYellow (C8):metaboliteMALIC             0.451                    
+## genotypeKO:chowYellow (C8):metaboliteMCAC total        0.484                    
+## genotypeKO:chowYellow (C8):metaboliteMETHYLSUCCINIC    0.477                    
+## genotypeKO:chowYellow (C8):metaboliteSUCCINIC-2        0.448                    
+## genotypeKO:chowYellow (C8):metabolitevaline            0.442                    
+##                                                       gntypKO:chwYllw(C8):mtblts
+## genotypeKO                                                                      
+## chowYellow (C8)                                                                 
+## metabolitearginine                                                              
+## metaboliteCITRIC                                                                
+## metaboliteFUMARIC                                                               
+## metaboliteglutamine                                                             
+## metaboliteisoleucine                                                            
+## metaboliteLACTIC                                                                
+## metaboliteLC even AC total                                                      
+## metaboliteLC odd AC total                                                       
+## metaboliteleucine                                                               
+## metaboliteMALIC                                                                 
+## metaboliteMCAC total                                                            
+## metaboliteMETHYLSUCCINIC                                                        
+## metaboliteSUCCINIC-2                                                            
+## metabolitevaline                                                                
+## genotypeKO:chowYellow (C8)                                                      
+## genotypeKO:metabolitearginine                                                   
+## genotypeKO:metaboliteCITRIC                                                     
+## genotypeKO:metaboliteFUMARIC                                                    
+## genotypeKO:metaboliteglutamine                                                  
+## genotypeKO:metaboliteisoleucine                                                 
+## genotypeKO:metaboliteLACTIC                                                     
+## genotypeKO:metaboliteLC even AC total                                           
+## genotypeKO:metaboliteLC odd AC total                                            
+## genotypeKO:metaboliteleucine                                                    
+## genotypeKO:metaboliteMALIC                                                      
+## genotypeKO:metaboliteMCAC total                                                 
+## genotypeKO:metaboliteMETHYLSUCCINIC                                             
+## genotypeKO:metaboliteSUCCINIC-2                                                 
+## genotypeKO:metabolitevaline                                                     
+## chowYellow (C8):metabolitearginine                                              
+## chowYellow (C8):metaboliteCITRIC                                                
+## chowYellow (C8):metaboliteFUMARIC                                               
+## chowYellow (C8):metaboliteglutamine                                             
+## chowYellow (C8):metaboliteisoleucine                                            
+## chowYellow (C8):metaboliteLACTIC                                                
+## chowYellow (C8):metaboliteLC even AC total                                      
+## chowYellow (C8):metaboliteLC odd AC total                                       
+## chowYellow (C8):metaboliteleucine                                               
+## chowYellow (C8):metaboliteMALIC                                                 
+## chowYellow (C8):metaboliteMCAC total                                            
+## chowYellow (C8):metaboliteMETHYLSUCCINIC                                        
+## chowYellow (C8):metaboliteSUCCINIC-2                                            
+## chowYellow (C8):metabolitevaline                                                
+## genotypeKO:chowYellow (C8):metabolitearginine                                   
+## genotypeKO:chowYellow (C8):metaboliteCITRIC                                     
+## genotypeKO:chowYellow (C8):metaboliteFUMARIC                                    
+## genotypeKO:chowYellow (C8):metaboliteglutamine                                  
+## genotypeKO:chowYellow (C8):metaboliteisoleucine                                 
+## genotypeKO:chowYellow (C8):metaboliteLACTIC            0.489                    
+## genotypeKO:chowYellow (C8):metaboliteLC even AC total  0.486                    
+## genotypeKO:chowYellow (C8):metaboliteLC odd AC total   0.531                    
+## genotypeKO:chowYellow (C8):metaboliteleucine           0.485                    
+## genotypeKO:chowYellow (C8):metaboliteMALIC             0.483                    
+## genotypeKO:chowYellow (C8):metaboliteMCAC total        0.473                    
+## genotypeKO:chowYellow (C8):metaboliteMETHYLSUCCINIC    0.495                    
+## genotypeKO:chowYellow (C8):metaboliteSUCCINIC-2        0.490                    
+## genotypeKO:chowYellow (C8):metabolitevaline            0.499                    
+##                                                       gKO:Y(C8):L gK(eAt
+## genotypeKO                                                              
+## chowYellow (C8)                                                         
+## metabolitearginine                                                      
+## metaboliteCITRIC                                                        
+## metaboliteFUMARIC                                                       
+## metaboliteglutamine                                                     
+## metaboliteisoleucine                                                    
+## metaboliteLACTIC                                                        
+## metaboliteLC even AC total                                              
+## metaboliteLC odd AC total                                               
+## metaboliteleucine                                                       
+## metaboliteMALIC                                                         
+## metaboliteMCAC total                                                    
+## metaboliteMETHYLSUCCINIC                                                
+## metaboliteSUCCINIC-2                                                    
+## metabolitevaline                                                        
+## genotypeKO:chowYellow (C8)                                              
+## genotypeKO:metabolitearginine                                           
+## genotypeKO:metaboliteCITRIC                                             
+## genotypeKO:metaboliteFUMARIC                                            
+## genotypeKO:metaboliteglutamine                                          
+## genotypeKO:metaboliteisoleucine                                         
+## genotypeKO:metaboliteLACTIC                                             
+## genotypeKO:metaboliteLC even AC total                                   
+## genotypeKO:metaboliteLC odd AC total                                    
+## genotypeKO:metaboliteleucine                                            
+## genotypeKO:metaboliteMALIC                                              
+## genotypeKO:metaboliteMCAC total                                         
+## genotypeKO:metaboliteMETHYLSUCCINIC                                     
+## genotypeKO:metaboliteSUCCINIC-2                                         
+## genotypeKO:metabolitevaline                                             
+## chowYellow (C8):metabolitearginine                                      
+## chowYellow (C8):metaboliteCITRIC                                        
+## chowYellow (C8):metaboliteFUMARIC                                       
+## chowYellow (C8):metaboliteglutamine                                     
+## chowYellow (C8):metaboliteisoleucine                                    
+## chowYellow (C8):metaboliteLACTIC                                        
+## chowYellow (C8):metaboliteLC even AC total                              
+## chowYellow (C8):metaboliteLC odd AC total                               
+## chowYellow (C8):metaboliteleucine                                       
+## chowYellow (C8):metaboliteMALIC                                         
+## chowYellow (C8):metaboliteMCAC total                                    
+## chowYellow (C8):metaboliteMETHYLSUCCINIC                                
+## chowYellow (C8):metaboliteSUCCINIC-2                                    
+## chowYellow (C8):metabolitevaline                                        
+## genotypeKO:chowYellow (C8):metabolitearginine                           
+## genotypeKO:chowYellow (C8):metaboliteCITRIC                             
+## genotypeKO:chowYellow (C8):metaboliteFUMARIC                            
+## genotypeKO:chowYellow (C8):metaboliteglutamine                          
+## genotypeKO:chowYellow (C8):metaboliteisoleucine                         
+## genotypeKO:chowYellow (C8):metaboliteLACTIC                             
+## genotypeKO:chowYellow (C8):metaboliteLC even AC total  0.491            
+## genotypeKO:chowYellow (C8):metaboliteLC odd AC total   0.485       0.497
+## genotypeKO:chowYellow (C8):metaboliteleucine           0.485       0.493
+## genotypeKO:chowYellow (C8):metaboliteMALIC             0.483       0.472
+## genotypeKO:chowYellow (C8):metaboliteMCAC total        0.475       0.470
+## genotypeKO:chowYellow (C8):metaboliteMETHYLSUCCINIC    0.497       0.488
+## genotypeKO:chowYellow (C8):metaboliteSUCCINIC-2        0.490       0.470
+## genotypeKO:chowYellow (C8):metabolitevaline            0.492       0.469
+##                                                       gK(oAt
+## genotypeKO                                                  
+## chowYellow (C8)                                             
+## metabolitearginine                                          
+## metaboliteCITRIC                                            
+## metaboliteFUMARIC                                           
+## metaboliteglutamine                                         
+## metaboliteisoleucine                                        
+## metaboliteLACTIC                                            
+## metaboliteLC even AC total                                  
+## metaboliteLC odd AC total                                   
+## metaboliteleucine                                           
+## metaboliteMALIC                                             
+## metaboliteMCAC total                                        
+## metaboliteMETHYLSUCCINIC                                    
+## metaboliteSUCCINIC-2                                        
+## metabolitevaline                                            
+## genotypeKO:chowYellow (C8)                                  
+## genotypeKO:metabolitearginine                               
+## genotypeKO:metaboliteCITRIC                                 
+## genotypeKO:metaboliteFUMARIC                                
+## genotypeKO:metaboliteglutamine                              
+## genotypeKO:metaboliteisoleucine                             
+## genotypeKO:metaboliteLACTIC                                 
+## genotypeKO:metaboliteLC even AC total                       
+## genotypeKO:metaboliteLC odd AC total                        
+## genotypeKO:metaboliteleucine                                
+## genotypeKO:metaboliteMALIC                                  
+## genotypeKO:metaboliteMCAC total                             
+## genotypeKO:metaboliteMETHYLSUCCINIC                         
+## genotypeKO:metaboliteSUCCINIC-2                             
+## genotypeKO:metabolitevaline                                 
+## chowYellow (C8):metabolitearginine                          
+## chowYellow (C8):metaboliteCITRIC                            
+## chowYellow (C8):metaboliteFUMARIC                           
+## chowYellow (C8):metaboliteglutamine                         
+## chowYellow (C8):metaboliteisoleucine                        
+## chowYellow (C8):metaboliteLACTIC                            
+## chowYellow (C8):metaboliteLC even AC total                  
+## chowYellow (C8):metaboliteLC odd AC total                   
+## chowYellow (C8):metaboliteleucine                           
+## chowYellow (C8):metaboliteMALIC                             
+## chowYellow (C8):metaboliteMCAC total                        
+## chowYellow (C8):metaboliteMETHYLSUCCINIC                    
+## chowYellow (C8):metaboliteSUCCINIC-2                        
+## chowYellow (C8):metabolitevaline                            
+## genotypeKO:chowYellow (C8):metabolitearginine               
+## genotypeKO:chowYellow (C8):metaboliteCITRIC                 
+## genotypeKO:chowYellow (C8):metaboliteFUMARIC                
+## genotypeKO:chowYellow (C8):metaboliteglutamine              
+## genotypeKO:chowYellow (C8):metaboliteisoleucine             
+## genotypeKO:chowYellow (C8):metaboliteLACTIC                 
+## genotypeKO:chowYellow (C8):metaboliteLC even AC total       
+## genotypeKO:chowYellow (C8):metaboliteLC odd AC total        
+## genotypeKO:chowYellow (C8):metaboliteleucine           0.510
+## genotypeKO:chowYellow (C8):metaboliteMALIC             0.510
+## genotypeKO:chowYellow (C8):metaboliteMCAC total        0.473
+## genotypeKO:chowYellow (C8):metaboliteMETHYLSUCCINIC    0.517
+## genotypeKO:chowYellow (C8):metaboliteSUCCINIC-2        0.520
+## genotypeKO:chowYellow (C8):metabolitevaline            0.505
+##                                                       gntypKO:chwYllw(C8):mtbltl
+## genotypeKO                                                                      
+## chowYellow (C8)                                                                 
+## metabolitearginine                                                              
+## metaboliteCITRIC                                                                
+## metaboliteFUMARIC                                                               
+## metaboliteglutamine                                                             
+## metaboliteisoleucine                                                            
+## metaboliteLACTIC                                                                
+## metaboliteLC even AC total                                                      
+## metaboliteLC odd AC total                                                       
+## metaboliteleucine                                                               
+## metaboliteMALIC                                                                 
+## metaboliteMCAC total                                                            
+## metaboliteMETHYLSUCCINIC                                                        
+## metaboliteSUCCINIC-2                                                            
+## metabolitevaline                                                                
+## genotypeKO:chowYellow (C8)                                                      
+## genotypeKO:metabolitearginine                                                   
+## genotypeKO:metaboliteCITRIC                                                     
+## genotypeKO:metaboliteFUMARIC                                                    
+## genotypeKO:metaboliteglutamine                                                  
+## genotypeKO:metaboliteisoleucine                                                 
+## genotypeKO:metaboliteLACTIC                                                     
+## genotypeKO:metaboliteLC even AC total                                           
+## genotypeKO:metaboliteLC odd AC total                                            
+## genotypeKO:metaboliteleucine                                                    
+## genotypeKO:metaboliteMALIC                                                      
+## genotypeKO:metaboliteMCAC total                                                 
+## genotypeKO:metaboliteMETHYLSUCCINIC                                             
+## genotypeKO:metaboliteSUCCINIC-2                                                 
+## genotypeKO:metabolitevaline                                                     
+## chowYellow (C8):metabolitearginine                                              
+## chowYellow (C8):metaboliteCITRIC                                                
+## chowYellow (C8):metaboliteFUMARIC                                               
+## chowYellow (C8):metaboliteglutamine                                             
+## chowYellow (C8):metaboliteisoleucine                                            
+## chowYellow (C8):metaboliteLACTIC                                                
+## chowYellow (C8):metaboliteLC even AC total                                      
+## chowYellow (C8):metaboliteLC odd AC total                                       
+## chowYellow (C8):metaboliteleucine                                               
+## chowYellow (C8):metaboliteMALIC                                                 
+## chowYellow (C8):metaboliteMCAC total                                            
+## chowYellow (C8):metaboliteMETHYLSUCCINIC                                        
+## chowYellow (C8):metaboliteSUCCINIC-2                                            
+## chowYellow (C8):metabolitevaline                                                
+## genotypeKO:chowYellow (C8):metabolitearginine                                   
+## genotypeKO:chowYellow (C8):metaboliteCITRIC                                     
+## genotypeKO:chowYellow (C8):metaboliteFUMARIC                                    
+## genotypeKO:chowYellow (C8):metaboliteglutamine                                  
+## genotypeKO:chowYellow (C8):metaboliteisoleucine                                 
+## genotypeKO:chowYellow (C8):metaboliteLACTIC                                     
+## genotypeKO:chowYellow (C8):metaboliteLC even AC total                           
+## genotypeKO:chowYellow (C8):metaboliteLC odd AC total                            
+## genotypeKO:chowYellow (C8):metaboliteleucine                                    
+## genotypeKO:chowYellow (C8):metaboliteMALIC             0.492                    
+## genotypeKO:chowYellow (C8):metaboliteMCAC total        0.493                    
+## genotypeKO:chowYellow (C8):metaboliteMETHYLSUCCINIC    0.481                    
+## genotypeKO:chowYellow (C8):metaboliteSUCCINIC-2        0.480                    
+## genotypeKO:chowYellow (C8):metabolitevaline            0.477                    
+##                                                       gKO:Y(C8):MA gKO:(t
+## genotypeKO                                                               
+## chowYellow (C8)                                                          
+## metabolitearginine                                                       
+## metaboliteCITRIC                                                         
+## metaboliteFUMARIC                                                        
+## metaboliteglutamine                                                      
+## metaboliteisoleucine                                                     
+## metaboliteLACTIC                                                         
+## metaboliteLC even AC total                                               
+## metaboliteLC odd AC total                                                
+## metaboliteleucine                                                        
+## metaboliteMALIC                                                          
+## metaboliteMCAC total                                                     
+## metaboliteMETHYLSUCCINIC                                                 
+## metaboliteSUCCINIC-2                                                     
+## metabolitevaline                                                         
+## genotypeKO:chowYellow (C8)                                               
+## genotypeKO:metabolitearginine                                            
+## genotypeKO:metaboliteCITRIC                                              
+## genotypeKO:metaboliteFUMARIC                                             
+## genotypeKO:metaboliteglutamine                                           
+## genotypeKO:metaboliteisoleucine                                          
+## genotypeKO:metaboliteLACTIC                                              
+## genotypeKO:metaboliteLC even AC total                                    
+## genotypeKO:metaboliteLC odd AC total                                     
+## genotypeKO:metaboliteleucine                                             
+## genotypeKO:metaboliteMALIC                                               
+## genotypeKO:metaboliteMCAC total                                          
+## genotypeKO:metaboliteMETHYLSUCCINIC                                      
+## genotypeKO:metaboliteSUCCINIC-2                                          
+## genotypeKO:metabolitevaline                                              
+## chowYellow (C8):metabolitearginine                                       
+## chowYellow (C8):metaboliteCITRIC                                         
+## chowYellow (C8):metaboliteFUMARIC                                        
+## chowYellow (C8):metaboliteglutamine                                      
+## chowYellow (C8):metaboliteisoleucine                                     
+## chowYellow (C8):metaboliteLACTIC                                         
+## chowYellow (C8):metaboliteLC even AC total                               
+## chowYellow (C8):metaboliteLC odd AC total                                
+## chowYellow (C8):metaboliteleucine                                        
+## chowYellow (C8):metaboliteMALIC                                          
+## chowYellow (C8):metaboliteMCAC total                                     
+## chowYellow (C8):metaboliteMETHYLSUCCINIC                                 
+## chowYellow (C8):metaboliteSUCCINIC-2                                     
+## chowYellow (C8):metabolitevaline                                         
+## genotypeKO:chowYellow (C8):metabolitearginine                            
+## genotypeKO:chowYellow (C8):metaboliteCITRIC                              
+## genotypeKO:chowYellow (C8):metaboliteFUMARIC                             
+## genotypeKO:chowYellow (C8):metaboliteglutamine                           
+## genotypeKO:chowYellow (C8):metaboliteisoleucine                          
+## genotypeKO:chowYellow (C8):metaboliteLACTIC                              
+## genotypeKO:chowYellow (C8):metaboliteLC even AC total                    
+## genotypeKO:chowYellow (C8):metaboliteLC odd AC total                     
+## genotypeKO:chowYellow (C8):metaboliteleucine                             
+## genotypeKO:chowYellow (C8):metaboliteMALIC                               
+## genotypeKO:chowYellow (C8):metaboliteMCAC total        0.477             
+## genotypeKO:chowYellow (C8):metaboliteMETHYLSUCCINIC    0.483        0.498
+## genotypeKO:chowYellow (C8):metaboliteSUCCINIC-2        0.466        0.491
+## genotypeKO:chowYellow (C8):metabolitevaline            0.468        0.485
+##                                                       gKO:Y(C8):ME
+## genotypeKO                                                        
+## chowYellow (C8)                                                   
+## metabolitearginine                                                
+## metaboliteCITRIC                                                  
+## metaboliteFUMARIC                                                 
+## metaboliteglutamine                                               
+## metaboliteisoleucine                                              
+## metaboliteLACTIC                                                  
+## metaboliteLC even AC total                                        
+## metaboliteLC odd AC total                                         
+## metaboliteleucine                                                 
+## metaboliteMALIC                                                   
+## metaboliteMCAC total                                              
+## metaboliteMETHYLSUCCINIC                                          
+## metaboliteSUCCINIC-2                                              
+## metabolitevaline                                                  
+## genotypeKO:chowYellow (C8)                                        
+## genotypeKO:metabolitearginine                                     
+## genotypeKO:metaboliteCITRIC                                       
+## genotypeKO:metaboliteFUMARIC                                      
+## genotypeKO:metaboliteglutamine                                    
+## genotypeKO:metaboliteisoleucine                                   
+## genotypeKO:metaboliteLACTIC                                       
+## genotypeKO:metaboliteLC even AC total                             
+## genotypeKO:metaboliteLC odd AC total                              
+## genotypeKO:metaboliteleucine                                      
+## genotypeKO:metaboliteMALIC                                        
+## genotypeKO:metaboliteMCAC total                                   
+## genotypeKO:metaboliteMETHYLSUCCINIC                               
+## genotypeKO:metaboliteSUCCINIC-2                                   
+## genotypeKO:metabolitevaline                                       
+## chowYellow (C8):metabolitearginine                                
+## chowYellow (C8):metaboliteCITRIC                                  
+## chowYellow (C8):metaboliteFUMARIC                                 
+## chowYellow (C8):metaboliteglutamine                               
+## chowYellow (C8):metaboliteisoleucine                              
+## chowYellow (C8):metaboliteLACTIC                                  
+## chowYellow (C8):metaboliteLC even AC total                        
+## chowYellow (C8):metaboliteLC odd AC total                         
+## chowYellow (C8):metaboliteleucine                                 
+## chowYellow (C8):metaboliteMALIC                                   
+## chowYellow (C8):metaboliteMCAC total                              
+## chowYellow (C8):metaboliteMETHYLSUCCINIC                          
+## chowYellow (C8):metaboliteSUCCINIC-2                              
+## chowYellow (C8):metabolitevaline                                  
+## genotypeKO:chowYellow (C8):metabolitearginine                     
+## genotypeKO:chowYellow (C8):metaboliteCITRIC                       
+## genotypeKO:chowYellow (C8):metaboliteFUMARIC                      
+## genotypeKO:chowYellow (C8):metaboliteglutamine                    
+## genotypeKO:chowYellow (C8):metaboliteisoleucine                   
+## genotypeKO:chowYellow (C8):metaboliteLACTIC                       
+## genotypeKO:chowYellow (C8):metaboliteLC even AC total             
+## genotypeKO:chowYellow (C8):metaboliteLC odd AC total              
+## genotypeKO:chowYellow (C8):metaboliteleucine                      
+## genotypeKO:chowYellow (C8):metaboliteMALIC                        
+## genotypeKO:chowYellow (C8):metaboliteMCAC total                   
+## genotypeKO:chowYellow (C8):metaboliteMETHYLSUCCINIC               
+## genotypeKO:chowYellow (C8):metaboliteSUCCINIC-2        0.474      
+## genotypeKO:chowYellow (C8):metabolitevaline            0.481      
+##                                                       gKO:Y(C8):S
+## genotypeKO                                                       
+## chowYellow (C8)                                                  
+## metabolitearginine                                               
+## metaboliteCITRIC                                                 
+## metaboliteFUMARIC                                                
+## metaboliteglutamine                                              
+## metaboliteisoleucine                                             
+## metaboliteLACTIC                                                 
+## metaboliteLC even AC total                                       
+## metaboliteLC odd AC total                                        
+## metaboliteleucine                                                
+## metaboliteMALIC                                                  
+## metaboliteMCAC total                                             
+## metaboliteMETHYLSUCCINIC                                         
+## metaboliteSUCCINIC-2                                             
+## metabolitevaline                                                 
+## genotypeKO:chowYellow (C8)                                       
+## genotypeKO:metabolitearginine                                    
+## genotypeKO:metaboliteCITRIC                                      
+## genotypeKO:metaboliteFUMARIC                                     
+## genotypeKO:metaboliteglutamine                                   
+## genotypeKO:metaboliteisoleucine                                  
+## genotypeKO:metaboliteLACTIC                                      
+## genotypeKO:metaboliteLC even AC total                            
+## genotypeKO:metaboliteLC odd AC total                             
+## genotypeKO:metaboliteleucine                                     
+## genotypeKO:metaboliteMALIC                                       
+## genotypeKO:metaboliteMCAC total                                  
+## genotypeKO:metaboliteMETHYLSUCCINIC                              
+## genotypeKO:metaboliteSUCCINIC-2                                  
+## genotypeKO:metabolitevaline                                      
+## chowYellow (C8):metabolitearginine                               
+## chowYellow (C8):metaboliteCITRIC                                 
+## chowYellow (C8):metaboliteFUMARIC                                
+## chowYellow (C8):metaboliteglutamine                              
+## chowYellow (C8):metaboliteisoleucine                             
+## chowYellow (C8):metaboliteLACTIC                                 
+## chowYellow (C8):metaboliteLC even AC total                       
+## chowYellow (C8):metaboliteLC odd AC total                        
+## chowYellow (C8):metaboliteleucine                                
+## chowYellow (C8):metaboliteMALIC                                  
+## chowYellow (C8):metaboliteMCAC total                             
+## chowYellow (C8):metaboliteMETHYLSUCCINIC                         
+## chowYellow (C8):metaboliteSUCCINIC-2                             
+## chowYellow (C8):metabolitevaline                                 
+## genotypeKO:chowYellow (C8):metabolitearginine                    
+## genotypeKO:chowYellow (C8):metaboliteCITRIC                      
+## genotypeKO:chowYellow (C8):metaboliteFUMARIC                     
+## genotypeKO:chowYellow (C8):metaboliteglutamine                   
+## genotypeKO:chowYellow (C8):metaboliteisoleucine                  
+## genotypeKO:chowYellow (C8):metaboliteLACTIC                      
+## genotypeKO:chowYellow (C8):metaboliteLC even AC total            
+## genotypeKO:chowYellow (C8):metaboliteLC odd AC total             
+## genotypeKO:chowYellow (C8):metaboliteleucine                     
+## genotypeKO:chowYellow (C8):metaboliteMALIC                       
+## genotypeKO:chowYellow (C8):metaboliteMCAC total                  
+## genotypeKO:chowYellow (C8):metaboliteMETHYLSUCCINIC              
+## genotypeKO:chowYellow (C8):metaboliteSUCCINIC-2                  
+## genotypeKO:chowYellow (C8):metabolitevaline            0.462     
 ## 
 ## Standardized Within-Group Residuals:
 ##          Min           Q1          Med           Q3          Max 
-## -14.11233569  -0.11922815   0.02994209   0.21328345   4.72986981 
+## -13.73899714  -0.10407005   0.02163056   0.18144089   4.43841691 
 ## 
 ## Number of Observations: 645
 ## Number of Groups: 43
