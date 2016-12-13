@@ -16,7 +16,8 @@ fixed <- formula(logValue ~
                    metabolite +
                    genotype * activity +
                    genotype * metabolite +
-                   activity * metabolite)
+                   activity * metabolite +
+                   activity * metabolite * genotype)
 random <- formula(~ 1 | id)
 ctrl <- lmeControl(opt = "optim",
                    maxIter = 500, msMaxIter = 500)
@@ -47,7 +48,8 @@ fixed <- formula(logValue ~
                    metabolite +
                    genotype * chow +
                    genotype * metabolite +
-                   chow * metabolite)
+                   chow * metabolite +
+                   chow * metabolite * genotype)
 cs <-
   corSymm(form = random, fixed = FALSE) %>%
   Initialize(data = D2)
