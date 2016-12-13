@@ -27,7 +27,7 @@ Use `corSymm`, *general correlation matrix, with no additional structure*.
 ```{r}
 rm(M)
 ctrl <- lmeControl(opt = "optim",
-                   maxIter = 500, msMaxIter = 500, tolerance = 1e-3, msTol = 1e-3)
+                   maxIter = 500, msMaxIter = 500)
 cs <-
   corSymm(form = random, fixed = FALSE) %>%
   Initialize(data = D1)

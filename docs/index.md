@@ -1,6 +1,6 @@
 ---
 title: "Metabolomics of very long-chain aclCoA dehydrogenase knockout mice"
-date: "2016-12-12 15:28:01"
+date: "2016-12-12 16:30:01"
 author: Benjamin Chan (chanb@ohsu.edu)
 output:
   html_document:
@@ -559,9 +559,10 @@ Use `corSymm`, *general correlation matrix, with no additional structure*.
 
 ```r
 rm(M)
-ctrl <- lmeControl(opt = "optim")
+ctrl <- lmeControl(opt = "optim",
+                   maxIter = 500, msMaxIter = 500)
 cs <-
-  corSymm(form = random, fixed = TRUE) %>%
+  corSymm(form = random, fixed = FALSE) %>%
   Initialize(data = D1)
 Dim(cs)
 ```
@@ -606,72 +607,87 @@ summary(M)
 ## Linear mixed-effects model fit by REML
 ##  Data: D1 
 ##        AIC      BIC    logLik
-##   2158.775 2202.975 -1069.388
+##   2289.148 2797.448 -1029.574
 ## 
 ## Random effects:
 ##  Formula: ~1 | id
 ##         (Intercept) Residual
-## StdDev: 0.004510822 1.341347
+## StdDev:  0.07778664 1.287426
 ## 
 ## Correlation Structure: General
 ##  Formula: ~1 | id 
 ##  Parameter estimate(s):
 ##  Correlation: 
-##    1 2 3 4 5 6 7 8 9 10 11 12 13 14
-## 2  0                               
-## 3  0 0                             
-## 4  0 0 0                           
-## 5  0 0 0 0                         
-## 6  0 0 0 0 0                       
-## 7  0 0 0 0 0 0                     
-## 8  0 0 0 0 0 0 0                   
-## 9  0 0 0 0 0 0 0 0                 
-## 10 0 0 0 0 0 0 0 0 0               
-## 11 0 0 0 0 0 0 0 0 0 0             
-## 12 0 0 0 0 0 0 0 0 0 0  0          
-## 13 0 0 0 0 0 0 0 0 0 0  0  0       
-## 14 0 0 0 0 0 0 0 0 0 0  0  0  0    
-## 15 0 0 0 0 0 0 0 0 0 0  0  0  0  0 
+##    1      2      3      4      5      6      7      8      9      10    
+## 2   0.127                                                               
+## 3   0.067  0.100                                                        
+## 4   0.047  0.051  0.031                                                 
+## 5   0.069  0.072  0.105 -0.010                                          
+## 6   0.150  0.155  0.148  0.040  0.065                                   
+## 7   0.044  0.129  0.052  0.208 -0.060  0.058                            
+## 8  -0.042  0.081  0.149  0.032  0.121 -0.001 -0.106                     
+## 9   0.006  0.019 -0.038  0.047 -0.002 -0.016  0.023 -0.027              
+## 10 -0.089 -0.031 -0.129  0.022 -0.012 -0.083  0.033  0.001  0.074       
+## 11  0.025 -0.059 -0.080 -0.162 -0.048 -0.043 -0.087 -0.291  0.068  0.041
+## 12  0.027 -0.002 -0.110 -0.088 -0.062  0.013  0.045 -0.263  0.014  0.030
+## 13  0.013 -0.087 -0.129  0.030 -0.030 -0.169  0.042 -0.052  0.036  0.134
+## 14  0.038 -0.134 -0.065 -0.042 -0.059 -0.051 -0.064 -0.031  0.031  0.024
+## 15  0.141 -0.026 -0.110 -0.014 -0.057  0.014  0.045 -0.106  0.034  0.087
+##    11     12     13     14    
+## 2                             
+## 3                             
+## 4                             
+## 5                             
+## 6                             
+## 7                             
+## 8                             
+## 9                             
+## 10                            
+## 11                            
+## 12  0.316                     
+## 13 -0.009  0.040              
+## 14  0.086  0.073  0.128       
+## 15  0.130  0.081  0.005  0.177
 ## Fixed effects: list(fixed) 
 ##                                              Value Std.Error  DF
-## (Intercept)                              0.1890362 0.2220659 576
-## genotypeKO                               0.0975868 0.3137461  38
-## activityExercise                        -0.0827997 0.1536066  38
-## metabolite_typeAmino acids               0.5201771 0.2448953 576
-## metabolite_typeOrganic acids             0.3002812 0.2325933 576
-## genotypeKO:activityExercise              0.0500206 0.2156338  38
-## genotypeKO:metabolite_typeAmino acids   -0.1732246 0.3463343 576
-## genotypeKO:metabolite_typeOrganic acids -0.4103842 0.3280970 576
+## (Intercept)                              0.1890740 0.2145606 576
+## genotypeKO                               0.0946190 0.2600812  38
+## activityExercise                        -0.0828719 0.1513450  38
+## metabolite_typeAmino acids               0.5201771 0.2350507 576
+## metabolite_typeOrganic acids             0.3003458 0.2232747 576
+## genotypeKO:activityExercise              0.0201255 0.2051725  38
+## genotypeKO:metabolite_typeAmino acids   -0.1747237 0.2570036 576
+## genotypeKO:metabolite_typeOrganic acids -0.4040182 0.2575570 576
 ##                                            t-value p-value
-## (Intercept)                              0.8512618  0.3950
-## genotypeKO                               0.3110376  0.7575
-## activityExercise                        -0.5390370  0.5930
-## metabolite_typeAmino acids               2.1240794  0.0341
-## metabolite_typeOrganic acids             1.2910139  0.1972
-## genotypeKO:activityExercise              0.2319702  0.8178
-## genotypeKO:metabolite_typeAmino acids   -0.5001660  0.6171
-## genotypeKO:metabolite_typeOrganic acids -1.2508017  0.2115
+## (Intercept)                              0.8812151  0.3786
+## genotypeKO                               0.3638058  0.7180
+## activityExercise                        -0.5475699  0.5872
+## metabolite_typeAmino acids               2.2130423  0.0273
+## metabolite_typeOrganic acids             1.3451851  0.1791
+## genotypeKO:activityExercise              0.0980904  0.9224
+## genotypeKO:metabolite_typeAmino acids   -0.6798492  0.4969
+## genotypeKO:metabolite_typeOrganic acids -1.5686558  0.1173
 ##  Correlation: 
 ##                                         (Intr) gntyKO actvtE mtb_Aa mtb_Oa
-## genotypeKO                              -0.708                            
-## activityExercise                        -0.362  0.256                     
-## metabolite_typeAmino acids              -0.788  0.558  0.000              
-## metabolite_typeOrganic acids            -0.823  0.583 -0.017  0.752       
-## genotypeKO:activityExercise              0.258 -0.360 -0.712  0.000  0.012
-## genotypeKO:metabolite_typeAmino acids    0.557 -0.788  0.000 -0.707 -0.532
-## genotypeKO:metabolite_typeOrganic acids  0.584 -0.829  0.012 -0.533 -0.709
+## genotypeKO                              -0.825                            
+## activityExercise                        -0.369  0.305                     
+## metabolite_typeAmino acids              -0.782  0.646  0.000              
+## metabolite_typeOrganic acids            -0.817  0.674 -0.017  0.752       
+## genotypeKO:activityExercise              0.273 -0.411 -0.738  0.000  0.013
+## genotypeKO:metabolite_typeAmino acids    0.716 -0.735  0.000 -0.915 -0.688
+## genotypeKO:metabolite_typeOrganic acids  0.709 -0.773  0.015 -0.652 -0.867
 ##                                         gnKO:E gKO:_Aa
 ## genotypeKO                                            
 ## activityExercise                                      
 ## metabolite_typeAmino acids                            
 ## metabolite_typeOrganic acids                          
 ## genotypeKO:activityExercise                           
-## genotypeKO:metabolite_typeAmino acids    0.000        
-## genotypeKO:metabolite_typeOrganic acids -0.009  0.754 
+## genotypeKO:metabolite_typeAmino acids   -0.019        
+## genotypeKO:metabolite_typeOrganic acids -0.061  0.769 
 ## 
 ## Standardized Within-Group Residuals:
 ##         Min          Q1         Med          Q3         Max 
-## -5.63270748 -0.36590175 -0.09892581  0.58649943  1.76164765 
+## -5.82905515 -0.38093924 -0.09213905  0.61516985  1.84492811 
 ## 
 ## Number of Observations: 622
 ## Number of Groups: 42
@@ -762,7 +778,7 @@ Use `corSymm`, *general correlation matrix, with no additional structure*.
 ```r
 rm(M)
 cs <-
-  corSymm(form = random, fixed = TRUE) %>%
+  corSymm(form = random, fixed = FALSE) %>%
   Initialize(data = D2)
 Dim(cs)
 ```
@@ -813,73 +829,89 @@ summary(M)
 ## Linear mixed-effects model fit by REML
 ##  Data: D2 
 ##        AIC      BIC    logLik
-##   2039.161 2084.382 -1009.581
+##   2227.143 2815.015 -983.5716
 ## 
 ## Random effects:
 ##  Formula: ~1 | id
 ##         (Intercept) Residual
-## StdDev: 0.003164857 1.039131
+## StdDev:  0.05446945 1.009781
 ## 
 ## Correlation Structure: General
 ##  Formula: ~1 | id 
 ##  Parameter estimate(s):
 ##  Correlation: 
-##    1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
-## 2  0                                  
-## 3  0 0                                
-## 4  0 0 0                              
-## 5  0 0 0 0                            
-## 6  0 0 0 0 0                          
-## 7  0 0 0 0 0 0                        
-## 8  0 0 0 0 0 0 0                      
-## 9  0 0 0 0 0 0 0 0                    
-## 10 0 0 0 0 0 0 0 0 0                  
-## 11 0 0 0 0 0 0 0 0 0 0                
-## 12 0 0 0 0 0 0 0 0 0 0  0             
-## 13 0 0 0 0 0 0 0 0 0 0  0  0          
-## 14 0 0 0 0 0 0 0 0 0 0  0  0  0       
-## 15 0 0 0 0 0 0 0 0 0 0  0  0  0  0    
-## 16 0 0 0 0 0 0 0 0 0 0  0  0  0  0  0 
+##    1      2      3      4      5      6      7      8      9      10    
+## 2  -0.003                                                               
+## 3  -0.027 -0.005                                                        
+## 4   0.023  0.035  0.022                                                 
+## 5   0.042  0.009  0.002 -0.056                                          
+## 6   0.027 -0.016  0.165 -0.048  0.095                                   
+## 7   0.071  0.032 -0.067  0.107 -0.024 -0.045                            
+## 8   0.048 -0.067 -0.045  0.066 -0.027 -0.209  0.122                     
+## 9   0.034  0.178  0.104 -0.078  0.029  0.053  0.005 -0.142              
+## 10  0.000 -0.029 -0.053 -0.006  0.012  0.065 -0.036  0.005 -0.074       
+## 11 -0.008  0.037 -0.063  0.148 -0.074 -0.151  0.106  0.254 -0.099 -0.051
+## 12 -0.070 -0.026  0.034 -0.054  0.122  0.011 -0.194  0.029  0.023 -0.077
+## 13 -0.002 -0.038  0.041 -0.061  0.079  0.213 -0.050 -0.117 -0.018  0.068
+## 14 -0.004 -0.017  0.092  0.117  0.067  0.176 -0.082 -0.103 -0.032 -0.047
+## 15 -0.093  0.004  0.008 -0.069 -0.025 -0.019 -0.016 -0.067 -0.058  0.017
+## 16 -0.033  0.057  0.136 -0.102  0.052  0.205 -0.048 -0.187  0.093  0.059
+##    11     12     13     14     15    
+## 2                                    
+## 3                                    
+## 4                                    
+## 5                                    
+## 6                                    
+## 7                                    
+## 8                                    
+## 9                                    
+## 10                                   
+## 11                                   
+## 12 -0.006                            
+## 13 -0.178  0.084                     
+## 14 -0.067  0.097  0.178              
+## 15  0.018  0.026  0.013 -0.082       
+## 16 -0.184 -0.033  0.087  0.060 -0.020
 ## Fixed effects: list(fixed) 
-##                                              Value Std.Error  DF   t-value
-## (Intercept)                              0.0918984 0.1238502 641  0.742012
-## genotypeKO                               0.4765655 0.1763972  39  2.701661
-## chowYellow (C8)                          0.0445021 0.1107799  39  0.401716
-## metabolite_typeAmino acids               0.5639168 0.1486158 641  3.794459
-## metabolite_typeOrganic acids             0.4143852 0.1388597 641  2.984201
-## genotypeKO:chowYellow (C8)              -0.0389779 0.1586127  39 -0.245742
-## genotypeKO:metabolite_typeAmino acids   -0.4936399 0.2126619 641 -2.321243
-## genotypeKO:metabolite_typeOrganic acids -0.4376502 0.1987013 641 -2.202553
-##                                         p-value
-## (Intercept)                              0.4584
-## genotypeKO                               0.0102
-## chowYellow (C8)                          0.6901
-## metabolite_typeAmino acids               0.0002
-## metabolite_typeOrganic acids             0.0030
-## genotypeKO:chowYellow (C8)               0.8072
-## genotypeKO:metabolite_typeAmino acids    0.0206
-## genotypeKO:metabolite_typeOrganic acids  0.0280
+##                                              Value  Std.Error  DF
+## (Intercept)                              0.1122630 0.08110812 641
+## genotypeKO                               0.4493007 0.14627988  39
+## chowYellow (C8)                         -0.0441967 0.09014854  39
+## metabolite_typeAmino acids               0.5336173 0.03176435 641
+## metabolite_typeOrganic acids             0.3894799 0.02935938 641
+## genotypeKO:chowYellow (C8)               0.0598961 0.14318235  39
+## genotypeKO:metabolite_typeAmino acids   -0.4449904 0.14721276 641
+## genotypeKO:metabolite_typeOrganic acids -0.4100803 0.13966634 641
+##                                           t-value p-value
+## (Intercept)                              1.384116  0.1668
+## genotypeKO                               3.071514  0.0039
+## chowYellow (C8)                         -0.490265  0.6267
+## metabolite_typeAmino acids              16.799251  0.0000
+## metabolite_typeOrganic acids            13.265946  0.0000
+## genotypeKO:chowYellow (C8)               0.418320  0.6780
+## genotypeKO:metabolite_typeAmino acids   -3.022770  0.0026
+## genotypeKO:metabolite_typeOrganic acids -2.936143  0.0034
 ##  Correlation: 
 ##                                         (Intr) gntyKO cY(C8) mtb_Aa mtb_Oa
-## genotypeKO                              -0.702                            
-## chowYellow (C8)                         -0.447  0.314                     
-## metabolite_typeAmino acids              -0.667  0.468  0.000              
-## metabolite_typeOrganic acids            -0.713  0.501  0.000  0.595       
-## genotypeKO:chowYellow (C8)               0.312 -0.439 -0.698  0.000  0.000
-## genotypeKO:metabolite_typeAmino acids    0.466 -0.670  0.000 -0.699 -0.416
-## genotypeKO:metabolite_typeOrganic acids  0.499 -0.717  0.000 -0.416 -0.699
+## genotypeKO                              -0.558                            
+## chowYellow (C8)                         -0.725  0.400                     
+## metabolite_typeAmino acids              -0.279  0.172 -0.371              
+## metabolite_typeOrganic acids            -0.279  0.161 -0.368  0.987       
+## genotypeKO:chowYellow (C8)               0.447 -0.540 -0.631  0.269  0.264
+## genotypeKO:metabolite_typeAmino acids    0.061 -0.569  0.081 -0.227 -0.207
+## genotypeKO:metabolite_typeOrganic acids  0.066 -0.609  0.083 -0.241 -0.229
 ##                                         gKO:Y( gKO:_Aa
 ## genotypeKO                                            
 ## chowYellow (C8)                                       
 ## metabolite_typeAmino acids                            
 ## metabolite_typeOrganic acids                          
 ## genotypeKO:chowYellow (C8)                            
-## genotypeKO:metabolite_typeAmino acids    0.000        
-## genotypeKO:metabolite_typeOrganic acids  0.000  0.595 
+## genotypeKO:metabolite_typeAmino acids   -0.061        
+## genotypeKO:metabolite_typeOrganic acids -0.046  0.609 
 ## 
 ## Standardized Within-Group Residuals:
 ##         Min          Q1         Med          Q3         Max 
-## -7.22276211 -0.48875493  0.02009388  0.58995641  2.02592409 
+## -7.37015246 -0.49002436  0.03881788  0.62218468  2.08236739 
 ## 
 ## Number of Observations: 688
 ## Number of Groups: 43
