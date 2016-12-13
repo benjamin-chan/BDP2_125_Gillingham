@@ -12,9 +12,10 @@ Default to `correlation = NULL`, corresponding to no within-group correlations.
 fixed <- formula(logValue ~
                    genotype +
                    activity +
-                   metabolite_type +
+                   metabolite +
                    genotype * activity +
-                   genotype * metabolite_type)
+                   genotype * metabolite +
+                   activity * metabolite)
 random <- formula(~ 1 | id)
 M <- lme(fixed, data = D1, random = random, correlation = NULL)
 summary(M)
@@ -48,9 +49,10 @@ Default to `correlation = NULL`, corresponding to no within-group correlations.
 fixed <- formula(logValue ~
                    genotype +
                    chow +
-                   metabolite_type +
+                   metabolite +
                    genotype * chow +
-                   genotype * metabolite_type)
+                   genotype * metabolite +
+                   chow * metabolite)
 random <- formula(~ 1 | id)
 M <- lme(fixed, data = D2, random = random, correlation = NULL)
 summary(M)
