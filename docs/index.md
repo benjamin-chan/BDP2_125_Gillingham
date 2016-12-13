@@ -1,6 +1,6 @@
 ---
 title: "Metabolomics of very long-chain aclCoA dehydrogenase knockout mice"
-date: "2016-12-13 11:56:22"
+date: "2016-12-13 12:25:46"
 author: Benjamin Chan (chanb@ohsu.edu)
 output:
   html_document:
@@ -609,6 +609,27 @@ Dim(cs)
 
 ```r
 M <- lme(fixed, data = D1, random = random, correlation = cs, control = ctrl)
+plot(M)
+```
+
+![plot of chunk lmeDiagnosticAim1](../figures/lmeDiagnosticAim1-1.png)
+
+```r
+anova(M)
+```
+
+```
+##                     numDF denDF  F-value p-value
+## (Intercept)             1   538 21296925  <.0001
+## genotype                1    38 14177385  <.0001
+## activity                1    38  9785253  <.0001
+## metabolite             14   538 22936360  <.0001
+## genotype:activity       1    38        0  0.6035
+## genotype:metabolite    14   538        7  <.0001
+## activity:metabolite    14   538        1  0.8918
+```
+
+```r
 summary(M)
 ```
 
@@ -1516,6 +1537,27 @@ Dim(cs)
 
 ```r
 M <- lme(fixed, data = D2, random = random, correlation = cs, control = ctrl)
+plot(M)
+```
+
+![plot of chunk lmeDiagnosticAim2](../figures/lmeDiagnosticAim2-1.png)
+
+```r
+anova(M)
+```
+
+```
+##                     numDF denDF      F-value p-value
+## (Intercept)             1   560 1.495067e+06  <.0001
+## genotype                1    39 2.360281e+13  <.0001
+## chow                    1    39 3.881290e+11  <.0001
+## metabolite             14   560 6.164543e+12  <.0001
+## genotype:chow           1    39 0.000000e+00  0.5853
+## genotype:metabolite    14   560 6.000000e+00  <.0001
+## chow:metabolite        14   560 3.000000e+00  0.0001
+```
+
+```r
 summary(M)
 ```
 
