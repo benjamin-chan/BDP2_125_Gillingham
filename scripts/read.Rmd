@@ -31,28 +31,32 @@ D2 <- L2[["data"]] %>% filter(metabolite != "LCAC total")
 
 Check the `value` and `logValue`.
 
-```{r densitiesAim1, results = "asis", fig.height = 4, fig.width = 8}
+```{r plotDataAim1, results = "asis", fig.height = 6, fig.width = 10}
 kable(summarizeOutcome(D1))
 ggplot(D1) +
-  aes(x = logValue, color = metabolite_type, fill = metabolite_type) +
-  geom_density(alpha = 1/3) +
+  aes(x = logValue, y = metabolite, color = activity, fill = activity) +
+  geom_jitter(alpha = 1/2) +
+  facet_wrap(~ genotype) +
   scale_x_continuous("log10 scale") +
-  facet_grid(genotype ~ activity) +
-  scale_color_brewer("Metabolite type", palette = "Set1") +
-  scale_fill_brewer("Metabolite type", palette = "Set1") +
+  scale_y_discrete("Metabolite") +
+  scale_color_brewer("Activity", palette = "Set1") +
+  scale_fill_brewer("Activity", palette = "Set1") +
   theme_bw()
+ggsave("../figures/plotDataAim1.png", width = 10, height = 8, units = "in")
 ```
 
-```{r densitiesAim2, results = "asis", fig.height = 4, fig.width = 8}
+```{r plotDataAim2, results = "asis", fig.height = 6, fig.width = 10}
 kable(summarizeOutcome(D2))
 ggplot(D2) +
-  aes(x = logValue, color = metabolite_type, fill = metabolite_type) +
-  geom_density(alpha = 1/3) +
+  aes(x = logValue, y = metabolite, color = chow, fill = chow) +
+  geom_jitter(alpha = 1/2) +
+  facet_wrap(~ genotype) +
   scale_x_continuous("log10 scale") +
-  facet_grid(genotype ~ chow) +
-  scale_color_brewer("Metabolite type", palette = "Set1") +
-  scale_fill_brewer("Metabolite type", palette = "Set1") +
+  scale_y_discrete("Metabolite") +
+  scale_color_brewer("Chow", palette = "Set1") +
+  scale_fill_brewer("Chow", palette = "Set1") +
   theme_bw()
+ggsave("../figures/plotDataAim2.png", width = 10, height = 8, units = "in")
 ```
 
 
