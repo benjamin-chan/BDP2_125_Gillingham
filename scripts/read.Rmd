@@ -14,13 +14,16 @@ L1[["head"]]
 D1 <- L1[["data"]]
 ```
 
+Import Aim 2: Diet data.
+Metabolite `LCAC total` is the sum of `LC even AC total` and `LC odd AC total`; remove `LCAC total` data.
+
 ```{r}
 L2 <- importDataToList("../data/raw/Ultragenyx Aim 2 Z score.xlsx")
 L2[["file"]]
 L2[["dim"]]
 L2[["names"]]
 L2[["head"]]
-D2 <- L2[["data"]]
+D2 <- L2[["data"]] %>% filter(metabolite != "LCAC total")
 ```
 
 
