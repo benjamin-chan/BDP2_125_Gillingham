@@ -6,7 +6,8 @@
 **Rest versus exhaustive exercise**
 
 Estimate model.
-Default to `correlation = NULL`, corresponding to no within-group correlations.
+Specify the correlation structure using `cs`.
+Use `corSymm`, *general correlation matrix, with no additional structure*.
 
 ```{r}
 fixed <- formula(logValue ~
@@ -17,16 +18,6 @@ fixed <- formula(logValue ~
                    genotype * metabolite +
                    activity * metabolite)
 random <- formula(~ 1 | id)
-M <- lme(fixed, data = D1, random = random, correlation = NULL)
-summary(M)
-```
-
-Estimate model.
-Specify the correlation structure using `cs`.
-Use `corSymm`, *general correlation matrix, with no additional structure*.
-
-```{r}
-rm(M)
 ctrl <- lmeControl(opt = "optim",
                    maxIter = 500, msMaxIter = 500)
 cs <-
@@ -43,9 +34,11 @@ summary(M)
 **MCT chow versus experimental chow with triheptanoin**
 
 Estimate model.
-Default to `correlation = NULL`, corresponding to no within-group correlations.
+Specify the correlation structure using `cs`.
+Use `corSymm`, *general correlation matrix, with no additional structure*.
 
 ```{r}
+rm(M)
 fixed <- formula(logValue ~
                    genotype +
                    chow +
@@ -53,17 +46,6 @@ fixed <- formula(logValue ~
                    genotype * chow +
                    genotype * metabolite +
                    chow * metabolite)
-random <- formula(~ 1 | id)
-M <- lme(fixed, data = D2, random = random, correlation = NULL)
-summary(M)
-```
-
-Estimate model.
-Specify the correlation structure using `cs`.
-Use `corSymm`, *general correlation matrix, with no additional structure*.
-
-```{r}
-rm(M)
 cs <-
   corSymm(form = random, fixed = FALSE) %>%
   Initialize(data = D2)
