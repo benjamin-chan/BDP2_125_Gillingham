@@ -31,7 +31,7 @@ D2 <- L2[["data"]] %>% filter(metabolite != "LCAC total")
 
 Check the `value` and `logValue`.
 
-```{r densitiesAim1, results = "asis", fig.height = 6, fig.width = 12}
+```{r densitiesAim1, results = "asis", fig.height = 4, fig.width = 8}
 kable(summarizeOutcome(D1))
 ggplot(D1) +
   aes(x = logValue, color = metabolite_type, fill = metabolite_type) +
@@ -43,7 +43,7 @@ ggplot(D1) +
   theme_bw()
 ```
 
-```{r densitiesAim2, results = "asis", fig.height = 6, fig.width = 12}
+```{r densitiesAim2, results = "asis", fig.height = 4, fig.width = 8}
 kable(summarizeOutcome(D2))
 ggplot(D2) +
   aes(x = logValue, color = metabolite_type, fill = metabolite_type) +
