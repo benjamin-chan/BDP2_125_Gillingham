@@ -9,7 +9,7 @@ Estimate model.
 Specify the correlation structure using `cs`.
 Use `corSymm`, *general correlation matrix, with no additional structure*.
 
-```{r}
+```{r lmeDiagnosticAim1}
 fixed <- formula(logValue ~
                    genotype +
                    activity +
@@ -25,6 +25,8 @@ cs <-
   Initialize(data = D1)
 Dim(cs)
 M <- lme(fixed, data = D1, random = random, correlation = cs, control = ctrl)
+plot(M)
+anova(M)
 summary(M)
 ```
 
@@ -37,7 +39,7 @@ Estimate model.
 Specify the correlation structure using `cs`.
 Use `corSymm`, *general correlation matrix, with no additional structure*.
 
-```{r}
+```{r lmeDiagnosticAim2}
 rm(M)
 fixed <- formula(logValue ~
                    genotype +
@@ -51,5 +53,7 @@ cs <-
   Initialize(data = D2)
 Dim(cs)
 M <- lme(fixed, data = D2, random = random, correlation = cs, control = ctrl)
+plot(M)
+anova(M)
 summary(M)
 ```
