@@ -25,10 +25,11 @@ cs <-
   corSymm(form = random, fixed = FALSE) %>%
   Initialize(data = D1)
 Dim(cs)
-M <- lme(fixed, data = D1, random = random, correlation = cs, control = ctrl)
-plot(M)
-kable(anova(M))
-kable(tidy(M, effects = "fixed"))
+M <- D1 %>% lme(fixed, data = ., random = random, correlation = cs, control = ctrl)
+M %>% plot
+M %>% anova %>% kable
+M %>% tidy(effects = "fixed") %>% kable
+M %>% tidy(effects = "fixed") %>% write.csv(file = "../data/processed/lmeFixedCoefAim1.csv", row.names = FALSE)
 ```
 
 
@@ -54,8 +55,9 @@ cs <-
   corSymm(form = random, fixed = FALSE) %>%
   Initialize(data = D2)
 Dim(cs)
-M <- lme(fixed, data = D2, random = random, correlation = cs, control = ctrl)
-plot(M)
-kable(anova(M))
-kable(tidy(M, effects = "fixed"))
+M <- D2 %>% lme(fixed, data = ., random = random, correlation = cs, control = ctrl)
+M %>% plot   
+M %>% anova %>% kable
+M %>% tidy(effects = "fixed") %>% kable
+M %>% tidy(effects = "fixed") %>% write.csv(file = "../data/processed/lmeFixedCoefAim2.csv", row.names = FALSE)
 ```
