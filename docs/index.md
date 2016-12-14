@@ -1,6 +1,6 @@
 ---
 title: "Metabolomics of very long-chain aclCoA dehydrogenase knockout mice"
-date: "2016-12-14 09:35:19"
+date: "2016-12-14 10:47:59"
 author: Benjamin Chan (chanb@ohsu.edu)
 output:
   html_document:
@@ -623,14 +623,14 @@ Dim(cs)
 ```
 
 ```r
-M <- lme(fixed, data = D1, random = random, correlation = cs, control = ctrl)
-plot(M)
+M <- D1 %>% lme(fixed, data = ., random = random, correlation = cs, control = ctrl)
+M %>% plot
 ```
 
 ![plot of chunk lmeDiagnosticAim1](../figures/lmeDiagnosticAim1-1.png)
 
 ```r
-kable(anova(M))
+M %>% anova %>% kable
 ```
 
 
@@ -647,7 +647,7 @@ kable(anova(M))
 |genotype:activity:metabolite |    14|   524| 1.786415e+00| 0.0375486|
 
 ```r
-kable(tidy(M, effects = "fixed"))
+M %>% tidy(effects = "fixed") %>% kable
 ```
 
 
@@ -715,6 +715,10 @@ kable(tidy(M, effects = "fixed"))
 |genotypeKO:activityExercise:metaboliteSUCCINIC-2     |  0.0678668| 0.6165921|  0.1100676| 0.9123979|
 |genotypeKO:activityExercise:metabolitevaline         |  0.5488350| 0.5997617|  0.9150884| 0.3605661|
 
+```r
+M %>% tidy(effects = "fixed") %>% write.csv(file = "../data/processed/lmeFixedCoefAim1.csv", row.names = FALSE)
+```
+
 
 ## Aim 2: Chow
 
@@ -779,14 +783,14 @@ Dim(cs)
 ```
 
 ```r
-M <- lme(fixed, data = D2, random = random, correlation = cs, control = ctrl)
-plot(M)
+M <- D2 %>% lme(fixed, data = ., random = random, correlation = cs, control = ctrl)
+M %>% plot   
 ```
 
 ![plot of chunk lmeDiagnosticAim2](../figures/lmeDiagnosticAim2-1.png)
 
 ```r
-kable(anova(M))
+M %>% anova %>% kable
 ```
 
 
@@ -803,7 +807,7 @@ kable(anova(M))
 |genotype:chow:metabolite |    14|   546| 1.312332e+00| 0.1948527|
 
 ```r
-kable(tidy(M, effects = "fixed"))
+M %>% tidy(effects = "fixed") %>% kable
 ```
 
 
@@ -870,3 +874,7 @@ kable(tidy(M, effects = "fixed"))
 |genotypeKO:chowYellow (C8):metaboliteMETHYLSUCCINIC   |  0.9976601| 0.4415882|  2.2592546| 0.0242610|
 |genotypeKO:chowYellow (C8):metaboliteSUCCINIC-2       |  0.6302176| 0.4266922|  1.4769839| 0.1402565|
 |genotypeKO:chowYellow (C8):metabolitevaline           |  0.7417809| 0.4293746|  1.7275843| 0.0846282|
+
+```r
+M %>% tidy(effects = "fixed") %>% write.csv(file = "../data/processed/lmeFixedCoefAim2.csv", row.names = FALSE)
+```
