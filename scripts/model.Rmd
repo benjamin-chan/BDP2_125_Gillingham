@@ -27,7 +27,7 @@ cs <-
 Dim(cs)
 M <- lme(fixed, data = D1, random = random, correlation = cs, control = ctrl)
 plot(M)
-anova(M)
+kable(anova(M))
 kable(tidy(M, effects = "fixed"))
 ```
 
@@ -56,6 +56,6 @@ cs <-
 Dim(cs)
 M <- lme(fixed, data = D2, random = random, correlation = cs, control = ctrl)
 plot(M)
-anova(M)
+kable(anova(M))
 kable(tidy(M, effects = "fixed"))
 ```
