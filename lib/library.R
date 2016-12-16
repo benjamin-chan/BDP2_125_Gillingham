@@ -72,12 +72,13 @@ contrast <- function (fixed, df, xvar, contrastValue, refMetabolite, refGenotype
     mutate(genotype = relevel(genotype, refGenotype))
   cs <- corSymm(form = random, fixed = FALSE) %>% Initialize(data = df)
   M <- df %>% lme(fixed, data = ., random = random, correlation = cs, control = ctrl)
-  b <- M %>% summary %>% .$tTable %>% data.frame %>% select(1) %>%
-    rename(beta = Value) %>%
-    filter(row.names(.) == paste0(xvar, contrastValue))
   M %>%
     anova(Terms = xvar) %>%
-    data.frame(contrast = contrastValue, metabolite = refMetabolite, genotype = refGenotype, b, .)
+    data.frame(contrast = contrastValue,
+               metabolite = refMetabolite,
+               genotype = refGenotype,
+               beta = M %>% fixef %>% .[names(.) == paste0(xvar, contrastValue)],
+               .)
 }
 
 
