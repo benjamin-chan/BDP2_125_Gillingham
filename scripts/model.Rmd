@@ -27,6 +27,7 @@ cs <-
 Dim(cs)
 M1 <- D1 %>% lme(fixed, data = ., random = random, correlation = cs, control = ctrl)
 M1 %>% plot
+M1 %>% ranef %>% plot
 M1 %>% anova %>% kable
 M1 %>% tidy(effects = "fixed") %>% kable
 M1 %>% tidy(effects = "fixed") %>% write.csv(file = "../data/processed/lmeFixedCoefAim1.csv", row.names = FALSE)
@@ -57,6 +58,7 @@ cs <-
 Dim(cs)
 M2 <- D2 %>% lme(fixed, data = ., random = random, correlation = cs, control = ctrl)
 M2 %>% plot   
+M2 %>% ranef %>% plot
 M2 %>% anova %>% kable
 M2 %>% tidy(effects = "fixed") %>% kable
 M2 %>% tidy(effects = "fixed") %>% write.csv(file = "../data/processed/lmeFixedCoefAim2.csv", row.names = FALSE)
