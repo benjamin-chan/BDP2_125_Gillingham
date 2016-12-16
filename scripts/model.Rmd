@@ -1,6 +1,27 @@
 # Model
 
 
+## Methods
+
+A mixed linear effects model was estimated for each aim.
+Metabolomic values were transformed to the log-10 scale.
+Fixed effects for Aim 1 were activity, genotype, and metabolite.
+Fixed effects for Aim 2 were chow, genotype, and metabolite.
+All 2-way and 3-way interactions between fixed effects were included in the models.
+Animal ID was the random effect.
+A general correlation structure was assumed.
+Estimates for the contrasts comparing exercise versus rest for Aim 1, and yellow C8 chow versus white C7 chow for Aim 2, for each combination of genotype and metabolite are presented
+The data was analyzed using `r R.Version()$version.string` and the `nlme` package version `r packageVersion("nlme")`.
+
+
+## References
+
+```{r}
+citation()
+citation("nlme")
+```
+
+
 ## Aim 1: Exercise
 
 **Rest versus exhaustive exercise**
@@ -86,6 +107,8 @@ Ftests %>% write.csv(file = "../data/processed/contrastsAim2.csv", row.names = F
 
 Click [link to figure](../figures/plotDataAim2.png).
 
+
+## Save
 
 Save `lme` objects for interactive work.
 
