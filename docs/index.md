@@ -1,6 +1,6 @@
 ---
 title: "Metabolomics of very long-chain aclCoA dehydrogenase knockout mice"
-date: "2016-12-16 11:37:15"
+date: "2016-12-16 11:52:07"
 author: Benjamin Chan (chanb@ohsu.edu)
 output:
   html_document:
@@ -741,7 +741,7 @@ Ftests %>% kable
 Ftests %>% write.csv(file = "../data/processed/contrastsAim1.csv", row.names = FALSE)
 ```
 
-Click [link to figure]("../figures/plotDataAim1.png").
+Click [link to figure](../figures/plotDataAim1.png).
 
 
 ## Aim 2: Chow
@@ -964,7 +964,7 @@ Ftests %>% kable
 Ftests %>% write.csv(file = "../data/processed/contrastsAim2.csv", row.names = FALSE)
 ```
 
-Click [link to figure]("../figures/plotDataAim2.png").
+Click [link to figure](../figures/plotDataAim2.png).
 
 
 Save `lme` objects for interactive work.
