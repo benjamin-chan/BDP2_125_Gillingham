@@ -39,7 +39,8 @@ importDataToList <- function (f) {
     mutate(metabolite_type = factor(metabolite_type,
                                     levels = c("acylcarnitines", "amino acids", "Amino Acids", "organic acids"),
                                     labels = c("Acylcarnitines", "Amino acids", "Amino acids", "Organic acids"))) %>%   # Reorder factor
-    mutate(metabolite_type = droplevels(metabolite_type))
+    mutate(metabolite_type = droplevels(metabolite_type)) %>% 
+    mutate(metabolite = factor(metabolite))
   L <- list(file = f,
             file.size = file.size(f),
             file.mtime = file.mtime(f),
