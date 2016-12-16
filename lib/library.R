@@ -60,3 +60,59 @@ summarizeOutcome <- function (D) {
   rownames(L) <- c("nominal", "log-transform")
   L
 }
+
+
+contrast <- function (fixed, df, xvar, contrastValue, refMetabolite, refGenotype) {
+  require(magrittr)
+  require(dplyr)
+  require(nlme)
+  df <-
+    df %>%
+    mutate(metabolite = relevel(metabolite, refMetabolite)) %>%
+    mutate(genotype = relevel(genotype, refGenotype))
+  cs <- corSymm(form = random, fixed = FALSE) %>% Initialize(data = df)
+  M <- df %>% lme(fixed, data = ., random = random, correlation = NULL, control = ctrl)
+  b <- M %>% summary %>% .$tTable %>% data.frame %>% select(1) %>%
+    rename(beta = Value) %>%
+    filter(row.names(.) == paste0(xvar, contrastValue))
+  M %>%
+    anova(Terms = xvar) %>%
+    data.frame(contrast = contrastValue, metabolite = refMetabolite, genotype = refGenotype, b, .)
+}
+
+
+contrastGenotype <- function(refGenotype, df, xvar, contrastValue) {
+  if (xvar == "activity") {
+    rbind(contrast(fixed, df, xvar, contrastValue, "3-HYDROXYBUTYRIC", refGenotype),
+          contrast(fixed, df, xvar, contrastValue, "arginine", refGenotype),
+          contrast(fixed, df, xvar, contrastValue, "CITRIC", refGenotype),
+          contrast(fixed, df, xvar, contrastValue, "FUMARIC", refGenotype),
+          contrast(fixed, df, xvar, contrastValue, "glutamine", refGenotype),
+          contrast(fixed, df, xvar, contrastValue, "isoleucine", refGenotype),
+          contrast(fixed, df, xvar, contrastValue, "LACTIC", refGenotype),
+          contrast(fixed, df, xvar, contrastValue, "LCAC total", refGenotype),
+          contrast(fixed, df, xvar, contrastValue, "leucine", refGenotype),
+          contrast(fixed, df, xvar, contrastValue, "MALIC", refGenotype),
+          contrast(fixed, df, xvar, contrastValue, "MCAC Total", refGenotype),
+          contrast(fixed, df, xvar, contrastValue, "METHYLSUCCINIC", refGenotype),
+          contrast(fixed, df, xvar, contrastValue, "PYRUVIC_P2P", refGenotype),
+          contrast(fixed, df, xvar, contrastValue, "SUCCINIC-2", refGenotype),
+          contrast(fixed, df, xvar, contrastValue, "valine", refGenotype))
+  } else if (xvar == "chow") {
+    rbind(contrast(fixed, df, xvar, contrastValue, "3-HYDROXYBUTYRIC", refGenotype),
+          contrast(fixed, df, xvar, contrastValue, "arginine", refGenotype),
+          contrast(fixed, df, xvar, contrastValue, "CITRIC", refGenotype),
+          contrast(fixed, df, xvar, contrastValue, "FUMARIC", refGenotype),
+          contrast(fixed, df, xvar, contrastValue, "glutamine", refGenotype),
+          contrast(fixed, df, xvar, contrastValue, "isoleucine", refGenotype),
+          contrast(fixed, df, xvar, contrastValue, "LACTIC", refGenotype),
+          contrast(fixed, df, xvar, contrastValue, "LC even AC total", refGenotype),
+          contrast(fixed, df, xvar, contrastValue, "LC odd AC total", refGenotype),
+          contrast(fixed, df, xvar, contrastValue, "leucine", refGenotype),
+          contrast(fixed, df, xvar, contrastValue, "MALIC", refGenotype),
+          contrast(fixed, df, xvar, contrastValue, "MCAC total", refGenotype),
+          contrast(fixed, df, xvar, contrastValue, "METHYLSUCCINIC", refGenotype),
+          contrast(fixed, df, xvar, contrastValue, "SUCCINIC-2", refGenotype),
+          contrast(fixed, df, xvar, contrastValue, "valine", refGenotype))
+  }
+}
