@@ -25,7 +25,7 @@ cs <-
   corSymm(form = random, fixed = FALSE) %>%
   Initialize(data = D1)
 Dim(cs)
-M1 <- D1 %>% lme(fixed, data = ., random = random, correlation = NULL, control = ctrl)
+M1 <- D1 %>% lme(fixed, data = ., random = random, correlation = cs, control = ctrl)
 M1 %>% plot
 M1 %>% ranef %>% plot
 M1 %>% anova %>% kable
@@ -67,7 +67,7 @@ cs <-
   corSymm(form = random, fixed = FALSE) %>%
   Initialize(data = D2)
 Dim(cs)
-M2 <- D2 %>% lme(fixed, data = ., random = random, correlation = NULL, control = ctrl)
+M2 <- D2 %>% lme(fixed, data = ., random = random, correlation = cs, control = ctrl)
 M2 %>% plot   
 M2 %>% ranef %>% plot
 M2 %>% anova %>% kable

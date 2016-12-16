@@ -71,7 +71,7 @@ contrast <- function (fixed, df, xvar, contrastValue, refMetabolite, refGenotype
     mutate(metabolite = relevel(metabolite, refMetabolite)) %>%
     mutate(genotype = relevel(genotype, refGenotype))
   cs <- corSymm(form = random, fixed = FALSE) %>% Initialize(data = df)
-  M <- df %>% lme(fixed, data = ., random = random, correlation = NULL, control = ctrl)
+  M <- df %>% lme(fixed, data = ., random = random, correlation = cs, control = ctrl)
   b <- M %>% summary %>% .$tTable %>% data.frame %>% select(1) %>%
     rename(beta = Value) %>%
     filter(row.names(.) == paste0(xvar, contrastValue))
