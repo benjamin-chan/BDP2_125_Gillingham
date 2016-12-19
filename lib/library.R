@@ -75,7 +75,7 @@ runClusters <- function (df, metabolites, fixed, xvar, contrastValue) {
     rename(metabolite = Var1, genotype = Var2)
   n <- nrow(lookup)
   cl <- makeCluster(2)
-  registerDoParallel(cl, cores = 2)
+  registerDoParallel(cl)
   L <- foreach (i = 1:n) %dopar% {
     require(magrittr)
     require(dplyr)
