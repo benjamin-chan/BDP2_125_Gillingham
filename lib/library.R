@@ -82,11 +82,12 @@ xvar <- "activity"
 contrastValue <- "Exercise"
 
 # Define the wrapper functions
-runClusters <- function (df, metabolites, xvar, contrastValue) {
+runClusters <- function (df, metabolites, fixed, xvar, contrastValue) {
   require(magrittr)
   require(dplyr)
   require(parallel)
   require(doParallel)
+  require(data.table)
   genotypes <- c("WT", "KO")
   lookup <-
     expand.grid(metabolites, genotypes, stringsAsFactors = FALSE) %>%
@@ -96,26 +97,27 @@ runClusters <- function (df, metabolites, xvar, contrastValue) {
   cl <- makeCluster(2)
   registerDoParallel(cl, cores = 2)
   L <- foreach (i = 1:n) %dopar% {
-  #   require(magrittr)
-  #   require(dplyr)
-  #   require(nlme)
-  # }
-  #   dfi <-
-  #     df %>%
-  #     mutate(metabolite = relevel(metabolite, lookup$metabolite[i])) %>%
-  #     mutate(genotype = relevel(genotype, lookup$genotype[i]))
-    # cs <- corSymm(form = random, fixed = FALSE) %>% Initialize(data = dfi)
-    # M <- dfi %>% lme(fixed, data = ., random = random, correlation = NULL, control = ctrl)
-    # M %>%
-    #   anova(Terms = xvar) %>%
-    #   data.frame(contrast = contrastValue,
-    #              metabolite = lookup$metabolite[i],
-    #              genotype = lookup$genotype[i],
-    #              beta = M %>% fixef %>% .[names(.) == paste0(xvar, contrastValue)],
-    #              .)
+    require(magrittr)
+    require(dplyr)
+    require(nlme)
+    dfi <-
+      df %>%
+      mutate(metabolite = relevel(metabolite, lookup$metabolite[i])) %>%
+      mutate(genotype = relevel(genotype, lookup$genotype[i]))
+    random <- formula(~ 1 | id)
+    ctrl <- lmeControl(opt = "optim",
+                       maxIter = 500, msMaxIter = 500)
+    cs <- corSymm(form = random, fixed = FALSE) %>% Initialize(data = dfi)
+    M <- dfi %>% lme(fixed, data = ., random = random, correlation = NULL, control = ctrl)
+    M %>%
+      anova(Terms = xvar) %>%
+      data.frame(contrast = contrastValue,
+                 metabolite = lookup$metabolite[i],
+                 genotype = lookup$genotype[i],
+                 beta = M %>% fixef %>% .[names(.) == paste0(xvar, contrastValue)],
+                 .)
   }
   stopCluster(cl)
-  # rbindlist(L)
 }
 
 Ftests <- runClusters(D1, metabolites, "activity", "Exercise")
@@ -176,4 +178,5 @@ contrastGenotype <- function(refGenotype, df, xvar, contrastValue) {
           contrast(fixed, df, xvar, contrastValue, "SUCCINIC-2", refGenotype),
           contrast(fixed, df, xvar, contrastValue, "valine", refGenotype))
   }
+  rbindlist(L)
 }

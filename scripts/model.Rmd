@@ -57,8 +57,22 @@ M1 %>% tidy(effects = "fixed") %>% write.csv(file = "../data/processed/lmeFixedC
 Calculate contrasts of *Exercise vs Rest* given metabolite and genotype.
 
 ```{r}
-Ftests <- rbind(contrastGenotype("WT", D1, "activity", "Exercise"),
-                contrastGenotype("KO", D1, "activity", "Exercise"))
+metabolites <- c("3-HYDROXYBUTYRIC",
+                 "arginine",
+                 "CITRIC",
+                 "FUMARIC",
+                 "glutamine",
+                 "isoleucine",
+                 "LACTIC",
+                 "LCAC total",
+                 "leucine",
+                 "MALIC",
+                 "MCAC Total",
+                 "METHYLSUCCINIC",
+                 "PYRUVIC_P2P",
+                 "SUCCINIC-2",
+                 "valine")
+Ftests <- runClusters(D1, metabolites, fixed, "activity", "Exercise")
 Ftests %>% kable
 Ftests %>% write.csv(file = "../data/processed/contrastsAim1.csv", row.names = FALSE)
 ```
@@ -99,8 +113,22 @@ M2 %>% tidy(effects = "fixed") %>% write.csv(file = "../data/processed/lmeFixedC
 Calculate contrasts of *Yellow (C8) vs White (C7)* given metabolite and genotype.
 
 ```{r}
-Ftests <- rbind(contrastGenotype("WT", D2, "chow", "Yellow (C8)"),
-                contrastGenotype("KO", D2, "chow", "Yellow (C8)"))
+metabolites <- c("3-HYDROXYBUTYRIC",
+                 "arginine",
+                 "CITRIC",
+                 "FUMARIC",
+                 "glutamine",
+                 "isoleucine",
+                 "LACTIC",
+                 "LC even AC total",
+                 "LC odd AC total",
+                 "leucine",
+                 "MALIC",
+                 "MCAC total",
+                 "METHYLSUCCINIC",
+                 "SUCCINIC-2",
+                 "valine")
+Ftests <- runClusters(D2, metabolites, fixed, "chow", "Yellow (C8)")
 Ftests %>% kable
 Ftests %>% write.csv(file = "../data/processed/contrastsAim2.csv", row.names = FALSE)
 ```
