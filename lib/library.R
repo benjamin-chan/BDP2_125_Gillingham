@@ -65,7 +65,6 @@ summarizeOutcome <- function (D) {
 runClusters <- function (df, metabolites, fixed, xvar, contrastValue) {
   require(magrittr)
   require(dplyr)
-  require(parallel)
   require(doParallel)
   require(data.table)
   genotypes <- c("WT", "KO")
@@ -74,7 +73,7 @@ runClusters <- function (df, metabolites, fixed, xvar, contrastValue) {
     data.frame %>%
     rename(metabolite = Var1, genotype = Var2)
   n <- nrow(lookup)
-  cl <- makeCluster(2)
+  cl <- makeCluster(10)
   registerDoParallel(cl)
   L <- foreach (i = 1:n) %dopar% {
     require(magrittr)
