@@ -16,6 +16,7 @@ library(nlme)
 library(broom)
 library(ggplot2)
 library(knitr)
+library(doParallel)
 ```
 
 Reproducibility steps.

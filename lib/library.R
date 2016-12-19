@@ -62,16 +62,76 @@ summarizeOutcome <- function (D) {
 }
 
 
+df <- D1
+metabolites <- c("3-HYDROXYBUTYRIC",
+                 "arginine",
+                 "CITRIC",
+                 "FUMARIC",
+                 "glutamine",
+                 "isoleucine",
+                 "LACTIC",
+                 "LCAC total",
+                 "leucine",
+                 "MALIC",
+                 "MCAC Total",
+                 "METHYLSUCCINIC",
+                 "PYRUVIC_P2P",
+                 "SUCCINIC-2",
+                 "valine")
+xvar <- "activity"
+contrastValue <- "Exercise"
+
+# Define the wrapper functions
+runClusters <- function (df, metabolites, xvar, contrastValue) {
+  require(magrittr)
+  require(dplyr)
+  require(parallel)
+  require(doParallel)
+  genotypes <- c("WT", "KO")
+  lookup <-
+    expand.grid(metabolites, genotypes, stringsAsFactors = FALSE) %>%
+    data.frame %>%
+    rename(metabolite = Var1, genotype = Var2)
+  n <- nrow(lookup)
+  cl <- makeCluster(2)
+  registerDoParallel(cl, cores = 2)
+  L <- foreach (i = 1:n) %dopar% {
+  #   require(magrittr)
+  #   require(dplyr)
+  #   require(nlme)
+  # }
+  #   dfi <-
+  #     df %>%
+  #     mutate(metabolite = relevel(metabolite, lookup$metabolite[i])) %>%
+  #     mutate(genotype = relevel(genotype, lookup$genotype[i]))
+    # cs <- corSymm(form = random, fixed = FALSE) %>% Initialize(data = dfi)
+    # M <- dfi %>% lme(fixed, data = ., random = random, correlation = NULL, control = ctrl)
+    # M %>%
+    #   anova(Terms = xvar) %>%
+    #   data.frame(contrast = contrastValue,
+    #              metabolite = lookup$metabolite[i],
+    #              genotype = lookup$genotype[i],
+    #              beta = M %>% fixef %>% .[names(.) == paste0(xvar, contrastValue)],
+    #              .)
+  }
+  stopCluster(cl)
+  # rbindlist(L)
+}
+
+Ftests <- runClusters(D1, metabolites, "activity", "Exercise")
+
+
 contrast <- function (fixed, df, xvar, contrastValue, refMetabolite, refGenotype) {
   require(magrittr)
   require(dplyr)
   require(nlme)
+  require(doParallel)
   df <-
     df %>%
     mutate(metabolite = relevel(metabolite, refMetabolite)) %>%
     mutate(genotype = relevel(genotype, refGenotype))
   cs <- corSymm(form = random, fixed = FALSE) %>% Initialize(data = df)
-  M <- df %>% lme(fixed, data = ., random = random, correlation = cs, control = ctrl)
+  M <- df %>% lme(fixed, data = ., random = random, correlation = NULL, control = ctrl)
   M %>%
     anova(Terms = xvar) %>%
     data.frame(contrast = contrastValue,
