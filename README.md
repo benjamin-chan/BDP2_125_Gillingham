@@ -32,4 +32,14 @@ The primary challenge of the analysis will be to reduce the data (using principl
 3. Text describing the statistical methods used, suitable for a manuscript
 
 
-Link to analysis: [`docs/index.md`](docs/index.md)
+## Outputs
+
+* [Methods](docs/index.md#methods)
+* [References](docs/index.md#references)
+* Aim 1
+  * [Figure, metabolite values for Aim 1](figures/plotDataAim1.png)
+  * [Contrast estimates, Aim 1](data/processed/contrastsAim1.csv)
+* Aim 2
+  * [Figure, metabolite values for Aim 2](figures/plotDataAim2.png)
+  * [Contrast estimates](data/processed/contrastsAim2.csv)
+* [Complete analysis](docs/index.md)

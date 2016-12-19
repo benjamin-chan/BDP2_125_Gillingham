@@ -1,6 +1,27 @@
 # Model
 
 
+## Methods
+
+A mixed linear effects model was estimated for each aim.
+Metabolomic values were transformed to the log-10 scale.
+Fixed effects for Aim 1 were activity, genotype, and metabolite.
+Fixed effects for Aim 2 were chow, genotype, and metabolite.
+All 2-way and 3-way interactions between fixed effects were included in the models.
+Animal ID was the random effect.
+A general correlation structure was assumed.
+Estimates for the contrasts comparing exercise versus rest for Aim 1, and yellow C8 chow versus white C7 chow for Aim 2, for each combination of genotype and metabolite are presented
+The data was analyzed using `r R.Version()$version.string` and the `nlme` package version `r packageVersion("nlme")`.
+
+
+## References
+
+```{r}
+citation()
+citation("nlme")
+```
+
+
 ## Aim 1: Exercise
 
 **Rest versus exhaustive exercise**
@@ -27,10 +48,22 @@ cs <-
 Dim(cs)
 M1 <- D1 %>% lme(fixed, data = ., random = random, correlation = cs, control = ctrl)
 M1 %>% plot
+M1 %>% ranef %>% plot
 M1 %>% anova %>% kable
 M1 %>% tidy(effects = "fixed") %>% kable
 M1 %>% tidy(effects = "fixed") %>% write.csv(file = "../data/processed/lmeFixedCoefAim1.csv", row.names = FALSE)
 ```
+
+Calculate contrasts of *Exercise vs Rest* given metabolite and genotype.
+
+```{r}
+Ftests <- rbind(contrastGenotype("WT", D1, "activity", "Exercise"),
+                contrastGenotype("KO", D1, "activity", "Exercise"))
+Ftests %>% kable
+Ftests %>% write.csv(file = "../data/processed/contrastsAim1.csv", row.names = FALSE)
+```
+
+Click [link to figure](../figures/plotDataAim1.png).
 
 
 ## Aim 2: Chow
@@ -57,11 +90,25 @@ cs <-
 Dim(cs)
 M2 <- D2 %>% lme(fixed, data = ., random = random, correlation = cs, control = ctrl)
 M2 %>% plot   
+M2 %>% ranef %>% plot
 M2 %>% anova %>% kable
 M2 %>% tidy(effects = "fixed") %>% kable
 M2 %>% tidy(effects = "fixed") %>% write.csv(file = "../data/processed/lmeFixedCoefAim2.csv", row.names = FALSE)
 ```
 
+Calculate contrasts of *Yellow (C8) vs White (C7)* given metabolite and genotype.
+
+```{r}
+Ftests <- rbind(contrastGenotype("WT", D2, "chow", "Yellow (C8)"),
+                contrastGenotype("KO", D2, "chow", "Yellow (C8)"))
+Ftests %>% kable
+Ftests %>% write.csv(file = "../data/processed/contrastsAim2.csv", row.names = FALSE)
+```
+
+Click [link to figure](../figures/plotDataAim2.png).
+
+
+## Save
 
 Save `lme` objects for interactive work.
 

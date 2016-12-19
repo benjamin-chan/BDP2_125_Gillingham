@@ -23,7 +23,7 @@ L2[["file"]]
 L2[["dim"]]
 L2[["names"]]
 L2[["head"]]
-D2 <- L2[["data"]] %>% filter(metabolite != "LCAC total")
+D2 <- L2[["data"]] %>% filter(metabolite != "LCAC total") %>% mutate(metabolite = droplevels(metabolite))
 ```
 
 
