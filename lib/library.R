@@ -62,58 +62,40 @@ summarizeOutcome <- function (D) {
 }
 
 
-contrast <- function (fixed, df, xvar, contrastValue, refMetabolite, refGenotype) {
+runClusters <- function (df, metabolites, fixed, xvar, contrastValue) {
   require(magrittr)
   require(dplyr)
-  require(nlme)
-  df <-
-    df %>%
-    mutate(metabolite = relevel(metabolite, refMetabolite)) %>%
-    mutate(genotype = relevel(genotype, refGenotype))
-  cs <- corSymm(form = random, fixed = FALSE) %>% Initialize(data = df)
-  M <- df %>% lme(fixed, data = ., random = random, correlation = cs, control = ctrl)
-  M %>%
-    anova(Terms = xvar) %>%
-    data.frame(contrast = contrastValue,
-               metabolite = refMetabolite,
-               genotype = refGenotype,
-               beta = M %>% fixef %>% .[names(.) == paste0(xvar, contrastValue)],
-               .)
-}
-
-
-contrastGenotype <- function(refGenotype, df, xvar, contrastValue) {
-  if (xvar == "activity") {
-    rbind(contrast(fixed, df, xvar, contrastValue, "3-HYDROXYBUTYRIC", refGenotype),
-          contrast(fixed, df, xvar, contrastValue, "arginine", refGenotype),
-          contrast(fixed, df, xvar, contrastValue, "CITRIC", refGenotype),
-          contrast(fixed, df, xvar, contrastValue, "FUMARIC", refGenotype),
-          contrast(fixed, df, xvar, contrastValue, "glutamine", refGenotype),
-          contrast(fixed, df, xvar, contrastValue, "isoleucine", refGenotype),
-          contrast(fixed, df, xvar, contrastValue, "LACTIC", refGenotype),
-          contrast(fixed, df, xvar, contrastValue, "LCAC total", refGenotype),
-          contrast(fixed, df, xvar, contrastValue, "leucine", refGenotype),
-          contrast(fixed, df, xvar, contrastValue, "MALIC", refGenotype),
-          contrast(fixed, df, xvar, contrastValue, "MCAC Total", refGenotype),
-          contrast(fixed, df, xvar, contrastValue, "METHYLSUCCINIC", refGenotype),
-          contrast(fixed, df, xvar, contrastValue, "PYRUVIC_P2P", refGenotype),
-          contrast(fixed, df, xvar, contrastValue, "SUCCINIC-2", refGenotype),
-          contrast(fixed, df, xvar, contrastValue, "valine", refGenotype))
-  } else if (xvar == "chow") {
-    rbind(contrast(fixed, df, xvar, contrastValue, "3-HYDROXYBUTYRIC", refGenotype),
-          contrast(fixed, df, xvar, contrastValue, "arginine", refGenotype),
-          contrast(fixed, df, xvar, contrastValue, "CITRIC", refGenotype),
-          contrast(fixed, df, xvar, contrastValue, "FUMARIC", refGenotype),
-          contrast(fixed, df, xvar, contrastValue, "glutamine", refGenotype),
-          contrast(fixed, df, xvar, contrastValue, "isoleucine", refGenotype),
-          contrast(fixed, df, xvar, contrastValue, "LACTIC", refGenotype),
-          contrast(fixed, df, xvar, contrastValue, "LC even AC total", refGenotype),
-          contrast(fixed, df, xvar, contrastValue, "LC odd AC total", refGenotype),
-          contrast(fixed, df, xvar, contrastValue, "leucine", refGenotype),
-          contrast(fixed, df, xvar, contrastValue, "MALIC", refGenotype),
-          contrast(fixed, df, xvar, contrastValue, "MCAC total", refGenotype),
-          contrast(fixed, df, xvar, contrastValue, "METHYLSUCCINIC", refGenotype),
-          contrast(fixed, df, xvar, contrastValue, "SUCCINIC-2", refGenotype),
-          contrast(fixed, df, xvar, contrastValue, "valine", refGenotype))
+  require(doParallel)
+  require(data.table)
+  genotypes <- c("WT", "KO")
+  lookup <-
+    expand.grid(metabolites, genotypes, stringsAsFactors = FALSE) %>%
+    data.frame %>%
+    rename(metabolite = Var1, genotype = Var2)
+  n <- nrow(lookup)
+  cl <- makeCluster(10)
+  registerDoParallel(cl)
+  L <- foreach (i = 1:n) %dopar% {
+    require(magrittr)
+    require(dplyr)
+    require(nlme)
+    dfi <-
+      df %>%
+      mutate(metabolite = relevel(metabolite, lookup$metabolite[i])) %>%
+      mutate(genotype = relevel(genotype, lookup$genotype[i]))
+    random <- formula(~ 1 | id)
+    ctrl <- lmeControl(opt = "optim",
+                       maxIter = 500, msMaxIter = 500)
+    cs <- corSymm(form = random, fixed = FALSE) %>% Initialize(data = dfi)
+    M <- dfi %>% lme(fixed, data = ., random = random, correlation = cs, control = ctrl)
+    M %>%
+      anova(Terms = xvar) %>%
+      data.frame(contrast = contrastValue,
+                 metabolite = lookup$metabolite[i],
+                 genotype = lookup$genotype[i],
+                 beta = M %>% fixef %>% .[names(.) == paste0(xvar, contrastValue)],
+                 .)
   }
+  stopCluster(cl)
+  rbindlist(L)
 }
