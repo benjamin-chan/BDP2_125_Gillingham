@@ -88,7 +88,7 @@ runClusters <- function (df, metabolites, fixed, xvar, contrastValue) {
     ctrl <- lmeControl(opt = "optim",
                        maxIter = 500, msMaxIter = 500)
     cs <- corSymm(form = random, fixed = FALSE) %>% Initialize(data = dfi)
-    M <- dfi %>% lme(fixed, data = ., random = random, correlation = NULL, control = ctrl)
+    M <- dfi %>% lme(fixed, data = ., random = random, correlation = cs, control = ctrl)
     M %>%
       anova(Terms = xvar) %>%
       data.frame(contrast = contrastValue,
