@@ -73,7 +73,7 @@ runClusters <- function (df, metabolites, fixed, xvar, contrastValue) {
     data.frame %>%
     rename(metabolite = Var1, genotype = Var2)
   n <- nrow(lookup)
-  cl <- makeCluster(10)
+  cl <- makeCluster(15)
   registerDoParallel(cl)
   L <- foreach (i = 1:n) %dopar% {
     require(magrittr)
@@ -85,7 +85,7 @@ runClusters <- function (df, metabolites, fixed, xvar, contrastValue) {
       mutate(genotype = relevel(genotype, lookup$genotype[i]))
     random <- formula(~ 1 | id)
     ctrl <- lmeControl(opt = "optim",
-                       maxIter = 500, msMaxIter = 500)
+                       maxIter = 5000, msMaxIter = 5000)
     cs <- corSymm(form = random, fixed = FALSE) %>% Initialize(data = dfi)
     M <- dfi %>% lme(fixed, data = ., random = random, correlation = cs, control = ctrl)
     M %>%
