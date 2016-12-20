@@ -59,12 +59,12 @@ Calculate contrasts of *Exercise vs Rest* given metabolite and genotype.
 ```{r}
 metabolites <- c("3-HYDROXYBUTYRIC",
                  "arginine",
-                 "CITRIC",
+                 "CITRIC",  # Returns "Singularity in backsolve at level 0, block 1" error
                  "FUMARIC",
                  "glutamine",
                  "isoleucine",
                  "LACTIC",
-                 "LCAC total",
+                 "LCAC total",  # Returns "Singularity in backsolve at level 0, block 1" error
                  "leucine",
                  "MALIC",
                  "MCAC Total",
@@ -72,7 +72,7 @@ metabolites <- c("3-HYDROXYBUTYRIC",
                  "PYRUVIC_P2P",
                  "SUCCINIC-2",
                  "valine")
-Ftests <- runClusters(D1, metabolites, fixed, "activity", "Exercise")
+Ftests <- runClusters(D1, metabolites[c(1:2, 4:7, 9:15)], fixed, "activity", "Exercise")
 Ftests %>% kable
 Ftests %>% write.csv(file = "../data/processed/contrastsAim1.csv", row.names = FALSE)
 ```

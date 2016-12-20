@@ -1,6 +1,6 @@
 ---
 title: "Metabolomics of very long-chain aclCoA dehydrogenase knockout mice"
-date: "2016-12-20 08:55:09"
+date: "2016-12-20 15:43:29"
 author: Benjamin Chan (chanb@ohsu.edu)
 output:
   html_document:
@@ -811,12 +811,12 @@ Calculate contrasts of *Exercise vs Rest* given metabolite and genotype.
 ```r
 metabolites <- c("3-HYDROXYBUTYRIC",
                  "arginine",
-                 "CITRIC",
+                 "CITRIC",  # Returns "Singularity in backsolve at level 0, block 1" error
                  "FUMARIC",
                  "glutamine",
                  "isoleucine",
                  "LACTIC",
-                 "LCAC total",
+                 "LCAC total",  # Returns "Singularity in backsolve at level 0, block 1" error
                  "leucine",
                  "MALIC",
                  "MCAC Total",
@@ -824,7 +824,7 @@ metabolites <- c("3-HYDROXYBUTYRIC",
                  "PYRUVIC_P2P",
                  "SUCCINIC-2",
                  "valine")
-Ftests <- runClusters(D1, metabolites, fixed, "activity", "Exercise")
+Ftests <- runClusters(D1, metabolites[c(1:2, 4:7, 9:15)], fixed, "activity", "Exercise")
 ```
 
 ```
@@ -855,24 +855,43 @@ Ftests <- runClusters(D1, metabolites, fixed, "activity", "Exercise")
 ##     between, last
 ```
 
-```
-## Error in {: task 3 failed - "Singularity in backsolve at level 0, block 1"
-```
-
 ```r
 Ftests %>% kable
 ```
 
-```
-## Error in eval(expr, envir, enclos): object 'Ftests' not found
-```
+
+
+|contrast |metabolite       |genotype |       beta| numDF| denDF|    F.value|   p.value|
+|:--------|:----------------|:--------|----------:|-----:|-----:|----------:|---------:|
+|Exercise |3-HYDROXYBUTYRIC |WT       |  0.2776503|     1|    38|  0.7207283| 0.4012218|
+|Exercise |arginine         |WT       | -0.2398795|     1|    38|  0.5700232| 0.4549039|
+|Exercise |FUMARIC          |WT       |  0.0072805|     1|    38|  0.0004965| 0.9823395|
+|Exercise |glutamine        |WT       | -0.0600176|     1|    38|  0.0355245| 0.8515038|
+|Exercise |isoleucine       |WT       | -0.0058224|     1|    38|  0.0003357| 0.9854776|
+|Exercise |LACTIC           |WT       |  0.0195790|     1|    38|  0.0035833| 0.9525802|
+|Exercise |leucine          |WT       | -0.0384637|     1|    38|  0.0146918| 0.9041637|
+|Exercise |MALIC            |WT       |  0.1336516|     1|    38|  0.1666295| 0.6854159|
+|Exercise |MCAC Total       |WT       | -0.0963604|     1|    38|  0.0921971| 0.7630588|
+|Exercise |METHYLSUCCINIC   |WT       | -0.1220418|     1|    38|  0.1386166| 0.7117286|
+|Exercise |PYRUVIC_P2P      |WT       | -1.0523844|     1|    38| 10.4198648| 0.0025695|
+|Exercise |SUCCINIC-2       |WT       | -0.0311458|     1|    38|  0.0090847| 0.9245666|
+|Exercise |valine           |WT       |  0.0274589|     1|    38|  0.0074721| 0.9315697|
+|Exercise |3-HYDROXYBUTYRIC |KO       | -0.0649910|     1|    38|  0.0542929| 0.8170055|
+|Exercise |arginine         |KO       | -0.2026521|     1|    38|  0.5386029| 0.4675166|
+|Exercise |FUMARIC          |KO       | -0.0462391|     1|    38|  0.0317519| 0.8595199|
+|Exercise |glutamine        |KO       | -0.1774892|     1|    38|  0.4037961| 0.5289437|
+|Exercise |isoleucine       |KO       |  0.0483601|     1|    38|  0.0326227| 0.8576276|
+|Exercise |LACTIC           |KO       |  0.0207338|     1|    38|  0.0052663| 0.9425295|
+|Exercise |leucine          |KO       | -0.7208362|     1|    38|  7.4883203| 0.0093903|
+|Exercise |MALIC            |KO       |  0.0000169|     1|    38|  0.0000000| 0.9999521|
+|Exercise |MCAC Total       |KO       | -0.1410221|     1|    38|  0.2557341| 0.6159872|
+|Exercise |METHYLSUCCINIC   |KO       |  0.1626501|     1|    38|  0.3169609| 0.5767467|
+|Exercise |PYRUVIC_P2P      |KO       |  0.7426518|     1|    38|  7.2355582| 0.0105594|
+|Exercise |SUCCINIC-2       |KO       | -0.1449387|     1|    38|  0.2492693| 0.6204685|
+|Exercise |valine           |KO       |  0.1264774|     1|    38|  0.1829548| 0.6712605|
 
 ```r
 Ftests %>% write.csv(file = "../data/processed/contrastsAim1.csv", row.names = FALSE)
-```
-
-```
-## Error in eval(expr, envir, enclos): object 'Ftests' not found
 ```
 
 Click [link to figure](../figures/plotDataAim1.png).
