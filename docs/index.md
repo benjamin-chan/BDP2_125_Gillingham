@@ -1,6 +1,6 @@
 ---
 title: "Metabolomics of very long-chain aclCoA dehydrogenase knockout mice"
-date: "2016-12-21 14:36:33"
+date: "2016-12-21 14:46:07"
 author: Benjamin Chan (chanb@ohsu.edu)
 output:
   html_document:
@@ -861,38 +861,38 @@ Ftests %>% kable
 
 
 
-|contrast |metabolite       |genotype |       beta| numDF| denDF|   F.value|   p.value|
-|:--------|:----------------|:--------|----------:|-----:|-----:|---------:|---------:|
-|Exercise |3-HYDROXYBUTYRIC |WT       |  0.2779262|     1|    38| 0.6609801| 0.4212789|
-|Exercise |arginine         |WT       | -0.2398795|     1|    38| 0.5210553| 0.4748105|
-|Exercise |CITRIC           |WT       |  0.0743927|     1|    38| 0.0473576| 0.8288911|
-|Exercise |FUMARIC          |WT       |  0.0074935|     1|    38| 0.0004805| 0.9826262|
-|Exercise |glutamine        |WT       | -0.0600176|     1|    38| 0.0326178| 0.8576381|
-|Exercise |isoleucine       |WT       | -0.0058224|     1|    38| 0.0003070| 0.9861129|
-|Exercise |LACTIC           |WT       |  0.0198184|     1|    38| 0.0033610| 0.9540732|
-|Exercise |LCAC total       |WT       | -0.1394294|     1|    38| 0.1760380| 0.6771631|
-|Exercise |leucine          |WT       | -0.0384637|     1|    38| 0.0133968| 0.9084646|
-|Exercise |MALIC            |WT       |  0.1339776|     1|    38| 0.1536010| 0.6973070|
-|Exercise |MCAC Total       |WT       | -0.0963604|     1|    38| 0.0840805| 0.7734184|
-|Exercise |METHYLSUCCINIC   |WT       | -0.1217775|     1|    38| 0.1269005| 0.7236379|
-|Exercise |PYRUVIC_P2P      |WT       | -1.0520892|     1|    38| 9.4718467| 0.0038602|
-|Exercise |SUCCINIC-2       |WT       | -0.0308307|     1|    38| 0.0081339| 0.9286116|
-|Exercise |valine           |WT       |  0.0274589|     1|    38| 0.0068275| 0.9345804|
-|Exercise |3-HYDROXYBUTYRIC |KO       |  0.0156683|     1|    38| 0.0022230| 0.9626415|
-|Exercise |arginine         |KO       | -0.1469590|     1|    38| 0.1955646| 0.6608319|
-|Exercise |CITRIC           |KO       | -0.0055821|     1|    38| 0.0002822| 0.9866861|
-|Exercise |FUMARIC          |KO       | -0.0232563|     1|    38| 0.0048976| 0.9445745|
-|Exercise |glutamine        |KO       | -0.0759361|     1|    38| 0.0522148| 0.8204784|
-|Exercise |isoleucine       |KO       |  0.0270659|     1|    38| 0.0066335| 0.9355145|
-|Exercise |LACTIC           |KO       | -0.0322433|     1|    38| 0.0094141| 0.9232156|
-|Exercise |LCAC total       |KO       | -0.0294524|     1|    38| 0.0078549| 0.9298432|
-|Exercise |leucine          |KO       | -0.6003266|     1|    38| 3.2634195| 0.0787656|
-|Exercise |MALIC            |KO       |  0.0546934|     1|    38| 0.0270874| 0.8701450|
-|Exercise |MCAC Total       |KO       | -0.1573325|     1|    38| 0.2241480| 0.6386060|
-|Exercise |METHYLSUCCINIC   |KO       |  0.0063600|     1|    38| 0.0003663| 0.9848308|
-|Exercise |PYRUVIC_P2P      |KO       |  0.5111139|     1|    38| 2.3655552| 0.1323259|
-|Exercise |SUCCINIC-2       |KO       | -0.1647955|     1|    38| 0.2459168| 0.6228211|
-|Exercise |valine           |KO       |  0.1292966|     1|    38| 0.1513812| 0.6993907|
+|contrast |metabolite       |genotype |       beta| numDF| denDF|    F.value|   p.value|
+|:--------|:----------------|:--------|----------:|-----:|-----:|----------:|---------:|
+|Exercise |3-HYDROXYBUTYRIC |WT       |  0.2777798|     1|    38|  0.7201063| 0.4014232|
+|Exercise |arginine         |WT       | -0.2398795|     1|    38|  0.5718903| 0.4541717|
+|Exercise |CITRIC           |WT       |  0.0742487|     1|    38|  0.0519015| 0.8210084|
+|Exercise |FUMARIC          |WT       |  0.0073471|     1|    38|  0.0005038| 0.9822108|
+|Exercise |glutamine        |WT       | -0.0600176|     1|    38|  0.0356145| 0.8513181|
+|Exercise |isoleucine       |WT       | -0.0058224|     1|    38|  0.0003372| 0.9854462|
+|Exercise |LACTIC           |WT       |  0.0196713|     1|    38|  0.0036328| 0.9522542|
+|Exercise |LCAC total       |WT       | -0.1394294|     1|    38|  0.1935884| 0.6624392|
+|Exercise |leucine          |WT       | -0.0384637|     1|    38|  0.0147422| 0.9040003|
+|Exercise |MALIC            |WT       |  0.1338363|     1|    38|  0.1685389| 0.6837193|
+|Exercise |MCAC Total       |WT       | -0.0963604|     1|    38|  0.0923856| 0.7628242|
+|Exercise |METHYLSUCCINIC   |WT       | -0.1219188|     1|    38|  0.1398800| 0.7104791|
+|Exercise |PYRUVIC_P2P      |WT       | -1.0522268|     1|    38| 10.3557230| 0.0026404|
+|Exercise |SUCCINIC-2       |WT       | -0.0309761|     1|    38|  0.0089657| 0.9250608|
+|Exercise |valine           |WT       |  0.0274589|     1|    38|  0.0074461| 0.9316883|
+|Exercise |3-HYDROXYBUTYRIC |KO       |  0.0083049|     1|    38|  0.0008901| 0.9763558|
+|Exercise |arginine         |KO       | -0.2471672|     1|    38|  0.8510344| 0.3620804|
+|Exercise |CITRIC           |KO       | -0.0051433|     1|    38|  0.0002883| 0.9865427|
+|Exercise |FUMARIC          |KO       |  0.0164711|     1|    38|  0.0033750| 0.9539777|
+|Exercise |glutamine        |KO       | -0.0707024|     1|    38|  0.0592163| 0.8090478|
+|Exercise |isoleucine       |KO       |  0.1411618|     1|    38|  0.2746513| 0.6032722|
+|Exercise |LACTIC           |KO       |  0.0390199|     1|    38|  0.0190424| 0.8909737|
+|Exercise |LCAC total       |KO       | -0.0955473|     1|    38|  0.1053458| 0.7472864|
+|Exercise |leucine          |KO       | -0.8227489|     1|    38| 10.3171175| 0.0026840|
+|Exercise |MALIC            |KO       |  0.0150146|     1|    38|  0.0025736| 0.9598058|
+|Exercise |MCAC Total       |KO       | -0.1556190|     1|    38|  0.2763153| 0.6021808|
+|Exercise |METHYLSUCCINIC   |KO       | -0.0232280|     1|    38|  0.0059550| 0.9388943|
+|Exercise |PYRUVIC_P2P      |KO       |  0.7549782|     1|    38|  7.2003717| 0.0107342|
+|Exercise |SUCCINIC-2       |KO       | -0.1330830|     1|    38|  0.2489477| 0.6206933|
+|Exercise |valine           |KO       |  0.2128280|     1|    38|  0.5516722| 0.4622024|
 
 ```r
 Ftests %>% write.csv(file = "../data/processed/contrastsAim1.csv", row.names = FALSE)
@@ -1098,38 +1098,38 @@ Ftests %>% kable
 
 
 
-|contrast    |metabolite       |genotype |       beta| numDF| denDF|   F.value|   p.value|
-|:-----------|:----------------|:--------|----------:|-----:|-----:|---------:|---------:|
-|Yellow (C8) |3-HYDROXYBUTYRIC |WT       |  0.7527158|     1|    39| 9.7498236| 0.0033733|
-|Yellow (C8) |arginine         |WT       | -0.1409029|     1|    39| 0.3416447| 0.5622477|
-|Yellow (C8) |CITRIC           |WT       |  0.0609412|     1|    39| 0.0639082| 0.8017500|
-|Yellow (C8) |FUMARIC          |WT       | -0.1843689|     1|    39| 0.5849383| 0.4489865|
-|Yellow (C8) |glutamine        |WT       | -0.0442748|     1|    39| 0.0337325| 0.8552286|
-|Yellow (C8) |isoleucine       |WT       | -0.0267640|     1|    39| 0.0123264| 0.9121664|
-|Yellow (C8) |LACTIC           |WT       | -0.0442638|     1|    39| 0.0337157| 0.8552641|
-|Yellow (C8) |LC even AC total |WT       | -0.0055162|     1|    39| 0.0005236| 0.9818607|
-|Yellow (C8) |LC odd AC total  |WT       | -0.2482787|     1|    39| 1.0607518| 0.3093891|
-|Yellow (C8) |leucine          |WT       |  0.0383855|     1|    39| 0.0253553| 0.8743067|
-|Yellow (C8) |MALIC            |WT       | -0.0551420|     1|    39| 0.0523239| 0.8202630|
-|Yellow (C8) |MCAC total       |WT       | -0.0078612|     1|    39| 0.0010634| 0.9741516|
-|Yellow (C8) |METHYLSUCCINIC   |WT       |  0.4734618|     1|    39| 3.8574887| 0.0566804|
-|Yellow (C8) |SUCCINIC-2       |WT       |  0.0165732|     1|    39| 0.0047266| 0.9455397|
-|Yellow (C8) |valine           |WT       |  0.1514753|     1|    39| 0.3948375| 0.5334304|
-|Yellow (C8) |3-HYDROXYBUTYRIC |KO       |  0.0502442|     1|    39| 0.0413731| 0.8398770|
-|Yellow (C8) |arginine         |KO       | -0.0837832|     1|    39| 0.1150428| 0.7362941|
-|Yellow (C8) |CITRIC           |KO       |  0.0500042|     1|    39| 0.0409787| 0.8406315|
-|Yellow (C8) |FUMARIC          |KO       |  0.0636747|     1|    39| 0.0664476| 0.7979365|
-|Yellow (C8) |glutamine        |KO       |  0.0638872|     1|    39| 0.0668917| 0.7972775|
-|Yellow (C8) |isoleucine       |KO       | -0.0288980|     1|    39| 0.0136862| 0.9074700|
-|Yellow (C8) |LACTIC           |KO       | -0.1244713|     1|    39| 0.2539124| 0.6171684|
-|Yellow (C8) |LC even AC total |KO       |  0.0437602|     1|    39| 0.0313837| 0.8603039|
-|Yellow (C8) |LC odd AC total  |KO       | -0.6960966|     1|    39| 7.9411684| 0.0075494|
-|Yellow (C8) |leucine          |KO       |  0.0036586|     1|    39| 0.0002194| 0.9882585|
-|Yellow (C8) |MALIC            |KO       | -0.1346094|     1|    39| 0.2969586| 0.5888983|
-|Yellow (C8) |MCAC total       |KO       |  0.0036745|     1|    39| 0.0002213| 0.9882073|
-|Yellow (C8) |METHYLSUCCINIC   |KO       |  0.7374861|     1|    39| 8.9136005| 0.0048697|
-|Yellow (C8) |SUCCINIC-2       |KO       | -0.0486705|     1|    39| 0.0388219| 0.8448252|
-|Yellow (C8) |valine           |KO       |  0.1990692|     1|    39| 0.6494616| 0.4251920|
+|contrast    |metabolite       |genotype |       beta| numDF| denDF|    F.value|   p.value|
+|:-----------|:----------------|:--------|----------:|-----:|-----:|----------:|---------:|
+|Yellow (C8) |3-HYDROXYBUTYRIC |WT       |  0.7830982|     1|    39| 14.8252710| 0.0004272|
+|Yellow (C8) |arginine         |WT       | -0.6087241|     1|    39|  9.0534833| 0.0045769|
+|Yellow (C8) |CITRIC           |WT       | -0.0073648|     1|    39|  0.0015842| 0.9684540|
+|Yellow (C8) |FUMARIC          |WT       | -0.1988490|     1|    39|  0.9282018| 0.3412667|
+|Yellow (C8) |glutamine        |WT       | -0.1414601|     1|    39|  0.5503522| 0.4626183|
+|Yellow (C8) |isoleucine       |WT       | -0.5197161|     1|    39|  8.1724892| 0.0067937|
+|Yellow (C8) |LACTIC           |WT       |  0.0000675|     1|    39|  0.0000001| 0.9997411|
+|Yellow (C8) |LC even AC total |WT       | -0.0921334|     1|    39|  0.1716681| 0.6809036|
+|Yellow (C8) |LC odd AC total  |WT       | -0.1090223|     1|    39|  0.2370455| 0.6290734|
+|Yellow (C8) |leucine          |WT       |  0.4957315|     1|    39|  6.1617113| 0.0174667|
+|Yellow (C8) |MALIC            |WT       | -0.0212323|     1|    39|  0.0104071| 0.9192672|
+|Yellow (C8) |MCAC total       |WT       |  0.0133454|     1|    39|  0.0036244| 0.9523012|
+|Yellow (C8) |METHYLSUCCINIC   |WT       |  0.4497369|     1|    39|  4.7487836| 0.0354233|
+|Yellow (C8) |SUCCINIC-2       |WT       |  0.0031386|     1|    39|  0.0002014| 0.9887488|
+|Yellow (C8) |valine           |WT       |  0.2472707|     1|    39|  1.5139550| 0.2259066|
+|Yellow (C8) |3-HYDROXYBUTYRIC |KO       |  0.0469125|     1|    39|  0.0396950| 0.8431133|
+|Yellow (C8) |arginine         |KO       | -0.0970962|     1|    39|  0.1646588| 0.6871208|
+|Yellow (C8) |CITRIC           |KO       |  0.0578721|     1|    39|  0.0601907| 0.8074813|
+|Yellow (C8) |FUMARIC          |KO       |  0.0591450|     1|    39|  0.0641518| 0.8013807|
+|Yellow (C8) |glutamine        |KO       |  0.0392963|     1|    39|  0.0280601| 0.8678332|
+|Yellow (C8) |isoleucine       |KO       | -0.0366778|     1|    39|  0.0252651| 0.8745285|
+|Yellow (C8) |LACTIC           |KO       | -0.1264586|     1|    39|  0.2992844| 0.5874484|
+|Yellow (C8) |LC even AC total |KO       |  0.0387301|     1|    39|  0.0271113| 0.8700658|
+|Yellow (C8) |LC odd AC total  |KO       | -0.6843471|     1|    39|  8.5239782| 0.0057960|
+|Yellow (C8) |leucine          |KO       | -0.0144473|     1|    39|  0.0037409| 0.9515421|
+|Yellow (C8) |MALIC            |KO       | -0.1347155|     1|    39|  0.3246049| 0.5721208|
+|Yellow (C8) |MCAC total       |KO       | -0.0000737|     1|    39|  0.0000001| 0.9997547|
+|Yellow (C8) |METHYLSUCCINIC   |KO       |  0.7373388|     1|    39|  9.7243104| 0.0034109|
+|Yellow (C8) |SUCCINIC-2       |KO       | -0.0485169|     1|    39|  0.0421449| 0.8384116|
+|Yellow (C8) |valine           |KO       |  0.1937060|     1|    39|  0.6753952| 0.4161730|
 
 ```r
 Ftests %>% write.csv(file = "../data/processed/contrastsAim2.csv", row.names = FALSE)
