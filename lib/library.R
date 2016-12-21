@@ -86,7 +86,7 @@ runClusters <- function (df, metabolites, fixed, xvar, contrastValue) {
     random <- formula(~ 1 | id)
     ctrl <- lmeControl(opt = "optim",
                        maxIter = 5000, msMaxIter = 5000,
-                       tolerance = 1e-6, niterEM = 25, msMaxEval = 200, msTol = 1e-7)
+                       tolerance = 1e-3, niterEM = 100, msMaxEval = 1000, msTol = 1e-7)
     cs <- corSymm(form = random, fixed = FALSE) %>% Initialize(data = dfi)
     M <- dfi %>% lme(fixed, data = ., random = random, correlation = cs, control = ctrl)
     M %>%
