@@ -72,7 +72,7 @@ metabolites <- c("3-HYDROXYBUTYRIC",
                  "PYRUVIC_P2P",
                  "SUCCINIC-2",
                  "valine")
-Ftests <- runClusters(D1, metabolites[c(1:2, 4:7, 9:15)], fixed, "activity", "Exercise")
+Ftests <- runClusters(D1, metabolites, fixed, "activity", "Exercise")
 Ftests %>% kable
 Ftests %>% write.csv(file = "../data/processed/contrastsAim1.csv", row.names = FALSE)
 ```
@@ -112,7 +112,7 @@ M2 %>% tidy(effects = "fixed") %>% write.csv(file = "../data/processed/lmeFixedC
 
 Calculate contrasts of *Yellow (C8) vs White (C7)* given metabolite and genotype.
 
-```{r}
+```{r, eval = FALSE}
 metabolites <- c("3-HYDROXYBUTYRIC",
                  "arginine",
                  "CITRIC",
