@@ -62,7 +62,7 @@ summarizeOutcome <- function (D) {
 }
 
 
-runClusters <- function (df, metabolites, fixed, xvar, contrastValue) {
+runClusters <- function (df, metabolites, fixed, xvar, contrastValue, ctrl) {
   require(magrittr)
   require(dplyr)
   require(doParallel)
@@ -84,9 +84,6 @@ runClusters <- function (df, metabolites, fixed, xvar, contrastValue) {
       mutate(metabolite = relevel(metabolite, lookup$metabolite[i])) %>%
       mutate(genotype = relevel(genotype, lookup$genotype[i]))
     random <- formula(~ 1 | id)
-    ctrl <- lmeControl(opt = "optim",
-                       maxIter = 5000, msMaxIter = 5000,
-                       tolerance = 1e-6, niterEM = 25, msMaxEval = 200, msTol = 1e-4)
     cs <- corSymm(form = random, fixed = FALSE) %>% Initialize(data = dfi)
     M <- dfi %>% lme(fixed, data = ., random = random, correlation = cs, control = ctrl)
     M %>%

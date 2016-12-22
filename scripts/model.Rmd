@@ -72,7 +72,10 @@ metabolites <- c("3-HYDROXYBUTYRIC",
                  "PYRUVIC_P2P",
                  "SUCCINIC-2",
                  "valine")
-Ftests <- runClusters(D1, metabolites, fixed, "activity", "Exercise")
+ctrl <- lmeControl(opt = "optim",
+                   maxIter = 5000, msMaxIter = 5000,
+                   tolerance = 1e-6, niterEM = 25, msMaxEval = 200, msTol = 1e-4)
+Ftests <- runClusters(D1, metabolites, fixed, "activity", "Exercise", ctrl)
 Ftests %>% kable
 Ftests %>% write.csv(file = "../data/processed/contrastsAim1.csv", row.names = FALSE)
 ```
@@ -128,7 +131,9 @@ metabolites <- c("3-HYDROXYBUTYRIC",
                  "METHYLSUCCINIC",
                  "SUCCINIC-2",
                  "valine")
-Ftests <- runClusters(D2, metabolites, fixed, "chow", "Yellow (C8)")
+ctrl <- lmeControl(opt = "optim",
+                   maxIter = 5000, msMaxIter = 5000)
+Ftests <- runClusters(D2, metabolites, fixed, "chow", "Yellow (C8)", ctrl)
 Ftests %>% kable
 Ftests %>% write.csv(file = "../data/processed/contrastsAim2.csv", row.names = FALSE)
 ```
