@@ -94,7 +94,7 @@ runClusters <- function (df, metabolites, fixed, xvar, contrastValue, ctrl) {
                  beta = M %>% fixef %>% .[names(.) == paste0(xvar, contrastValue)],
                  se = M %>% summary %>% .$tTable %>% data.frame %>%
                         select(matches("Std.Error")) %>%
-                        .[names(.) == paste0(xvar, contrastValue)],
+                        .[row.names(.) == paste0(xvar, contrastValue), ],
                  .) %>%
       mutate(lowerCL = beta + qnorm(0.025) * se,
              upperCL = beta + qnorm(0.975) * se)
