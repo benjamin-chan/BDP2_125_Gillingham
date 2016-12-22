@@ -100,5 +100,7 @@ runClusters <- function (df, metabolites, fixed, xvar, contrastValue, ctrl) {
              upperCL = beta + qnorm(0.975) * se)
   }
   stopCluster(cl)
-  rbindlist(L)
+  rbindlist(L) %>%
+    mutate(p.adjustBon = p.adjust(p.value, n = nrow(.), method = "bonferroni"),
+           p.adjustBH = p.adjust(p.value, n = nrow(.), method = "BH"))
 }
