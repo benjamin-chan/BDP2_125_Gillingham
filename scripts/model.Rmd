@@ -112,7 +112,7 @@ M2 %>% tidy(effects = "fixed") %>% write.csv(file = "../data/processed/lmeFixedC
 
 Calculate contrasts of *Yellow (C8) vs White (C7)* given metabolite and genotype.
 
-```{r, eval = FALSE}
+```{r}
 metabolites <- c("3-HYDROXYBUTYRIC",
                  "arginine",
                  "CITRIC",
