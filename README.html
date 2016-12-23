@@ -748,5 +748,189 @@ MathJax.Hub.Config({
   showProcessingMessages: false
 });
 </script>
-<title>README</title></head><body><article class="markdown-body"><p>)</p>
+<title>README</title></head><body><article class="markdown-body"><h1>
+<a id="user-content-metabolomics-of-very-long-chain-aclcoa-dehydrogenase-knockout-mice" class="anchor" href="#metabolomics-of-very-long-chain-aclcoa-dehydrogenase-knockout-mice" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Metabolomics of very long-chain aclCoA dehydrogenase knockout mice</h1>
+
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Principal investigator</td>
+<td>Melanie Gillingham, <a href="mailto:gillingm@ohsu.edu">gillingm@ohsu.edu</a>, 503-494-1682</td>
+</tr>
+<tr>
+<td>Main contact</td>
+<td>Melanie Gillingham, <a href="mailto:gillingm@ohsu.edu">gillingm@ohsu.edu</a>, 503-494-1682</td>
+</tr>
+<tr>
+<td>Statistician</td>
+<td>Benjamin Chan, <a href="mailto:chanb@ohsu.edu">chanb@ohsu.edu</a>, 503-494-5491</td>
+</tr>
+</tbody>
+</table>
+
+<h2>
+<a id="user-content-objective" class="anchor" href="#objective" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Objective</h2>
+
+<p>To compare wild type versus very long-chain acylCoA dehydrogenase knockout mice on the following experimental conditions</p>
+
+<p>A. Rest versus exhaustive exercise<br>
+B. MCT chow versus experimental chow with triheptanoin  </p>
+
+<p>The design of both experiments is a two-factor balanced design with multiple measurements (300 metabolites per mouse). 
+The primary challenge of the analysis will be to reduce the data (using principle components analysis or other data reduction techniques) or to account for the correlation structure of the multiple measurements.</p>
+
+<h2>
+<a id="user-content-deliverables" class="anchor" href="#deliverables" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Deliverables</h2>
+
+<ol>
+<li>Analysis of experiment A
+
+<ul>
+<li>Standardize measurements</li>
+<li>Perform data reduction and model reduced data</li>
+<li>Model non-reduced data accounting for within-mouse correlation structure</li>
+<li>Compare models</li>
+<li>Summarize</li>
+</ul>
+</li>
+<li>Analysis of experiment B
+
+<ul>
+<li>Same as above</li>
+</ul>
+</li>
+<li>Text describing the statistical methods used, suitable for a manuscript</li>
+</ol>
+
+<h2>
+<a id="user-content-interpretation-of-analysis" class="anchor" href="#interpretation-of-analysis" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Interpretation of analysis</h2>
+
+<ul>
+<li>Aim 1, activity: exercise vs rest
+
+<ul>
+<li>None of the log-transformed metabolite values in either the wildtype or
+knockout mice were statistically significant at $\alpha$-level 0.05
+(controlling for the false discovery rate)</li>
+</ul>
+</li>
+<li>Aim 2, chow: yellow C8 vs white C7
+
+<ul>
+<li>
+<strong>3-hydroxybutyric</strong> values were significantly <strong>higher</strong> in wildtype mice feed yellow C8 compared to wildtype mice fed white C7 ($\beta$ = 0.81, p = 0.007).
+The large estimated effect is likely due to an outlying value among the wilftype mice fed white C7.</li>
+<li>
+<strong>LC odd AC total</strong> values were significantly <strong>lower</strong> in wildtype mice feed yellow C8 compared to wildtype mice fed white C7 ($\beta$ = -0.70, p = 0.040)</li>
+<li>
+<strong>Methylsuccinic</strong> values were significantly <strong>higher</strong> in wildtype mice feed yellow C8 compared to wildtype mice fed white C7 ($\beta$ = 0.74, p = 0.040)</li>
+</ul>
+</li>
+</ul>
+
+<h2>
+<a id="user-content-outputs" class="anchor" href="#outputs" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Outputs</h2>
+
+<ul>
+<li>
+<a href="///C://Users/chanb/Documents/Projects/GillinghamMetabolomics/data/processed/contrasts.xlsx">Results</a>
+
+<ul>
+<li>Formatted versions of <code>data/processed/contrastsAim1.csv</code> and <code>data/processed/contrastsAim2.csv</code>
+</li>
+</ul>
+</li>
+<li>Aim 1
+
+<ul>
+<li><a href="///C://Users/chanb/Documents/Projects/GillinghamMetabolomics/figures/plotDataAim1.png">Figure, metabolite values</a></li>
+<li><a href="///C://Users/chanb/Documents/Projects/GillinghamMetabolomics/data/processed/contrastsAim1.csv">Contrast estimates</a></li>
+</ul>
+</li>
+<li>Aim 2
+
+<ul>
+<li><a href="///C://Users/chanb/Documents/Projects/GillinghamMetabolomics/figures/plotDataAim2.png">Figure, metabolite values</a></li>
+<li><a href="///C://Users/chanb/Documents/Projects/GillinghamMetabolomics/data/processed/contrastsAim2.csv">Contrast estimates</a></li>
+</ul>
+</li>
+<li>Complete analysis
+
+<ul>
+<li><a href="///C://Users/chanb/Documents/Projects/GillinghamMetabolomics/docs/index.html">HTML</a></li>
+<li><a href="///C://Users/chanb/Documents/Projects/GillinghamMetabolomics/docs/index.md">Markdown</a></li>
+</ul>
+</li>
+</ul>
+
+<h2>
+<a id="user-content-methods" class="anchor" href="#methods" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Methods</h2>
+
+<p>A mixed linear effects model was estimated for each aim.
+Metabolomic values were transformed to the log-10 scale.
+Fixed effects for Aim 1 were activity, genotype, and metabolite.
+Fixed effects for Aim 2 were chow, genotype, and metabolite.
+All 2-way and 3-way interactions between fixed effects were included in the models.
+Animal ID was the random effect.
+A general correlation structure was assumed.
+Estimates for the contrasts comparing exercise versus rest for Aim 1, and yellow C8 chow versus white C7 chow for Aim 2, for each combination of genotype and metabolite are presented.
+P-values were adjusted to control the false discovery rate, the expected proportion of false discoveries amongst the rejected hypotheses.
+The data was analyzed using R version 3.3.2 (2016-10-31) and the <code>nlme</code> package version 3.1.128.</p>
+
+<h2>
+<a id="user-content-references" class="anchor" href="#references" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>References</h2>
+
+<p>Benjamini, Y., and Hochberg, Y.
+(1995).
+Controlling the false discovery rate: a practical and powerful approach to multiple testing.
+<em>Journal of the Royal Statistical Society Series B</em> 57, 289â€“300.</p>
+
+<div class="highlight highlight-source-r"><pre>citation()</pre></div>
+
+<pre><code>## 
+## To cite R in publications use:
+## 
+##   R Core Team (2016). R: A language and environment for
+##   statistical computing. R Foundation for Statistical Computing,
+##   Vienna, Austria. URL https://www.R-project.org/.
+## 
+## A BibTeX entry for LaTeX users is
+## 
+##   @Manual{,
+##     title = {R: A Language and Environment for Statistical Computing},
+##     author = {{R Core Team}},
+##     organization = {R Foundation for Statistical Computing},
+##     address = {Vienna, Austria},
+##     year = {2016},
+##     url = {https://www.R-project.org/},
+##   }
+## 
+## We have invested a lot of time and effort in creating R, please
+## cite it when using it for data analysis. See also
+## 'citation("pkgname")' for citing R packages.
+</code></pre>
+
+<div class="highlight highlight-source-r"><pre>citation(<span class="pl-s"><span class="pl-pds">"</span>nlme<span class="pl-pds">"</span></span>)</pre></div>
+
+<pre><code>## 
+## Pinheiro J, Bates D, DebRoy S, Sarkar D and R Core Team (2016).
+## _nlme: Linear and Nonlinear Mixed Effects Models_. R package
+## version 3.1-128, &lt;URL: http://CRAN.R-project.org/package=nlme&gt;.
+## 
+## A BibTeX entry for LaTeX users is
+## 
+##   @Manual{,
+##     title = {{nlme}: Linear and Nonlinear Mixed Effects Models},
+##     author = {Jose Pinheiro and Douglas Bates and Saikat DebRoy and Deepayan Sarkar and {R Core Team}},
+##     year = {2016},
+##     note = {R package version 3.1-128},
+##     url = {http://CRAN.R-project.org/package=nlme},
+##   }
+</code></pre>
 </article></body></html>
