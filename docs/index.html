@@ -1,0 +1,3533 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><style>@font-face {
+  font-family: octicons-anchor;
+  src: url(data:font/woff;charset=utf-8;base64,d09GRgABAAAAAAYcAA0AAAAACjQAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABGRlRNAAABMAAAABwAAAAca8vGTk9TLzIAAAFMAAAARAAAAFZG1VHVY21hcAAAAZAAAAA+AAABQgAP9AdjdnQgAAAB0AAAAAQAAAAEACICiGdhc3AAAAHUAAAACAAAAAj//wADZ2x5ZgAAAdwAAADRAAABEKyikaNoZWFkAAACsAAAAC0AAAA2AtXoA2hoZWEAAALgAAAAHAAAACQHngNFaG10eAAAAvwAAAAQAAAAEAwAACJsb2NhAAADDAAAAAoAAAAKALIAVG1heHAAAAMYAAAAHwAAACABEAB2bmFtZQAAAzgAAALBAAAFu3I9x/Nwb3N0AAAF/AAAAB0AAAAvaoFvbwAAAAEAAAAAzBdyYwAAAADP2IQvAAAAAM/bz7t4nGNgZGFgnMDAysDB1Ml0hoGBoR9CM75mMGLkYGBgYmBlZsAKAtJcUxgcPsR8iGF2+O/AEMPsznAYKMwIkgMA5REMOXicY2BgYGaAYBkGRgYQsAHyGMF8FgYFIM0ChED+h5j//yEk/3KoSgZGNgYYk4GRCUgwMaACRoZhDwCs7QgGAAAAIgKIAAAAAf//AAJ4nHWMMQrCQBBF/0zWrCCIKUQsTDCL2EXMohYGSSmorScInsRGL2DOYJe0Ntp7BK+gJ1BxF1stZvjz/v8DRghQzEc4kIgKwiAppcA9LtzKLSkdNhKFY3HF4lK69ExKslx7Xa+vPRVS43G98vG1DnkDMIBUgFN0MDXflU8tbaZOUkXUH0+U27RoRpOIyCKjbMCVejwypzJJG4jIwb43rfl6wbwanocrJm9XFYfskuVC5K/TPyczNU7b84CXcbxks1Un6H6tLH9vf2LRnn8Ax7A5WQAAAHicY2BkYGAA4teL1+yI57f5ysDNwgAC529f0kOmWRiYVgEpDgYmEA8AUzEKsQAAAHicY2BkYGB2+O/AEMPCAAJAkpEBFbAAADgKAe0EAAAiAAAAAAQAAAAEAAAAAAAAKgAqACoAiAAAeJxjYGRgYGBhsGFgYgABEMkFhAwM/xn0QAIAD6YBhwB4nI1Ty07cMBS9QwKlQapQW3VXySvEqDCZGbGaHULiIQ1FKgjWMxknMfLEke2A+IJu+wntrt/QbVf9gG75jK577Lg8K1qQPCfnnnt8fX1NRC/pmjrk/zprC+8D7tBy9DHgBXoWfQ44Av8t4Bj4Z8CLtBL9CniJluPXASf0Lm4CXqFX8Q84dOLnMB17N4c7tBo1AS/Qi+hTwBH4rwHHwN8DXqQ30XXAS7QaLwSc0Gn8NuAVWou/gFmnjLrEaEh9GmDdDGgL3B4JsrRPDU2hTOiMSuJUIdKQQayiAth69r6akSSFqIJuA19TrzCIaY8sIoxyrNIrL//pw7A2iMygkX5vDj+G+kuoLdX4GlGK/8Lnlz6/h9MpmoO9rafrz7ILXEHHaAx95s9lsI7AHNMBWEZHULnfAXwG9/ZqdzLI08iuwRloXE8kfhXYAvE23+23DU3t626rbs8/8adv+9DWknsHp3E17oCf+Z48rvEQNZ78paYM38qfk3v/u3l3u3GXN2Dmvmvpf1Srwk3pB/VSsp512bA/GG5i2WJ7wu430yQ5K3nFGiOqgtmSB5pJVSizwaacmUZzZhXLlZTq8qGGFY2YcSkqbth6aW1tRmlaCFs2016m5qn36SbJrqosG4uMV4aP2PHBmB3tjtmgN2izkGQyLWprekbIntJFing32a5rKWCN/SdSoga45EJykyQ7asZvHQ8PTm6cslIpwyeyjbVltNikc2HTR7YKh9LBl9DADC0U/jLcBZDKrMhUBfQBvXRzLtFtjU9eNHKin0x5InTqb8lNpfKv1s1xHzTXRqgKzek/mb7nB8RZTCDhGEX3kK/8Q75AmUM/eLkfA+0Hi908Kx4eNsMgudg5GLdRD7a84npi+YxNr5i5KIbW5izXas7cHXIMAau1OueZhfj+cOcP3P8MNIWLyYOBuxL6DRylJ4cAAAB4nGNgYoAALjDJyIAOWMCiTIxMLDmZedkABtIBygAAAA==) format('woff');
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    width: 980px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+body .markdown-body {
+    padding: 45px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    word-wrap: break-word;
+}
+
+pre {
+    font: 12px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+}
+
+.markdown-body {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  color: #333;
+  font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 16px;
+  line-height: 1.6;
+  word-wrap: break-word;
+}
+
+.markdown-body a {
+  background-color: transparent;
+}
+
+.markdown-body a:active,
+.markdown-body a:hover {
+  outline: 0;
+}
+
+.markdown-body strong {
+  font-weight: bold;
+}
+
+.markdown-body h1 {
+  font-size: 2em;
+  margin: 0.67em 0;
+}
+
+.markdown-body img {
+  border: 0;
+}
+
+.markdown-body hr {
+  box-sizing: content-box;
+  height: 0;
+}
+
+.markdown-body pre {
+  overflow: auto;
+}
+
+.markdown-body code,
+.markdown-body kbd,
+.markdown-body pre {
+  font-family: monospace, monospace;
+  font-size: 1em;
+}
+
+.markdown-body input {
+  color: inherit;
+  font: inherit;
+  margin: 0;
+}
+
+.markdown-body html input[disabled] {
+  cursor: default;
+}
+
+.markdown-body input {
+  line-height: normal;
+}
+
+.markdown-body input[type="checkbox"] {
+  box-sizing: border-box;
+  padding: 0;
+}
+
+.markdown-body table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.markdown-body td,
+.markdown-body th {
+  padding: 0;
+}
+
+.markdown-body input {
+  font: 13px / 1.4 Helvetica, arial, nimbussansl, liberationsans, freesans, clean, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+.markdown-body a {
+  color: #4078c0;
+  text-decoration: none;
+}
+
+.markdown-body a:hover,
+.markdown-body a:active {
+  text-decoration: underline;
+}
+
+.markdown-body hr {
+  height: 0;
+  margin: 15px 0;
+  overflow: hidden;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.markdown-body hr:before {
+  display: table;
+  content: "";
+}
+
+.markdown-body hr:after {
+  display: table;
+  clear: both;
+  content: "";
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  margin-top: 15px;
+  margin-bottom: 15px;
+  line-height: 1.1;
+}
+
+.markdown-body h1 {
+  font-size: 30px;
+}
+
+.markdown-body h2 {
+  font-size: 21px;
+}
+
+.markdown-body h3 {
+  font-size: 16px;
+}
+
+.markdown-body h4 {
+  font-size: 14px;
+}
+
+.markdown-body h5 {
+  font-size: 12px;
+}
+
+.markdown-body h6 {
+  font-size: 11px;
+}
+
+.markdown-body blockquote {
+  margin: 0;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+  padding: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.markdown-body ol ol,
+.markdown-body ul ol {
+  list-style-type: lower-roman;
+}
+
+.markdown-body ul ul ol,
+.markdown-body ul ol ol,
+.markdown-body ol ul ol,
+.markdown-body ol ol ol {
+  list-style-type: lower-alpha;
+}
+
+.markdown-body dd {
+  margin-left: 0;
+}
+
+.markdown-body code {
+  font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  font-size: 12px;
+}
+
+.markdown-body pre {
+  margin-top: 0;
+  margin-bottom: 0;
+  font: 12px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+}
+
+.markdown-body .select::-ms-expand {
+  opacity: 0;
+}
+
+.markdown-body .octicon {
+  font: normal normal normal 16px/1 octicons-anchor;
+  display: inline-block;
+  text-decoration: none;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.markdown-body .octicon-link:before {
+  content: '\f05c';
+}
+
+.markdown-body:before {
+  display: table;
+  content: "";
+}
+
+.markdown-body:after {
+  display: table;
+  clear: both;
+  content: "";
+}
+
+.markdown-body>*:first-child {
+  margin-top: 0 !important;
+}
+
+.markdown-body>*:last-child {
+  margin-bottom: 0 !important;
+}
+
+.markdown-body a:not([href]) {
+  color: inherit;
+  text-decoration: none;
+}
+
+.markdown-body .anchor {
+  display: inline-block;
+  padding-right: 2px;
+  margin-left: -18px;
+}
+
+.markdown-body .anchor:focus {
+  outline: none;
+}
+
+.markdown-body h1,
+.markdown-body h2,
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6 {
+  margin-top: 1em;
+  margin-bottom: 16px;
+  font-weight: bold;
+  line-height: 1.4;
+}
+
+.markdown-body h1 .octicon-link,
+.markdown-body h2 .octicon-link,
+.markdown-body h3 .octicon-link,
+.markdown-body h4 .octicon-link,
+.markdown-body h5 .octicon-link,
+.markdown-body h6 .octicon-link {
+  color: #000;
+  vertical-align: middle;
+  visibility: hidden;
+}
+
+.markdown-body h1:hover .anchor,
+.markdown-body h2:hover .anchor,
+.markdown-body h3:hover .anchor,
+.markdown-body h4:hover .anchor,
+.markdown-body h5:hover .anchor,
+.markdown-body h6:hover .anchor {
+  text-decoration: none;
+}
+
+.markdown-body h1:hover .anchor .octicon-link,
+.markdown-body h2:hover .anchor .octicon-link,
+.markdown-body h3:hover .anchor .octicon-link,
+.markdown-body h4:hover .anchor .octicon-link,
+.markdown-body h5:hover .anchor .octicon-link,
+.markdown-body h6:hover .anchor .octicon-link {
+  visibility: visible;
+}
+
+.markdown-body h1 {
+  padding-bottom: 0.3em;
+  font-size: 2.25em;
+  line-height: 1.2;
+  border-bottom: 1px solid #eee;
+}
+
+.markdown-body h1 .anchor {
+  line-height: 1;
+}
+
+.markdown-body h2 {
+  padding-bottom: 0.3em;
+  font-size: 1.75em;
+  line-height: 1.225;
+  border-bottom: 1px solid #eee;
+}
+
+.markdown-body h2 .anchor {
+  line-height: 1;
+}
+
+.markdown-body h3 {
+  font-size: 1.5em;
+  line-height: 1.43;
+}
+
+.markdown-body h3 .anchor {
+  line-height: 1.2;
+}
+
+.markdown-body h4 {
+  font-size: 1.25em;
+}
+
+.markdown-body h4 .anchor {
+  line-height: 1.2;
+}
+
+.markdown-body h5 {
+  font-size: 1em;
+}
+
+.markdown-body h5 .anchor {
+  line-height: 1.1;
+}
+
+.markdown-body h6 {
+  font-size: 1em;
+  color: #777;
+}
+
+.markdown-body h6 .anchor {
+  line-height: 1.1;
+}
+
+.markdown-body p,
+.markdown-body blockquote,
+.markdown-body ul,
+.markdown-body ol,
+.markdown-body dl,
+.markdown-body table,
+.markdown-body pre {
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+.markdown-body hr {
+  height: 4px;
+  padding: 0;
+  margin: 16px 0;
+  background-color: #e7e7e7;
+  border: 0 none;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+  padding-left: 2em;
+}
+
+.markdown-body ul ul,
+.markdown-body ul ol,
+.markdown-body ol ol,
+.markdown-body ol ul {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.markdown-body li>p {
+  margin-top: 16px;
+}
+
+.markdown-body dl {
+  padding: 0;
+}
+
+.markdown-body dl dt {
+  padding: 0;
+  margin-top: 16px;
+  font-size: 1em;
+  font-style: italic;
+  font-weight: bold;
+}
+
+.markdown-body dl dd {
+  padding: 0 16px;
+  margin-bottom: 16px;
+}
+
+.markdown-body blockquote {
+  padding: 0 15px;
+  color: #777;
+  border-left: 4px solid #ddd;
+}
+
+.markdown-body blockquote>:first-child {
+  margin-top: 0;
+}
+
+.markdown-body blockquote>:last-child {
+  margin-bottom: 0;
+}
+
+.markdown-body table {
+  display: block;
+  width: 100%;
+  overflow: auto;
+  word-break: normal;
+  word-break: keep-all;
+}
+
+.markdown-body table th {
+  font-weight: bold;
+}
+
+.markdown-body table th,
+.markdown-body table td {
+  padding: 6px 13px;
+  border: 1px solid #ddd;
+}
+
+.markdown-body table tr {
+  background-color: #fff;
+  border-top: 1px solid #ccc;
+}
+
+.markdown-body table tr:nth-child(2n) {
+  background-color: #f8f8f8;
+}
+
+.markdown-body img {
+  max-width: 100%;
+  box-sizing: content-box;
+  background-color: #fff;
+}
+
+.markdown-body code {
+  padding: 0;
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+  margin: 0;
+  font-size: 85%;
+  background-color: rgba(0,0,0,0.04);
+  border-radius: 3px;
+}
+
+.markdown-body code:before,
+.markdown-body code:after {
+  letter-spacing: -0.2em;
+  content: "\00a0";
+}
+
+.markdown-body pre>code {
+  padding: 0;
+  margin: 0;
+  font-size: 100%;
+  word-break: normal;
+  white-space: pre;
+  background: transparent;
+  border: 0;
+}
+
+.markdown-body .highlight {
+  margin-bottom: 16px;
+}
+
+.markdown-body .highlight pre,
+.markdown-body pre {
+  padding: 16px;
+  overflow: auto;
+  font-size: 85%;
+  line-height: 1.45;
+  background-color: #f7f7f7;
+  border-radius: 3px;
+}
+
+.markdown-body .highlight pre {
+  margin-bottom: 0;
+  word-break: normal;
+}
+
+.markdown-body pre {
+  word-wrap: normal;
+}
+
+.markdown-body pre code {
+  display: inline;
+  max-width: initial;
+  padding: 0;
+  margin: 0;
+  overflow: initial;
+  line-height: inherit;
+  word-wrap: normal;
+  background-color: transparent;
+  border: 0;
+}
+
+.markdown-body pre code:before,
+.markdown-body pre code:after {
+  content: normal;
+}
+
+.markdown-body kbd {
+  display: inline-block;
+  padding: 3px 5px;
+  font-size: 11px;
+  line-height: 10px;
+  color: #555;
+  vertical-align: middle;
+  background-color: #fcfcfc;
+  border: solid 1px #ccc;
+  border-bottom-color: #bbb;
+  border-radius: 3px;
+  box-shadow: inset 0 -1px 0 #bbb;
+}
+
+.markdown-body .pl-c {
+  color: #969896;
+}
+
+.markdown-body .pl-c1,
+.markdown-body .pl-s .pl-v {
+  color: #0086b3;
+}
+
+.markdown-body .pl-e,
+.markdown-body .pl-en {
+  color: #795da3;
+}
+
+.markdown-body .pl-s .pl-s1,
+.markdown-body .pl-smi {
+  color: #333;
+}
+
+.markdown-body .pl-ent {
+  color: #63a35c;
+}
+
+.markdown-body .pl-k {
+  color: #a71d5d;
+}
+
+.markdown-body .pl-pds,
+.markdown-body .pl-s,
+.markdown-body .pl-s .pl-pse .pl-s1,
+.markdown-body .pl-sr,
+.markdown-body .pl-sr .pl-cce,
+.markdown-body .pl-sr .pl-sra,
+.markdown-body .pl-sr .pl-sre {
+  color: #183691;
+}
+
+.markdown-body .pl-v {
+  color: #ed6a43;
+}
+
+.markdown-body .pl-id {
+  color: #b52a1d;
+}
+
+.markdown-body .pl-ii {
+  background-color: #b52a1d;
+  color: #f8f8f8;
+}
+
+.markdown-body .pl-sr .pl-cce {
+  color: #63a35c;
+  font-weight: bold;
+}
+
+.markdown-body .pl-ml {
+  color: #693a17;
+}
+
+.markdown-body .pl-mh,
+.markdown-body .pl-mh .pl-en,
+.markdown-body .pl-ms {
+  color: #1d3e81;
+  font-weight: bold;
+}
+
+.markdown-body .pl-mq {
+  color: #008080;
+}
+
+.markdown-body .pl-mi {
+  color: #333;
+  font-style: italic;
+}
+
+.markdown-body .pl-mb {
+  color: #333;
+  font-weight: bold;
+}
+
+.markdown-body .pl-md {
+  background-color: #ffecec;
+  color: #bd2c00;
+}
+
+.markdown-body .pl-mi1 {
+  background-color: #eaffea;
+  color: #55a532;
+}
+
+.markdown-body .pl-mdr {
+  color: #795da3;
+  font-weight: bold;
+}
+
+.markdown-body .pl-mo {
+  color: #1d3e81;
+}
+
+.markdown-body kbd {
+  display: inline-block;
+  padding: 3px 5px;
+  font: 11px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  line-height: 10px;
+  color: #555;
+  vertical-align: middle;
+  background-color: #fcfcfc;
+  border: solid 1px #ccc;
+  border-bottom-color: #bbb;
+  border-radius: 3px;
+  box-shadow: inset 0 -1px 0 #bbb;
+}
+
+.markdown-body .plan-price-unit {
+  color: #767676;
+  font-weight: normal;
+}
+
+.markdown-body .task-list-item {
+  list-style-type: none;
+}
+
+.markdown-body .task-list-item+.task-list-item {
+  margin-top: 3px;
+}
+
+.markdown-body .task-list-item input {
+  margin: 0 0.35em 0.25em -1.6em;
+  vertical-align: middle;
+}
+
+.markdown-body .plan-choice {
+  padding: 15px;
+  padding-left: 40px;
+  display: block;
+  border: 1px solid #e0e0e0;
+  position: relative;
+  font-weight: normal;
+  background-color: #fafafa;
+}
+
+.markdown-body .plan-choice.open {
+  background-color: #fff;
+}
+
+.markdown-body .plan-choice.open .plan-choice-seat-breakdown {
+  display: block;
+}
+
+.markdown-body .plan-choice-free {
+  border-radius: 3px 3px 0 0;
+}
+
+.markdown-body .plan-choice-paid {
+  border-radius: 0 0 3px 3px;
+  border-top: 0;
+  margin-bottom: 20px;
+}
+
+.markdown-body .plan-choice-radio {
+  position: absolute;
+  left: 15px;
+  top: 18px;
+}
+
+.markdown-body .plan-choice-exp {
+  color: #999;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.markdown-body .plan-choice-seat-breakdown {
+  margin-top: 10px;
+  display: none;
+}
+
+.markdown-body :checked+.radio-label {
+  z-index: 1;
+  position: relative;
+  border-color: #4078c0;
+}
+</style>
+<link href='http://bootswatch.com/readable/bootstrap.css' rel='stylesheet' type='text/css'><script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script>
+MathJax.Hub.Config({
+  config: ["MMLorHTML.js"],
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX"],
+  tex2jax: {
+    inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+    displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+    processEscapes: false
+  },
+  TeX: {
+    extensions: ["AMSmath.js", "AMSsymbols.js"],
+    TagSide: "right",
+    TagIndent: ".8em",
+    MultLineWidth: "85%",
+    equationNumbers: {
+      autoNumber: "AMS",
+    },
+    unicode: {
+      fonts: "STIXGeneral,'Arial Unicode MS'"
+    }
+  },
+  showProcessingMessages: false
+});
+</script>
+<title>index</title></head><body><article class="markdown-body"><hr>
+
+<p>title: "Metabolomics of very long-chain aclCoA dehydrogenase knockout mice"
+date: "2016-12-22 15:26:59"
+author: Benjamin Chan (<a href="mailto:chanb@ohsu.edu">chanb@ohsu.edu</a>)
+output:
+  html_document:
+    toc: true</p>
+
+<h2>
+<a id="user-content-----theme-simplex" class="anchor" href="#----theme-simplex" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>    theme: simplex</h2>
+
+<hr>
+
+<h1>
+<a id="user-content-preamble" class="anchor" href="#preamble" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Preamble</h1>
+
+<p>Set working directory.</p>
+
+<div class="highlight highlight-source-r"><pre>setwd(<span class="pl-s"><span class="pl-pds">"</span>~/Projects/GillinghamMetabolomics/scripts<span class="pl-pds">"</span></span>)</pre></div>
+
+<p>Load libraries.</p>
+
+<div class="highlight highlight-source-r"><pre>library(<span class="pl-smi">readxl</span>)
+library(<span class="pl-smi">magrittr</span>)
+library(<span class="pl-smi">dplyr</span>)</pre></div>
+
+<pre><code>## 
+## Attaching package: 'dplyr'
+</code></pre>
+
+<pre><code>## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+</code></pre>
+
+<pre><code>## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+</code></pre>
+
+<div class="highlight highlight-source-r"><pre>library(<span class="pl-smi">nlme</span>)</pre></div>
+
+<pre><code>## 
+## Attaching package: 'nlme'
+</code></pre>
+
+<pre><code>## The following object is masked from 'package:dplyr':
+## 
+##     collapse
+</code></pre>
+
+<div class="highlight highlight-source-r"><pre>library(<span class="pl-smi">broom</span>)
+library(<span class="pl-smi">ggplot2</span>)
+library(<span class="pl-smi">knitr</span>)
+library(<span class="pl-smi">doParallel</span>)</pre></div>
+
+<pre><code>## Loading required package: foreach
+</code></pre>
+
+<pre><code>## Loading required package: iterators
+</code></pre>
+
+<pre><code>## Loading required package: parallel
+</code></pre>
+
+<p>Reproducibility steps.</p>
+
+<div class="highlight highlight-source-r"><pre>sessionInfo()</pre></div>
+
+<pre><code>## R version 3.3.2 (2016-10-31)
+## Platform: x86_64-redhat-linux-gnu (64-bit)
+## Running under: CentOS release 6.8 (Final)
+## 
+## locale:
+##  [1] LC_CTYPE=en_US.iso885915       LC_NUMERIC=C                  
+##  [3] LC_TIME=en_US.iso885915        LC_COLLATE=en_US.iso885915    
+##  [5] LC_MONETARY=en_US.iso885915    LC_MESSAGES=en_US.iso885915   
+##  [7] LC_PAPER=en_US.iso885915       LC_NAME=C                     
+##  [9] LC_ADDRESS=C                   LC_TELEPHONE=C                
+## [11] LC_MEASUREMENT=en_US.iso885915 LC_IDENTIFICATION=C           
+## 
+## attached base packages:
+## [1] parallel  stats     graphics  grDevices utils     datasets  base     
+## 
+## other attached packages:
+##  [1] doParallel_1.0.10 iterators_1.0.8   foreach_1.4.3    
+##  [4] ggplot2_2.1.0     broom_0.4.1       nlme_3.1-128     
+##  [7] dplyr_0.5.0       magrittr_1.5      readxl_0.1.1     
+## [10] rmarkdown_1.0     knitr_1.14        checkpoint_0.3.16
+## 
+## loaded via a namespace (and not attached):
+##  [1] Rcpp_0.12.7      munsell_0.4.3    mnormt_1.5-4     colorspace_1.2-6
+##  [5] lattice_0.20-34  R6_2.1.3         stringr_1.1.0    plyr_1.8.4      
+##  [9] tools_3.3.2      grid_3.3.2       gtable_0.2.0     psych_1.6.9     
+## [13] DBI_0.5-1        htmltools_0.3.5  assertthat_0.1   digest_0.6.10   
+## [17] tibble_1.2       reshape2_1.4.1   formatR_1.4      tidyr_0.6.0     
+## [21] codetools_0.2-14 evaluate_0.9     stringi_1.1.1    scales_0.4.0    
+## [25] methods_3.3.2    foreign_0.8-67
+</code></pre>
+
+<div class="highlight highlight-source-r"><pre>set.seed(as.integer(as.Date(<span class="pl-s"><span class="pl-pds">"</span>2016-11-18<span class="pl-pds">"</span></span>)))</pre></div>
+
+<p>Source user-defined functions.</p>
+
+<div class="highlight highlight-source-r"><pre>sapply(list.files(<span class="pl-s"><span class="pl-pds">"</span>../lib<span class="pl-pds">"</span></span>, <span class="pl-v">full.names</span> <span class="pl-k">=</span> <span class="pl-c1">TRUE</span>), <span class="pl-smi">source</span>)</pre></div>
+
+<pre><code>##         ../lib/library.R
+## value   ?               
+## visible FALSE
+</code></pre>
+
+<hr>
+
+<h1>
+<a id="user-content-read-data" class="anchor" href="#read-data" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Read data</h1>
+
+<p>Import the data.
+Data files are locally stored.</p>
+
+<p>Import Aim 1: Exercise data</p>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-smi">L1</span> <span class="pl-k">&lt;-</span> importDataToList(<span class="pl-s"><span class="pl-pds">"</span>../data/raw/Ultragenyx Aim 1 Z score.xlsx<span class="pl-pds">"</span></span>)</pre></div>
+
+<pre><code>## Warning in `levels&lt;-`(`*tmp*`, value = if (nl == nL) as.character(labels)
+## else paste0(labels, : duplicated levels in factors are deprecated
+
+## Warning in `levels&lt;-`(`*tmp*`, value = if (nl == nL) as.character(labels)
+## else paste0(labels, : duplicated levels in factors are deprecated
+
+## Warning in `levels&lt;-`(`*tmp*`, value = if (nl == nL) as.character(labels)
+## else paste0(labels, : duplicated levels in factors are deprecated
+
+## Warning in `levels&lt;-`(`*tmp*`, value = if (nl == nL) as.character(labels)
+## else paste0(labels, : duplicated levels in factors are deprecated
+</code></pre>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-smi">L1</span>[[<span class="pl-s"><span class="pl-pds">"</span>file<span class="pl-pds">"</span></span>]]</pre></div>
+
+<pre><code>## [1] "../data/raw/Ultragenyx Aim 1 Z score.xlsx"
+</code></pre>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-smi">L1</span>[[<span class="pl-s"><span class="pl-pds">"</span>dim<span class="pl-pds">"</span></span>]]</pre></div>
+
+<pre><code>## [1] 622  11
+</code></pre>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-smi">L1</span>[[<span class="pl-s"><span class="pl-pds">"</span>names<span class="pl-pds">"</span></span>]]</pre></div>
+
+<pre><code>##  [1] "id"              "genotype"        "activity"       
+##  [4] "chow"            "metabolite_type" "metabolite"     
+##  [7] "value"           "logValue"        "zValue"         
+## [10] "zLogValue"       "important"
+</code></pre>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-smi">L1</span>[[<span class="pl-s"><span class="pl-pds">"</span>head<span class="pl-pds">"</span></span>]]</pre></div>
+
+<pre><code>## # A tibble: 6 × 11
+##      id genotype activity    chow metabolite_type metabolite   value
+##   &lt;chr&gt;   &lt;fctr&gt;   &lt;fctr&gt;  &lt;fctr&gt;          &lt;fctr&gt;     &lt;fctr&gt;   &lt;dbl&gt;
+## 1  1170       WT     Rest Regular  Acylcarnitines LCAC total  4.8986
+## 2  1171       WT     Rest Regular  Acylcarnitines LCAC total  5.8048
+## 3  1172       WT     Rest Regular  Acylcarnitines LCAC total  5.7869
+## 4  1201       WT     Rest Regular  Acylcarnitines LCAC total 10.1177
+## 5  1202       WT     Rest Regular  Acylcarnitines LCAC total  6.7489
+## 6  1209       WT     Rest Regular  Acylcarnitines LCAC total  7.6464
+## # ... with 4 more variables: logValue &lt;dbl&gt;, zValue &lt;dbl&gt;,
+## #   zLogValue &lt;dbl&gt;, important &lt;lgl&gt;
+</code></pre>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-smi">D1</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">L1</span>[[<span class="pl-s"><span class="pl-pds">"</span>data<span class="pl-pds">"</span></span>]]</pre></div>
+
+<p>Import Aim 2: Diet data.
+Metabolite <code>LCAC total</code> is the sum of <code>LC even AC total</code> and <code>LC odd AC total</code>; remove <code>LCAC total</code> data.</p>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-smi">L2</span> <span class="pl-k">&lt;-</span> importDataToList(<span class="pl-s"><span class="pl-pds">"</span>../data/raw/Ultragenyx Aim 2 Z score.xlsx<span class="pl-pds">"</span></span>)</pre></div>
+
+<pre><code>## Warning in read_xlsx_(path, sheet, col_names = col_names, col_types =
+## col_types, : [4173, 23]: expecting numeric: got ' ctrl mean val'
+</code></pre>
+
+<pre><code>## Warning in read_xlsx_(path, sheet, col_names = col_names, col_types =
+## col_types, : [4173, 24]: expecting numeric: got 'stdev ctrl val'
+</code></pre>
+
+<pre><code>## Warning in read_xlsx_(path, sheet, col_names = col_names, col_types =
+## col_types, : [4173, 25]: expecting numeric: got 'mean log ctrl val'
+</code></pre>
+
+<pre><code>## Warning in read_xlsx_(path, sheet, col_names = col_names, col_types =
+## col_types, : [4173, 26]: expecting numeric: got 'stdev log ctrl val'
+</code></pre>
+
+<pre><code>## Warning in `levels&lt;-`(`*tmp*`, value = if (nl == nL) as.character(labels)
+## else paste0(labels, : duplicated levels in factors are deprecated
+
+## Warning in `levels&lt;-`(`*tmp*`, value = if (nl == nL) as.character(labels)
+## else paste0(labels, : duplicated levels in factors are deprecated
+
+## Warning in `levels&lt;-`(`*tmp*`, value = if (nl == nL) as.character(labels)
+## else paste0(labels, : duplicated levels in factors are deprecated
+
+## Warning in `levels&lt;-`(`*tmp*`, value = if (nl == nL) as.character(labels)
+## else paste0(labels, : duplicated levels in factors are deprecated
+</code></pre>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-smi">L2</span>[[<span class="pl-s"><span class="pl-pds">"</span>file<span class="pl-pds">"</span></span>]]</pre></div>
+
+<pre><code>## [1] "../data/raw/Ultragenyx Aim 2 Z score.xlsx"
+</code></pre>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-smi">L2</span>[[<span class="pl-s"><span class="pl-pds">"</span>dim<span class="pl-pds">"</span></span>]]</pre></div>
+
+<pre><code>## [1] 688  11
+</code></pre>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-smi">L2</span>[[<span class="pl-s"><span class="pl-pds">"</span>names<span class="pl-pds">"</span></span>]]</pre></div>
+
+<pre><code>##  [1] "id"              "genotype"        "activity"       
+##  [4] "chow"            "metabolite_type" "metabolite"     
+##  [7] "value"           "logValue"        "zValue"         
+## [10] "zLogValue"       "important"
+</code></pre>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-smi">L2</span>[[<span class="pl-s"><span class="pl-pds">"</span>head<span class="pl-pds">"</span></span>]]</pre></div>
+
+<pre><code>## # A tibble: 6 × 11
+##      id genotype activity        chow metabolite_type       metabolite
+##   &lt;chr&gt;   &lt;fctr&gt;   &lt;fctr&gt;      &lt;fctr&gt;          &lt;fctr&gt;           &lt;fctr&gt;
+## 1  1101       WT Exercise Yellow (C8)  Acylcarnitines LC even AC total
+## 2  1102       WT Exercise Yellow (C8)  Acylcarnitines LC even AC total
+## 3  1103       WT Exercise Yellow (C8)  Acylcarnitines LC even AC total
+## 4  1184       WT Exercise Yellow (C8)  Acylcarnitines LC even AC total
+## 5  1185       WT Exercise Yellow (C8)  Acylcarnitines LC even AC total
+## 6  1186       WT Exercise Yellow (C8)  Acylcarnitines LC even AC total
+## # ... with 5 more variables: value &lt;dbl&gt;, logValue &lt;dbl&gt;, zValue &lt;dbl&gt;,
+## #   zLogValue &lt;dbl&gt;, important &lt;lgl&gt;
+</code></pre>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-smi">D2</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">L2</span>[[<span class="pl-s"><span class="pl-pds">"</span>data<span class="pl-pds">"</span></span>]] %<span class="pl-k">&gt;</span>% filter(<span class="pl-smi">metabolite</span> <span class="pl-k">!=</span> <span class="pl-s"><span class="pl-pds">"</span>LCAC total<span class="pl-pds">"</span></span>) %<span class="pl-k">&gt;</span>% mutate(<span class="pl-v">metabolite</span> <span class="pl-k">=</span> droplevels(<span class="pl-smi">metabolite</span>))</pre></div>
+
+<h2>
+<a id="user-content-check-data" class="anchor" href="#check-data" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Check data</h2>
+
+<p>Check the <code>value</code> and <code>logValue</code>.</p>
+
+<div class="highlight highlight-source-r"><pre>kable(summarizeOutcome(<span class="pl-smi">D1</span>))</pre></div>
+
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="right">Min.</th>
+<th align="right">X1st.Qu.</th>
+<th align="right">Median</th>
+<th align="right">Mean</th>
+<th align="right">X3rd.Qu.</th>
+<th align="right">Max.</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">nominal</td>
+<td align="right">0.0000001</td>
+<td align="right">1.06900</td>
+<td align="right">3.0360</td>
+<td align="right">28.4200</td>
+<td align="right">12.070</td>
+<td align="right">438.700</td>
+</tr>
+<tr>
+<td align="left">log-transform</td>
+<td align="right">-6.9550000</td>
+<td align="right">0.02907</td>
+<td align="right">0.4823</td>
+<td align="right">0.4017</td>
+<td align="right">1.082</td>
+<td align="right">2.642</td>
+</tr>
+</tbody>
+</table>
+
+<div class="highlight highlight-source-r"><pre>ggplot(<span class="pl-smi">D1</span>) <span class="pl-k">+</span>
+  aes(<span class="pl-v">x</span> <span class="pl-k">=</span> <span class="pl-smi">logValue</span>, <span class="pl-v">y</span> <span class="pl-k">=</span> <span class="pl-smi">metabolite</span>, <span class="pl-v">color</span> <span class="pl-k">=</span> <span class="pl-smi">activity</span>, <span class="pl-v">fill</span> <span class="pl-k">=</span> <span class="pl-smi">activity</span>) <span class="pl-k">+</span>
+  geom_jitter(<span class="pl-v">alpha</span> <span class="pl-k">=</span> <span class="pl-c1">1</span><span class="pl-k">/</span><span class="pl-c1">2</span>) <span class="pl-k">+</span>
+  facet_wrap(<span class="pl-k">~</span> <span class="pl-smi">genotype</span>) <span class="pl-k">+</span>
+  scale_x_continuous(<span class="pl-s"><span class="pl-pds">"</span>log10 scale<span class="pl-pds">"</span></span>) <span class="pl-k">+</span>
+  scale_y_discrete(<span class="pl-s"><span class="pl-pds">"</span>Metabolite<span class="pl-pds">"</span></span>) <span class="pl-k">+</span>
+  scale_color_brewer(<span class="pl-s"><span class="pl-pds">"</span>Activity<span class="pl-pds">"</span></span>, <span class="pl-v">palette</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>Set1<span class="pl-pds">"</span></span>) <span class="pl-k">+</span>
+  scale_fill_brewer(<span class="pl-s"><span class="pl-pds">"</span>Activity<span class="pl-pds">"</span></span>, <span class="pl-v">palette</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>Set1<span class="pl-pds">"</span></span>) <span class="pl-k">+</span>
+  theme_bw()</pre></div>
+
+<p><a href="///C://Users/chanb/Documents/Projects/GillinghamMetabolomics/figures/plotDataAim1-1.png" target="_blank"><img src="///C://Users/chanb/Documents/Projects/GillinghamMetabolomics/figures/plotDataAim1-1.png" alt="plot of chunk plotDataAim1" style="max-width:100%;"></a></p>
+
+<div class="highlight highlight-source-r"><pre>ggsave(<span class="pl-s"><span class="pl-pds">"</span>../figures/plotDataAim1.png<span class="pl-pds">"</span></span>, <span class="pl-v">width</span> <span class="pl-k">=</span> <span class="pl-c1">10</span>, <span class="pl-v">height</span> <span class="pl-k">=</span> <span class="pl-c1">8</span>, <span class="pl-v">units</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>in<span class="pl-pds">"</span></span>)</pre></div>
+
+<div class="highlight highlight-source-r"><pre>kable(summarizeOutcome(<span class="pl-smi">D2</span>))</pre></div>
+
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="right">Min.</th>
+<th align="right">X1st.Qu.</th>
+<th align="right">Median</th>
+<th align="right">Mean</th>
+<th align="right">X3rd.Qu.</th>
+<th align="right">Max.</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">nominal</td>
+<td align="right">0.0000001</td>
+<td align="right">0.84630</td>
+<td align="right">3.2620</td>
+<td align="right">24.7700</td>
+<td align="right">12.070</td>
+<td align="right">408.800</td>
+</tr>
+<tr>
+<td align="left">log-transform</td>
+<td align="right">-6.9550000</td>
+<td align="right">-0.07246</td>
+<td align="right">0.5134</td>
+<td align="right">0.4957</td>
+<td align="right">1.082</td>
+<td align="right">2.612</td>
+</tr>
+</tbody>
+</table>
+
+<div class="highlight highlight-source-r"><pre>ggplot(<span class="pl-smi">D2</span>) <span class="pl-k">+</span>
+  aes(<span class="pl-v">x</span> <span class="pl-k">=</span> <span class="pl-smi">logValue</span>, <span class="pl-v">y</span> <span class="pl-k">=</span> <span class="pl-smi">metabolite</span>, <span class="pl-v">color</span> <span class="pl-k">=</span> <span class="pl-smi">chow</span>, <span class="pl-v">fill</span> <span class="pl-k">=</span> <span class="pl-smi">chow</span>) <span class="pl-k">+</span>
+  geom_jitter(<span class="pl-v">alpha</span> <span class="pl-k">=</span> <span class="pl-c1">1</span><span class="pl-k">/</span><span class="pl-c1">2</span>) <span class="pl-k">+</span>
+  facet_wrap(<span class="pl-k">~</span> <span class="pl-smi">genotype</span>) <span class="pl-k">+</span>
+  scale_x_continuous(<span class="pl-s"><span class="pl-pds">"</span>log10 scale<span class="pl-pds">"</span></span>) <span class="pl-k">+</span>
+  scale_y_discrete(<span class="pl-s"><span class="pl-pds">"</span>Metabolite<span class="pl-pds">"</span></span>) <span class="pl-k">+</span>
+  scale_color_brewer(<span class="pl-s"><span class="pl-pds">"</span>Chow<span class="pl-pds">"</span></span>, <span class="pl-v">palette</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>Set1<span class="pl-pds">"</span></span>) <span class="pl-k">+</span>
+  scale_fill_brewer(<span class="pl-s"><span class="pl-pds">"</span>Chow<span class="pl-pds">"</span></span>, <span class="pl-v">palette</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>Set1<span class="pl-pds">"</span></span>) <span class="pl-k">+</span>
+  theme_bw()</pre></div>
+
+<p><a href="///C://Users/chanb/Documents/Projects/GillinghamMetabolomics/figures/plotDataAim2-1.png" target="_blank"><img src="///C://Users/chanb/Documents/Projects/GillinghamMetabolomics/figures/plotDataAim2-1.png" alt="plot of chunk plotDataAim2" style="max-width:100%;"></a></p>
+
+<div class="highlight highlight-source-r"><pre>ggsave(<span class="pl-s"><span class="pl-pds">"</span>../figures/plotDataAim2.png<span class="pl-pds">"</span></span>, <span class="pl-v">width</span> <span class="pl-k">=</span> <span class="pl-c1">10</span>, <span class="pl-v">height</span> <span class="pl-k">=</span> <span class="pl-c1">8</span>, <span class="pl-v">units</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>in<span class="pl-pds">"</span></span>)</pre></div>
+
+<p>Check fixed effects factors.</p>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-smi">D1</span> %<span class="pl-k">&gt;</span>% group_by(<span class="pl-smi">genotype</span>, <span class="pl-smi">activity</span>) %<span class="pl-k">&gt;</span>% <span class="pl-smi">tally</span></pre></div>
+
+<pre><code>## Source: local data frame [4 x 3]
+## Groups: genotype [?]
+## 
+##   genotype activity     n
+##     &lt;fctr&gt;   &lt;fctr&gt; &lt;int&gt;
+## 1       WT     Rest   142
+## 2       WT Exercise   165
+## 3       KO     Rest   150
+## 4       KO Exercise   165
+</code></pre>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-smi">D1</span> %<span class="pl-k">&gt;</span>% group_by(<span class="pl-smi">genotype</span>, <span class="pl-smi">metabolite</span>) %<span class="pl-k">&gt;</span>% <span class="pl-smi">tally</span> %<span class="pl-k">&gt;</span>% print(<span class="pl-v">n</span> <span class="pl-k">=</span> nrow(.))</pre></div>
+
+<pre><code>## Source: local data frame [30 x 3]
+## Groups: genotype [?]
+## 
+##    genotype       metabolite     n
+##      &lt;fctr&gt;           &lt;fctr&gt; &lt;int&gt;
+## 1        WT 3-HYDROXYBUTYRIC    20
+## 2        WT         arginine    21
+## 3        WT           CITRIC    20
+## 4        WT          FUMARIC    20
+## 5        WT        glutamine    21
+## 6        WT       isoleucine    21
+## 7        WT           LACTIC    20
+## 8        WT       LCAC total    21
+## 9        WT          leucine    21
+## 10       WT            MALIC    20
+## 11       WT       MCAC Total    21
+## 12       WT   METHYLSUCCINIC    20
+## 13       WT      PYRUVIC_P2P    20
+## 14       WT       SUCCINIC-2    20
+## 15       WT           valine    21
+## 16       KO 3-HYDROXYBUTYRIC    21
+## 17       KO         arginine    21
+## 18       KO           CITRIC    21
+## 19       KO          FUMARIC    21
+## 20       KO        glutamine    21
+## 21       KO       isoleucine    21
+## 22       KO           LACTIC    21
+## 23       KO       LCAC total    21
+## 24       KO          leucine    21
+## 25       KO            MALIC    21
+## 26       KO       MCAC Total    21
+## 27       KO   METHYLSUCCINIC    21
+## 28       KO      PYRUVIC_P2P    21
+## 29       KO       SUCCINIC-2    21
+## 30       KO           valine    21
+</code></pre>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-smi">D1</span> %<span class="pl-k">&gt;</span>% group_by(<span class="pl-smi">activity</span>, <span class="pl-smi">metabolite</span>) %<span class="pl-k">&gt;</span>% <span class="pl-smi">tally</span> %<span class="pl-k">&gt;</span>% print(<span class="pl-v">n</span> <span class="pl-k">=</span> nrow(.))</pre></div>
+
+<pre><code>## Source: local data frame [30 x 3]
+## Groups: activity [?]
+## 
+##    activity       metabolite     n
+##      &lt;fctr&gt;           &lt;fctr&gt; &lt;int&gt;
+## 1      Rest 3-HYDROXYBUTYRIC    19
+## 2      Rest         arginine    20
+## 3      Rest           CITRIC    19
+## 4      Rest          FUMARIC    19
+## 5      Rest        glutamine    20
+## 6      Rest       isoleucine    20
+## 7      Rest           LACTIC    19
+## 8      Rest       LCAC total    20
+## 9      Rest          leucine    20
+## 10     Rest            MALIC    19
+## 11     Rest       MCAC Total    20
+## 12     Rest   METHYLSUCCINIC    19
+## 13     Rest      PYRUVIC_P2P    19
+## 14     Rest       SUCCINIC-2    19
+## 15     Rest           valine    20
+## 16 Exercise 3-HYDROXYBUTYRIC    22
+## 17 Exercise         arginine    22
+## 18 Exercise           CITRIC    22
+## 19 Exercise          FUMARIC    22
+## 20 Exercise        glutamine    22
+## 21 Exercise       isoleucine    22
+## 22 Exercise           LACTIC    22
+## 23 Exercise       LCAC total    22
+## 24 Exercise          leucine    22
+## 25 Exercise            MALIC    22
+## 26 Exercise       MCAC Total    22
+## 27 Exercise   METHYLSUCCINIC    22
+## 28 Exercise      PYRUVIC_P2P    22
+## 29 Exercise       SUCCINIC-2    22
+## 30 Exercise           valine    22
+</code></pre>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-smi">D2</span> %<span class="pl-k">&gt;</span>% group_by(<span class="pl-smi">genotype</span>, <span class="pl-smi">chow</span>) %<span class="pl-k">&gt;</span>% <span class="pl-smi">tally</span></pre></div>
+
+<pre><code>## Source: local data frame [4 x 3]
+## Groups: genotype [?]
+## 
+##   genotype        chow     n
+##     &lt;fctr&gt;      &lt;fctr&gt; &lt;int&gt;
+## 1       WT  White (C7)   165
+## 2       WT Yellow (C8)   165
+## 3       KO  White (C7)   165
+## 4       KO Yellow (C8)   150
+</code></pre>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-smi">D2</span> %<span class="pl-k">&gt;</span>% group_by(<span class="pl-smi">genotype</span>, <span class="pl-smi">metabolite</span>) %<span class="pl-k">&gt;</span>% <span class="pl-smi">tally</span> %<span class="pl-k">&gt;</span>% print(<span class="pl-v">n</span> <span class="pl-k">=</span> nrow(.))</pre></div>
+
+<pre><code>## Source: local data frame [30 x 3]
+## Groups: genotype [?]
+## 
+##    genotype       metabolite     n
+##      &lt;fctr&gt;           &lt;fctr&gt; &lt;int&gt;
+## 1        WT 3-HYDROXYBUTYRIC    22
+## 2        WT         arginine    22
+## 3        WT           CITRIC    22
+## 4        WT          FUMARIC    22
+## 5        WT        glutamine    22
+## 6        WT       isoleucine    22
+## 7        WT           LACTIC    22
+## 8        WT LC even AC total    22
+## 9        WT  LC odd AC total    22
+## 10       WT          leucine    22
+## 11       WT            MALIC    22
+## 12       WT       MCAC total    22
+## 13       WT   METHYLSUCCINIC    22
+## 14       WT       SUCCINIC-2    22
+## 15       WT           valine    22
+## 16       KO 3-HYDROXYBUTYRIC    21
+## 17       KO         arginine    21
+## 18       KO           CITRIC    21
+## 19       KO          FUMARIC    21
+## 20       KO        glutamine    21
+## 21       KO       isoleucine    21
+## 22       KO           LACTIC    21
+## 23       KO LC even AC total    21
+## 24       KO  LC odd AC total    21
+## 25       KO          leucine    21
+## 26       KO            MALIC    21
+## 27       KO       MCAC total    21
+## 28       KO   METHYLSUCCINIC    21
+## 29       KO       SUCCINIC-2    21
+## 30       KO           valine    21
+</code></pre>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-smi">D2</span> %<span class="pl-k">&gt;</span>% group_by(<span class="pl-smi">chow</span>, <span class="pl-smi">metabolite</span>) %<span class="pl-k">&gt;</span>% <span class="pl-smi">tally</span> %<span class="pl-k">&gt;</span>% print(<span class="pl-v">n</span> <span class="pl-k">=</span> nrow(.))</pre></div>
+
+<pre><code>## Source: local data frame [30 x 3]
+## Groups: chow [?]
+## 
+##           chow       metabolite     n
+##         &lt;fctr&gt;           &lt;fctr&gt; &lt;int&gt;
+## 1   White (C7) 3-HYDROXYBUTYRIC    22
+## 2   White (C7)         arginine    22
+## 3   White (C7)           CITRIC    22
+## 4   White (C7)          FUMARIC    22
+## 5   White (C7)        glutamine    22
+## 6   White (C7)       isoleucine    22
+## 7   White (C7)           LACTIC    22
+## 8   White (C7) LC even AC total    22
+## 9   White (C7)  LC odd AC total    22
+## 10  White (C7)          leucine    22
+## 11  White (C7)            MALIC    22
+## 12  White (C7)       MCAC total    22
+## 13  White (C7)   METHYLSUCCINIC    22
+## 14  White (C7)       SUCCINIC-2    22
+## 15  White (C7)           valine    22
+## 16 Yellow (C8) 3-HYDROXYBUTYRIC    21
+## 17 Yellow (C8)         arginine    21
+## 18 Yellow (C8)           CITRIC    21
+## 19 Yellow (C8)          FUMARIC    21
+## 20 Yellow (C8)        glutamine    21
+## 21 Yellow (C8)       isoleucine    21
+## 22 Yellow (C8)           LACTIC    21
+## 23 Yellow (C8) LC even AC total    21
+## 24 Yellow (C8)  LC odd AC total    21
+## 25 Yellow (C8)          leucine    21
+## 26 Yellow (C8)            MALIC    21
+## 27 Yellow (C8)       MCAC total    21
+## 28 Yellow (C8)   METHYLSUCCINIC    21
+## 29 Yellow (C8)       SUCCINIC-2    21
+## 30 Yellow (C8)           valine    21
+</code></pre>
+
+<hr>
+
+<h1>
+<a id="user-content-model" class="anchor" href="#model" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Model</h1>
+
+<h2>
+<a id="user-content-methods" class="anchor" href="#methods" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Methods</h2>
+
+<p>A mixed linear effects model was estimated for each aim.
+Metabolomic values were transformed to the log-10 scale.
+Fixed effects for Aim 1 were activity, genotype, and metabolite.
+Fixed effects for Aim 2 were chow, genotype, and metabolite.
+All 2-way and 3-way interactions between fixed effects were included in the models.
+Animal ID was the random effect.
+A general correlation structure was assumed.
+Estimates for the contrasts comparing exercise versus rest for Aim 1, and yellow C8 chow versus white C7 chow for Aim 2, for each combination of genotype and metabolite are presented.
+P-values were adjusted to control the false discovery rate, the expected proportion of false discoveries amongst the rejected hypotheses.
+The data was analyzed using R version 3.3.2 (2016-10-31) and the <code>nlme</code> package version 3.1.128.</p>
+
+<h2>
+<a id="user-content-references" class="anchor" href="#references" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>References</h2>
+
+<p>Benjamini, Y., and Hochberg, Y.
+(1995).
+Controlling the false discovery rate: a practical and powerful approach to multiple testing.
+<em>Journal of the Royal Statistical Society Series B</em> 57, 289â€“300.</p>
+
+<div class="highlight highlight-source-r"><pre>citation()</pre></div>
+
+<pre><code>## 
+## To cite R in publications use:
+## 
+##   R Core Team (2016). R: A language and environment for
+##   statistical computing. R Foundation for Statistical Computing,
+##   Vienna, Austria. URL https://www.R-project.org/.
+## 
+## A BibTeX entry for LaTeX users is
+## 
+##   @Manual{,
+##     title = {R: A Language and Environment for Statistical Computing},
+##     author = {{R Core Team}},
+##     organization = {R Foundation for Statistical Computing},
+##     address = {Vienna, Austria},
+##     year = {2016},
+##     url = {https://www.R-project.org/},
+##   }
+## 
+## We have invested a lot of time and effort in creating R, please
+## cite it when using it for data analysis. See also
+## 'citation("pkgname")' for citing R packages.
+</code></pre>
+
+<div class="highlight highlight-source-r"><pre>citation(<span class="pl-s"><span class="pl-pds">"</span>nlme<span class="pl-pds">"</span></span>)</pre></div>
+
+<pre><code>## 
+## Pinheiro J, Bates D, DebRoy S, Sarkar D and R Core Team (2016).
+## _nlme: Linear and Nonlinear Mixed Effects Models_. R package
+## version 3.1-128, &lt;URL: http://CRAN.R-project.org/package=nlme&gt;.
+## 
+## A BibTeX entry for LaTeX users is
+## 
+##   @Manual{,
+##     title = {{nlme}: Linear and Nonlinear Mixed Effects Models},
+##     author = {Jose Pinheiro and Douglas Bates and Saikat DebRoy and Deepayan Sarkar and {R Core Team}},
+##     year = {2016},
+##     note = {R package version 3.1-128},
+##     url = {http://CRAN.R-project.org/package=nlme},
+##   }
+</code></pre>
+
+<h2>
+<a id="user-content-aim-1-exercise" class="anchor" href="#aim-1-exercise" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Aim 1: Exercise</h2>
+
+<p><strong>Rest versus exhaustive exercise</strong></p>
+
+<p>Estimate model.
+Specify the correlation structure using <code>cs</code>.
+Use <code>corSymm</code>, <em>general correlation matrix, with no additional structure</em>.</p>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-smi">fixed</span> <span class="pl-k">&lt;-</span> formula(<span class="pl-smi">logValue</span> <span class="pl-k">~</span>
+                   <span class="pl-smi">genotype</span> <span class="pl-k">+</span>
+                   <span class="pl-smi">activity</span> <span class="pl-k">+</span>
+                   <span class="pl-smi">metabolite</span> <span class="pl-k">+</span>
+                   <span class="pl-smi">genotype</span> <span class="pl-k">*</span> <span class="pl-smi">activity</span> <span class="pl-k">+</span>
+                   <span class="pl-smi">genotype</span> <span class="pl-k">*</span> <span class="pl-smi">metabolite</span> <span class="pl-k">+</span>
+                   <span class="pl-smi">activity</span> <span class="pl-k">*</span> <span class="pl-smi">metabolite</span> <span class="pl-k">+</span>
+                   <span class="pl-smi">activity</span> <span class="pl-k">*</span> <span class="pl-smi">metabolite</span> <span class="pl-k">*</span> <span class="pl-smi">genotype</span>)
+<span class="pl-smi">random</span> <span class="pl-k">&lt;-</span> formula(<span class="pl-k">~</span> <span class="pl-c1">1</span> <span class="pl-k">|</span> <span class="pl-smi">id</span>)
+<span class="pl-smi">ctrl</span> <span class="pl-k">&lt;-</span> lmeControl(<span class="pl-v">opt</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>optim<span class="pl-pds">"</span></span>,
+                   <span class="pl-v">maxIter</span> <span class="pl-k">=</span> <span class="pl-c1">500</span>, <span class="pl-v">msMaxIter</span> <span class="pl-k">=</span> <span class="pl-c1">500</span>)
+<span class="pl-smi">cs</span> <span class="pl-k">&lt;-</span>
+  corSymm(<span class="pl-v">form</span> <span class="pl-k">=</span> <span class="pl-smi">random</span>, <span class="pl-v">fixed</span> <span class="pl-k">=</span> <span class="pl-c1">FALSE</span>) %<span class="pl-k">&gt;</span>%
+  Initialize(<span class="pl-v">data</span> <span class="pl-k">=</span> <span class="pl-smi">D1</span>)
+Dim(<span class="pl-smi">cs</span>)</pre></div>
+
+<pre><code>## $N
+## [1] 622
+## 
+## $M
+## [1] 42
+## 
+## $maxLen
+## [1] 15
+## 
+## $sumLenSq
+## [1] 9274
+## 
+## $len
+## groups
+##   1170   1171   1172   1201   1202   1209   1210   1211   1212 1208B  
+##     15     15     15     15      7     15     15     15     15     15 
+##   1028   1029   1030   1033   1034   1046   1090   1091   1092   1094 
+##     15     15     15     15     15     15     15     15     15     15 
+##   1095   1134   1135   1150   1151   1163   1164 1204B  1205B  1206B  
+##     15     15     15     15     15     15     15     15     15     15 
+## 1207B    1010   1012   1014   1017   1018   1019   1060   1066   1073 
+##     15     15     15     15     15     15     15     15     15     15 
+##   1076   1077 
+##     15     15 
+## 
+## $start
+##  [1]  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22
+## [24] 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41
+</code></pre>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-smi">M1</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">D1</span> %<span class="pl-k">&gt;</span>% lme(<span class="pl-smi">fixed</span>, <span class="pl-v">data</span> <span class="pl-k">=</span> ., <span class="pl-v">random</span> <span class="pl-k">=</span> <span class="pl-smi">random</span>, <span class="pl-v">correlation</span> <span class="pl-k">=</span> <span class="pl-smi">cs</span>, <span class="pl-v">control</span> <span class="pl-k">=</span> <span class="pl-smi">ctrl</span>)
+<span class="pl-smi">M1</span> %<span class="pl-k">&gt;</span>% <span class="pl-smi">plot</span></pre></div>
+
+<p><a href="///C://Users/chanb/Documents/Projects/GillinghamMetabolomics/figures/lmeDiagnosticAim1-1.png" target="_blank"><img src="///C://Users/chanb/Documents/Projects/GillinghamMetabolomics/figures/lmeDiagnosticAim1-1.png" alt="plot of chunk lmeDiagnosticAim1" style="max-width:100%;"></a></p>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-smi">M1</span> %<span class="pl-k">&gt;</span>% <span class="pl-smi">ranef</span> %<span class="pl-k">&gt;</span>% <span class="pl-smi">plot</span></pre></div>
+
+<p><a href="///C://Users/chanb/Documents/Projects/GillinghamMetabolomics/figures/lmeDiagnosticAim1-2.png" target="_blank"><img src="///C://Users/chanb/Documents/Projects/GillinghamMetabolomics/figures/lmeDiagnosticAim1-2.png" alt="plot of chunk lmeDiagnosticAim1" style="max-width:100%;"></a></p>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-smi">M1</span> %<span class="pl-k">&gt;</span>% <span class="pl-smi">anova</span> %<span class="pl-k">&gt;</span>% <span class="pl-smi">kable</span></pre></div>
+
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="right">numDF</th>
+<th align="right">denDF</th>
+<th align="right">F-value</th>
+<th align="right">p-value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">(Intercept)</td>
+<td align="right">1</td>
+<td align="right">524</td>
+<td align="right">1.191794e+04</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr>
+<td align="left">genotype</td>
+<td align="right">1</td>
+<td align="right">38</td>
+<td align="right">1.551776e+04</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr>
+<td align="left">activity</td>
+<td align="right">1</td>
+<td align="right">38</td>
+<td align="right">1.443118e+04</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr>
+<td align="left">metabolite</td>
+<td align="right">14</td>
+<td align="right">524</td>
+<td align="right">1.421757e+06</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr>
+<td align="left">genotype:activity</td>
+<td align="right">1</td>
+<td align="right">38</td>
+<td align="right">1.304574e-01</td>
+<td align="right">0.7199587</td>
+</tr>
+<tr>
+<td align="left">genotype:metabolite</td>
+<td align="right">14</td>
+<td align="right">524</td>
+<td align="right">3.671942e+00</td>
+<td align="right">0.0000071</td>
+</tr>
+<tr>
+<td align="left">activity:metabolite</td>
+<td align="right">14</td>
+<td align="right">524</td>
+<td align="right">5.168172e-01</td>
+<td align="right">0.9238893</td>
+</tr>
+<tr>
+<td align="left">genotype:activity:metabolite</td>
+<td align="right">14</td>
+<td align="right">524</td>
+<td align="right">1.586157e+00</td>
+<td align="right">0.0786948</td>
+</tr>
+</tbody>
+</table>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-smi">M1</span> %<span class="pl-k">&gt;</span>% tidy(<span class="pl-v">effects</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>fixed<span class="pl-pds">"</span></span>) %<span class="pl-k">&gt;</span>% <span class="pl-smi">kable</span></pre></div>
+
+<table>
+<thead>
+<tr>
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">(Intercept)</td>
+<td align="right">0.7800090</td>
+<td align="right">0.2425439</td>
+<td align="right">3.2159495</td>
+<td align="right">0.0013804</td>
+</tr>
+<tr>
+<td align="left">genotypeKO</td>
+<td align="right">0.1111820</td>
+<td align="right">0.3343264</td>
+<td align="right">0.3325551</td>
+<td align="right">0.7412978</td>
+</tr>
+<tr>
+<td align="left">activityExercise</td>
+<td align="right">0.2776503</td>
+<td align="right">0.3270487</td>
+<td align="right">0.8489572</td>
+<td align="right">0.4012218</td>
+</tr>
+<tr>
+<td align="left">metabolitearginine</td>
+<td align="right">-0.3534200</td>
+<td align="right">0.3331907</td>
+<td align="right">-1.0607138</td>
+<td align="right">0.2893086</td>
+</tr>
+<tr>
+<td align="left">metaboliteCITRIC</td>
+<td align="right">0.2699043</td>
+<td align="right">0.3417847</td>
+<td align="right">0.7896910</td>
+<td align="right">0.4300654</td>
+</tr>
+<tr>
+<td align="left">metaboliteFUMARIC</td>
+<td align="right">-1.7086321</td>
+<td align="right">0.3417847</td>
+<td align="right">-4.9991472</td>
+<td align="right">0.0000008</td>
+</tr>
+<tr>
+<td align="left">metaboliteglutamine</td>
+<td align="right">1.2559135</td>
+<td align="right">0.3331907</td>
+<td align="right">3.7693533</td>
+<td align="right">0.0001823</td>
+</tr>
+<tr>
+<td align="left">metaboliteisoleucine</td>
+<td align="right">-0.5368570</td>
+<td align="right">0.3331907</td>
+<td align="right">-1.6112603</td>
+<td align="right">0.1077252</td>
+</tr>
+<tr>
+<td align="left">metaboliteLACTIC</td>
+<td align="right">1.6755101</td>
+<td align="right">0.3417847</td>
+<td align="right">4.9022379</td>
+<td align="right">0.0000013</td>
+</tr>
+<tr>
+<td align="left">metaboliteLCAC total</td>
+<td align="right">0.1169659</td>
+<td align="right">0.3331907</td>
+<td align="right">0.3510480</td>
+<td align="right">0.7256935</td>
+</tr>
+<tr>
+<td align="left">metaboliteleucine</td>
+<td align="right">-0.3706275</td>
+<td align="right">0.3331907</td>
+<td align="right">-1.1123584</td>
+<td align="right">0.2664942</td>
+</tr>
+<tr>
+<td align="left">metaboliteMALIC</td>
+<td align="right">0.1387884</td>
+<td align="right">0.3417847</td>
+<td align="right">0.4060697</td>
+<td align="right">0.6848572</td>
+</tr>
+<tr>
+<td align="left">metaboliteMCAC Total</td>
+<td align="right">-1.2621451</td>
+<td align="right">0.3331907</td>
+<td align="right">-3.7880560</td>
+<td align="right">0.0001694</td>
+</tr>
+<tr>
+<td align="left">metaboliteMETHYLSUCCINIC</td>
+<td align="right">-2.0968883</td>
+<td align="right">0.3417847</td>
+<td align="right">-6.1351140</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr>
+<td align="left">metabolitePYRUVIC_P2P</td>
+<td align="right">-0.9377425</td>
+<td align="right">0.3417847</td>
+<td align="right">-2.7436642</td>
+<td align="right">0.0062840</td>
+</tr>
+<tr>
+<td align="left">metaboliteSUCCINIC-2</td>
+<td align="right">0.3515290</td>
+<td align="right">0.3417847</td>
+<td align="right">1.0285100</td>
+<td align="right">0.3041845</td>
+</tr>
+<tr>
+<td align="left">metabolitevaline</td>
+<td align="right">-0.3999409</td>
+<td align="right">0.3331907</td>
+<td align="right">-1.2003362</td>
+<td align="right">0.2305512</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:activityExercise</td>
+<td align="right">-0.2908137</td>
+<td align="right">0.4303946</td>
+<td align="right">-0.6756909</td>
+<td align="right">0.5033284</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:metabolitearginine</td>
+<td align="right">-0.0846091</td>
+<td align="right">0.4649206</td>
+<td align="right">-0.1819861</td>
+<td align="right">0.8556640</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:metaboliteCITRIC</td>
+<td align="right">-0.1808884</td>
+<td align="right">0.4711177</td>
+<td align="right">-0.3839559</td>
+<td align="right">0.7011669</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:metaboliteFUMARIC</td>
+<td align="right">-0.1459773</td>
+<td align="right">0.4711177</td>
+<td align="right">-0.3098531</td>
+<td align="right">0.7567959</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:metaboliteglutamine</td>
+<td align="right">-0.0934294</td>
+<td align="right">0.4649206</td>
+<td align="right">-0.2009579</td>
+<td align="right">0.8408095</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:metaboliteisoleucine</td>
+<td align="right">-0.1551750</td>
+<td align="right">0.4649206</td>
+<td align="right">-0.3337666</td>
+<td align="right">0.7386892</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:metaboliteLACTIC</td>
+<td align="right">-0.2130032</td>
+<td align="right">0.4711177</td>
+<td align="right">-0.4521231</td>
+<td align="right">0.6513674</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:metaboliteLCAC total</td>
+<td align="right">0.2585752</td>
+<td align="right">0.4649206</td>
+<td align="right">0.5561706</td>
+<td align="right">0.5783316</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:metaboliteleucine</td>
+<td align="right">-0.1519815</td>
+<td align="right">0.4649206</td>
+<td align="right">-0.3268978</td>
+<td align="right">0.7438758</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:metaboliteMALIC</td>
+<td align="right">-0.1775990</td>
+<td align="right">0.4711177</td>
+<td align="right">-0.3769738</td>
+<td align="right">0.7063457</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:metaboliteMCAC Total</td>
+<td align="right">-0.2590321</td>
+<td align="right">0.4649206</td>
+<td align="right">-0.5571534</td>
+<td align="right">0.5776605</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:metaboliteMETHYLSUCCINIC</td>
+<td align="right">-0.3177490</td>
+<td align="right">0.4711177</td>
+<td align="right">-0.6744576</td>
+<td align="right">0.5003179</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:metabolitePYRUVIC_P2P</td>
+<td align="right">-2.5513187</td>
+<td align="right">0.4711177</td>
+<td align="right">-5.4154588</td>
+<td align="right">0.0000001</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:metaboliteSUCCINIC-2</td>
+<td align="right">-0.1502577</td>
+<td align="right">0.4711177</td>
+<td align="right">-0.3189388</td>
+<td align="right">0.7499000</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:metabolitevaline</td>
+<td align="right">-0.1344934</td>
+<td align="right">0.4649206</td>
+<td align="right">-0.2892825</td>
+<td align="right">0.7724796</td>
+</tr>
+<tr>
+<td align="left">activityExercise:metabolitearginine</td>
+<td align="right">-0.5175298</td>
+<td align="right">0.4545255</td>
+<td align="right">-1.1386155</td>
+<td align="right">0.2553838</td>
+</tr>
+<tr>
+<td align="left">activityExercise:metaboliteCITRIC</td>
+<td align="right">-0.2035335</td>
+<td align="right">0.4608624</td>
+<td align="right">-0.4416361</td>
+<td align="right">0.6589347</td>
+</tr>
+<tr>
+<td align="left">activityExercise:metaboliteFUMARIC</td>
+<td align="right">-0.2704327</td>
+<td align="right">0.4608624</td>
+<td align="right">-0.5867970</td>
+<td align="right">0.5575927</td>
+</tr>
+<tr>
+<td align="left">activityExercise:metaboliteglutamine</td>
+<td align="right">-0.3376680</td>
+<td align="right">0.4545255</td>
+<td align="right">-0.7429021</td>
+<td align="right">0.4578739</td>
+</tr>
+<tr>
+<td align="left">activityExercise:metaboliteisoleucine</td>
+<td align="right">-0.2834727</td>
+<td align="right">0.4545255</td>
+<td align="right">-0.6236674</td>
+<td align="right">0.5331174</td>
+</tr>
+<tr>
+<td align="left">activityExercise:metaboliteLACTIC</td>
+<td align="right">-0.2581078</td>
+<td align="right">0.4608624</td>
+<td align="right">-0.5600539</td>
+<td align="right">0.5756820</td>
+</tr>
+<tr>
+<td align="left">activityExercise:metaboliteLCAC total</td>
+<td align="right">-0.4170798</td>
+<td align="right">0.4545255</td>
+<td align="right">-0.9176157</td>
+<td align="right">0.3592422</td>
+</tr>
+<tr>
+<td align="left">activityExercise:metaboliteleucine</td>
+<td align="right">-0.3161141</td>
+<td align="right">0.4545255</td>
+<td align="right">-0.6954815</td>
+<td align="right">0.4870619</td>
+</tr>
+<tr>
+<td align="left">activityExercise:metaboliteMALIC</td>
+<td align="right">-0.1439485</td>
+<td align="right">0.4608624</td>
+<td align="right">-0.3123460</td>
+<td align="right">0.7549019</td>
+</tr>
+<tr>
+<td align="left">activityExercise:metaboliteMCAC Total</td>
+<td align="right">-0.3740108</td>
+<td align="right">0.4545255</td>
+<td align="right">-0.8228598</td>
+<td align="right">0.4109620</td>
+</tr>
+<tr>
+<td align="left">activityExercise:metaboliteMETHYLSUCCINIC</td>
+<td align="right">-0.3997036</td>
+<td align="right">0.4608624</td>
+<td align="right">-0.8672948</td>
+<td align="right">0.3861775</td>
+</tr>
+<tr>
+<td align="left">activityExercise:metabolitePYRUVIC_P2P</td>
+<td align="right">-1.3300154</td>
+<td align="right">0.4608624</td>
+<td align="right">-2.8859271</td>
+<td align="right">0.0040635</td>
+</tr>
+<tr>
+<td align="left">activityExercise:metaboliteSUCCINIC-2</td>
+<td align="right">-0.3087569</td>
+<td align="right">0.4608624</td>
+<td align="right">-0.6699545</td>
+<td align="right">0.5031819</td>
+</tr>
+<tr>
+<td align="left">activityExercise:metabolitevaline</td>
+<td align="right">-0.2501914</td>
+<td align="right">0.4545255</td>
+<td align="right">-0.5504453</td>
+<td align="right">0.5822485</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:activityExercise:metabolitearginine</td>
+<td align="right">0.3748411</td>
+<td align="right">0.5791115</td>
+<td align="right">0.6472694</td>
+<td align="right">0.5177411</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:activityExercise:metaboliteCITRIC</td>
+<td align="right">0.2206466</td>
+<td align="right">0.6134004</td>
+<td align="right">0.3597105</td>
+<td align="right">0.7192086</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:activityExercise:metaboliteFUMARIC</td>
+<td align="right">0.1920021</td>
+<td align="right">0.5978287</td>
+<td align="right">0.3211658</td>
+<td align="right">0.7482128</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:activityExercise:metaboliteglutamine</td>
+<td align="right">0.1846255</td>
+<td align="right">0.5811352</td>
+<td align="right">0.3176980</td>
+<td align="right">0.7508406</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:activityExercise:metaboliteisoleucine</td>
+<td align="right">0.3597893</td>
+<td align="right">0.5935793</td>
+<td align="right">0.6061352</td>
+<td align="right">0.5446875</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:activityExercise:metaboliteLACTIC</td>
+<td align="right">0.2242323</td>
+<td align="right">0.6059730</td>
+<td align="right">0.3700368</td>
+<td align="right">0.7115046</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:activityExercise:metaboliteLCAC total</td>
+<td align="right">0.3760820</td>
+<td align="right">0.6082746</td>
+<td align="right">0.6182767</td>
+<td align="right">0.5366616</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:activityExercise:metaboliteleucine</td>
+<td align="right">-0.4842152</td>
+<td align="right">0.6065173</td>
+<td align="right">-0.7983536</td>
+<td align="right">0.4250270</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:activityExercise:metaboliteMALIC</td>
+<td align="right">0.1908207</td>
+<td align="right">0.6066488</td>
+<td align="right">0.3145489</td>
+<td align="right">0.7532294</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:activityExercise:metaboliteMCAC Total</td>
+<td align="right">0.3701566</td>
+<td align="right">0.6055197</td>
+<td align="right">0.6113039</td>
+<td align="right">0.5412635</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:activityExercise:metaboliteMETHYLSUCCINIC</td>
+<td align="right">0.5323673</td>
+<td align="right">0.6026102</td>
+<td align="right">0.8834356</td>
+<td align="right">0.3774061</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:activityExercise:metabolitePYRUVIC_P2P</td>
+<td align="right">2.1692702</td>
+<td align="right">0.6193383</td>
+<td align="right">3.5025608</td>
+<td align="right">0.0005002</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:activityExercise:metaboliteSUCCINIC-2</td>
+<td align="right">0.1089766</td>
+<td align="right">0.6191092</td>
+<td align="right">0.1760217</td>
+<td align="right">0.8603449</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:activityExercise:metabolitevaline</td>
+<td align="right">0.4109778</td>
+<td align="right">0.5960044</td>
+<td align="right">0.6895551</td>
+<td align="right">0.4907793</td>
+</tr>
+</tbody>
+</table>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-smi">M1</span> %<span class="pl-k">&gt;</span>% tidy(<span class="pl-v">effects</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>fixed<span class="pl-pds">"</span></span>) %<span class="pl-k">&gt;</span>% write.csv(<span class="pl-v">file</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>../data/processed/lmeFixedCoefAim1.csv<span class="pl-pds">"</span></span>, <span class="pl-v">row.names</span> <span class="pl-k">=</span> <span class="pl-c1">FALSE</span>)</pre></div>
+
+<p>Calculate contrasts of <em>Exercise vs Rest</em> given metabolite and genotype.</p>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-smi">metabolites</span> <span class="pl-k">&lt;-</span> c(<span class="pl-s"><span class="pl-pds">"</span>3-HYDROXYBUTYRIC<span class="pl-pds">"</span></span>,
+                 <span class="pl-s"><span class="pl-pds">"</span>arginine<span class="pl-pds">"</span></span>,
+                 <span class="pl-s"><span class="pl-pds">"</span>CITRIC<span class="pl-pds">"</span></span>,  <span class="pl-c"><span class="pl-c">#</span> Returns "Singularity in backsolve at level 0, block 1" error</span>
+                 <span class="pl-s"><span class="pl-pds">"</span>FUMARIC<span class="pl-pds">"</span></span>,
+                 <span class="pl-s"><span class="pl-pds">"</span>glutamine<span class="pl-pds">"</span></span>,
+                 <span class="pl-s"><span class="pl-pds">"</span>isoleucine<span class="pl-pds">"</span></span>,
+                 <span class="pl-s"><span class="pl-pds">"</span>LACTIC<span class="pl-pds">"</span></span>,
+                 <span class="pl-s"><span class="pl-pds">"</span>LCAC total<span class="pl-pds">"</span></span>,  <span class="pl-c"><span class="pl-c">#</span> Returns "Singularity in backsolve at level 0, block 1" error</span>
+                 <span class="pl-s"><span class="pl-pds">"</span>leucine<span class="pl-pds">"</span></span>,
+                 <span class="pl-s"><span class="pl-pds">"</span>MALIC<span class="pl-pds">"</span></span>,
+                 <span class="pl-s"><span class="pl-pds">"</span>MCAC Total<span class="pl-pds">"</span></span>,
+                 <span class="pl-s"><span class="pl-pds">"</span>METHYLSUCCINIC<span class="pl-pds">"</span></span>,
+                 <span class="pl-s"><span class="pl-pds">"</span>PYRUVIC_P2P<span class="pl-pds">"</span></span>,
+                 <span class="pl-s"><span class="pl-pds">"</span>SUCCINIC-2<span class="pl-pds">"</span></span>,
+                 <span class="pl-s"><span class="pl-pds">"</span>valine<span class="pl-pds">"</span></span>)
+<span class="pl-smi">ctrl</span> <span class="pl-k">&lt;-</span> lmeControl(<span class="pl-v">opt</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>optim<span class="pl-pds">"</span></span>,
+                   <span class="pl-v">maxIter</span> <span class="pl-k">=</span> <span class="pl-c1">5000</span>, <span class="pl-v">msMaxIter</span> <span class="pl-k">=</span> <span class="pl-c1">5000</span>,
+                   <span class="pl-v">tolerance</span> <span class="pl-k">=</span> <span class="pl-c1">1e-6</span>, <span class="pl-v">niterEM</span> <span class="pl-k">=</span> <span class="pl-c1">25</span>, <span class="pl-v">msMaxEval</span> <span class="pl-k">=</span> <span class="pl-c1">200</span>, <span class="pl-v">msTol</span> <span class="pl-k">=</span> <span class="pl-c1">1e-4</span>)
+<span class="pl-smi">Ftests</span> <span class="pl-k">&lt;-</span> runClusters(<span class="pl-smi">D1</span>, <span class="pl-smi">metabolites</span>, <span class="pl-smi">fixed</span>, <span class="pl-s"><span class="pl-pds">"</span>activity<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Exercise<span class="pl-pds">"</span></span>, <span class="pl-smi">ctrl</span>)</pre></div>
+
+<pre><code>## Loading required package: data.table
+</code></pre>
+
+<pre><code>## -------------------------------------------------------------------------
+</code></pre>
+
+<pre><code>## data.table + dplyr code now lives in dtplyr.
+## Please library(dtplyr)!
+</code></pre>
+
+<pre><code>## -------------------------------------------------------------------------
+</code></pre>
+
+<pre><code>## 
+## Attaching package: 'data.table'
+</code></pre>
+
+<pre><code>## The following objects are masked from 'package:dplyr':
+## 
+##     between, last
+</code></pre>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-smi">Ftests</span> %<span class="pl-k">&gt;</span>% <span class="pl-smi">kable</span></pre></div>
+
+<table>
+<thead>
+<tr>
+<th align="left">contrast</th>
+<th align="left">metabolite</th>
+<th align="left">genotype</th>
+<th align="right">beta</th>
+<th align="right">se</th>
+<th align="right">numDF</th>
+<th align="right">denDF</th>
+<th align="right">F.value</th>
+<th align="right">p.value</th>
+<th align="right">lowerCL</th>
+<th align="right">upperCL</th>
+<th align="right">p.adjustBon</th>
+<th align="right">p.adjustBH</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">Exercise</td>
+<td align="left">3-HYDROXYBUTYRIC</td>
+<td align="left">WT</td>
+<td align="right">0.2775026</td>
+<td align="right">0.3301726</td>
+<td align="right">1</td>
+<td align="right">38</td>
+<td align="right">0.7064025</td>
+<td align="right">0.4058982</td>
+<td align="right">-0.3696237</td>
+<td align="right">0.9246290</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9989720</td>
+</tr>
+<tr>
+<td align="left">Exercise</td>
+<td align="left">arginine</td>
+<td align="left">WT</td>
+<td align="right">-0.2398795</td>
+<td align="right">0.3209714</td>
+<td align="right">1</td>
+<td align="right">38</td>
+<td align="right">0.5585389</td>
+<td align="right">0.4594494</td>
+<td align="right">-0.8689719</td>
+<td align="right">0.3892130</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9989720</td>
+</tr>
+<tr>
+<td align="left">Exercise</td>
+<td align="left">CITRIC</td>
+<td align="left">WT</td>
+<td align="right">0.0739691</td>
+<td align="right">0.3301723</td>
+<td align="right">1</td>
+<td align="right">38</td>
+<td align="right">0.0501903</td>
+<td align="right">0.8239326</td>
+<td align="right">-0.5731566</td>
+<td align="right">0.7210949</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9989720</td>
+</tr>
+<tr>
+<td align="left">Exercise</td>
+<td align="left">FUMARIC</td>
+<td align="left">WT</td>
+<td align="right">0.0070699</td>
+<td align="right">0.3301723</td>
+<td align="right">1</td>
+<td align="right">38</td>
+<td align="right">0.0004585</td>
+<td align="right">0.9830284</td>
+<td align="right">-0.6400560</td>
+<td align="right">0.6541958</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9989720</td>
+</tr>
+<tr>
+<td align="left">Exercise</td>
+<td align="left">glutamine</td>
+<td align="left">WT</td>
+<td align="right">-0.0600176</td>
+<td align="right">0.3209716</td>
+<td align="right">1</td>
+<td align="right">38</td>
+<td align="right">0.0349643</td>
+<td align="right">0.8526654</td>
+<td align="right">-0.6891104</td>
+<td align="right">0.5690752</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9989720</td>
+</tr>
+<tr>
+<td align="left">Exercise</td>
+<td align="left">isoleucine</td>
+<td align="left">WT</td>
+<td align="right">-0.0058224</td>
+<td align="right">0.3209715</td>
+<td align="right">1</td>
+<td align="right">38</td>
+<td align="right">0.0003291</td>
+<td align="right">0.9856221</td>
+<td align="right">-0.6349150</td>
+<td align="right">0.6232702</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9989720</td>
+</tr>
+<tr>
+<td align="left">Exercise</td>
+<td align="left">LACTIC</td>
+<td align="left">WT</td>
+<td align="right">0.0193948</td>
+<td align="right">0.3301725</td>
+<td align="right">1</td>
+<td align="right">38</td>
+<td align="right">0.0034506</td>
+<td align="right">0.9534659</td>
+<td align="right">-0.6277315</td>
+<td align="right">0.6665211</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9989720</td>
+</tr>
+<tr>
+<td align="left">Exercise</td>
+<td align="left">LCAC total</td>
+<td align="left">WT</td>
+<td align="right">-0.1394294</td>
+<td align="right">0.3209715</td>
+<td align="right">1</td>
+<td align="right">38</td>
+<td align="right">0.1887018</td>
+<td align="right">0.6664561</td>
+<td align="right">-0.7685219</td>
+<td align="right">0.4896631</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9989720</td>
+</tr>
+<tr>
+<td align="left">Exercise</td>
+<td align="left">leucine</td>
+<td align="left">WT</td>
+<td align="right">-0.0384637</td>
+<td align="right">0.3209714</td>
+<td align="right">1</td>
+<td align="right">38</td>
+<td align="right">0.0143605</td>
+<td align="right">0.9052449</td>
+<td align="right">-0.6675561</td>
+<td align="right">0.5906286</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9989720</td>
+</tr>
+<tr>
+<td align="left">Exercise</td>
+<td align="left">MALIC</td>
+<td align="left">WT</td>
+<td align="right">0.1335541</td>
+<td align="right">0.3301725</td>
+<td align="right">1</td>
+<td align="right">38</td>
+<td align="right">0.1636185</td>
+<td align="right">0.6881145</td>
+<td align="right">-0.5135722</td>
+<td align="right">0.7806804</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9989720</td>
+</tr>
+<tr>
+<td align="left">Exercise</td>
+<td align="left">MCAC Total</td>
+<td align="left">WT</td>
+<td align="right">-0.0963604</td>
+<td align="right">0.3209715</td>
+<td align="right">1</td>
+<td align="right">38</td>
+<td align="right">0.0901290</td>
+<td align="right">0.7656495</td>
+<td align="right">-0.7254531</td>
+<td align="right">0.5327322</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9989720</td>
+</tr>
+<tr>
+<td align="left">Exercise</td>
+<td align="left">METHYLSUCCINIC</td>
+<td align="left">WT</td>
+<td align="right">-0.1222010</td>
+<td align="right">0.3301725</td>
+<td align="right">1</td>
+<td align="right">38</td>
+<td align="right">0.1369833</td>
+<td align="right">0.7133536</td>
+<td align="right">-0.7693272</td>
+<td align="right">0.5249252</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9989720</td>
+</tr>
+<tr>
+<td align="left">Exercise</td>
+<td align="left">PYRUVIC_P2P</td>
+<td align="left">WT</td>
+<td align="right">-1.0525127</td>
+<td align="right">0.3301723</td>
+<td align="right">1</td>
+<td align="right">38</td>
+<td align="right">10.1618649</td>
+<td align="right">0.0028675</td>
+<td align="right">-1.6996386</td>
+<td align="right">-0.4053869</td>
+<td align="right">0.0860244</td>
+<td align="right">0.0860244</td>
+</tr>
+<tr>
+<td align="left">Exercise</td>
+<td align="left">SUCCINIC-2</td>
+<td align="left">WT</td>
+<td align="right">-0.0312542</td>
+<td align="right">0.3301721</td>
+<td align="right">1</td>
+<td align="right">38</td>
+<td align="right">0.0089606</td>
+<td align="right">0.9250820</td>
+<td align="right">-0.6783796</td>
+<td align="right">0.6158712</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9989720</td>
+</tr>
+<tr>
+<td align="left">Exercise</td>
+<td align="left">valine</td>
+<td align="left">WT</td>
+<td align="right">0.0274589</td>
+<td align="right">0.3209714</td>
+<td align="right">1</td>
+<td align="right">38</td>
+<td align="right">0.0073187</td>
+<td align="right">0.9322738</td>
+<td align="right">-0.6016334</td>
+<td align="right">0.6565512</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9989720</td>
+</tr>
+<tr>
+<td align="left">Exercise</td>
+<td align="left">3-HYDROXYBUTYRIC</td>
+<td align="left">KO</td>
+<td align="right">0.0616776</td>
+<td align="right">0.3185345</td>
+<td align="right">1</td>
+<td align="right">38</td>
+<td align="right">0.0374923</td>
+<td align="right">0.8474974</td>
+<td align="right">-0.5626384</td>
+<td align="right">0.6859937</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9989720</td>
+</tr>
+<tr>
+<td align="left">Exercise</td>
+<td align="left">arginine</td>
+<td align="left">KO</td>
+<td align="right">-0.2605428</td>
+<td align="right">0.3221752</td>
+<td align="right">1</td>
+<td align="right">38</td>
+<td align="right">0.6539945</td>
+<td align="right">0.4237226</td>
+<td align="right">-0.8919946</td>
+<td align="right">0.3709089</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9989720</td>
+</tr>
+<tr>
+<td align="left">Exercise</td>
+<td align="left">CITRIC</td>
+<td align="left">KO</td>
+<td align="right">-0.0510394</td>
+<td align="right">0.3001199</td>
+<td align="right">1</td>
+<td align="right">38</td>
+<td align="right">0.0289215</td>
+<td align="right">0.8658626</td>
+<td align="right">-0.6392636</td>
+<td align="right">0.5371848</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9989720</td>
+</tr>
+<tr>
+<td align="left">Exercise</td>
+<td align="left">FUMARIC</td>
+<td align="left">KO</td>
+<td align="right">-0.4386049</td>
+<td align="right">0.2949607</td>
+<td align="right">1</td>
+<td align="right">38</td>
+<td align="right">2.2111528</td>
+<td align="right">0.1452674</td>
+<td align="right">-1.0167172</td>
+<td align="right">0.1395074</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9989720</td>
+</tr>
+<tr>
+<td align="left">Exercise</td>
+<td align="left">glutamine</td>
+<td align="left">KO</td>
+<td align="right">-0.2908682</td>
+<td align="right">0.3064468</td>
+<td align="right">1</td>
+<td align="right">38</td>
+<td align="right">0.9009122</td>
+<td align="right">0.3485350</td>
+<td align="right">-0.8914928</td>
+<td align="right">0.3097564</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9989720</td>
+</tr>
+<tr>
+<td align="left">Exercise</td>
+<td align="left">isoleucine</td>
+<td align="left">KO</td>
+<td align="right">0.1530777</td>
+<td align="right">0.3120161</td>
+<td align="right">1</td>
+<td align="right">38</td>
+<td align="right">0.2406967</td>
+<td align="right">0.6265246</td>
+<td align="right">-0.4584625</td>
+<td align="right">0.7646180</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9989720</td>
+</tr>
+<tr>
+<td align="left">Exercise</td>
+<td align="left">LACTIC</td>
+<td align="left">KO</td>
+<td align="right">-0.0004029</td>
+<td align="right">0.3106943</td>
+<td align="right">1</td>
+<td align="right">38</td>
+<td align="right">0.0000017</td>
+<td align="right">0.9989720</td>
+<td align="right">-0.6093526</td>
+<td align="right">0.6085467</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9989720</td>
+</tr>
+<tr>
+<td align="left">Exercise</td>
+<td align="left">LCAC total</td>
+<td align="left">KO</td>
+<td align="right">-0.0266989</td>
+<td align="right">0.3182934</td>
+<td align="right">1</td>
+<td align="right">38</td>
+<td align="right">0.0070361</td>
+<td align="right">0.9335910</td>
+<td align="right">-0.6505424</td>
+<td align="right">0.5971446</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9989720</td>
+</tr>
+<tr>
+<td align="left">Exercise</td>
+<td align="left">leucine</td>
+<td align="left">KO</td>
+<td align="right">-0.7551267</td>
+<td align="right">0.3168767</td>
+<td align="right">1</td>
+<td align="right">38</td>
+<td align="right">5.6788329</td>
+<td align="right">0.0222750</td>
+<td align="right">-1.3761935</td>
+<td align="right">-0.1340598</td>
+<td align="right">0.6682498</td>
+<td align="right">0.2227499</td>
+</tr>
+<tr>
+<td align="left">Exercise</td>
+<td align="left">MALIC</td>
+<td align="left">KO</td>
+<td align="right">0.0569946</td>
+<td align="right">0.3187203</td>
+<td align="right">1</td>
+<td align="right">38</td>
+<td align="right">0.0319777</td>
+<td align="right">0.8590266</td>
+<td align="right">-0.5676858</td>
+<td align="right">0.6816749</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9989720</td>
+</tr>
+<tr>
+<td align="left">Exercise</td>
+<td align="left">MCAC Total</td>
+<td align="left">KO</td>
+<td align="right">0.0535780</td>
+<td align="right">0.2990264</td>
+<td align="right">1</td>
+<td align="right">38</td>
+<td align="right">0.0321037</td>
+<td align="right">0.8587523</td>
+<td align="right">-0.5325030</td>
+<td align="right">0.6396591</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9989720</td>
+</tr>
+<tr>
+<td align="left">Exercise</td>
+<td align="left">METHYLSUCCINIC</td>
+<td align="left">KO</td>
+<td align="right">0.1824572</td>
+<td align="right">0.3126031</td>
+<td align="right">1</td>
+<td align="right">38</td>
+<td align="right">0.3406711</td>
+<td align="right">0.5628908</td>
+<td align="right">-0.4302337</td>
+<td align="right">0.7951481</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9989720</td>
+</tr>
+<tr>
+<td align="left">Exercise</td>
+<td align="left">PYRUVIC_P2P</td>
+<td align="left">KO</td>
+<td align="right">0.7999029</td>
+<td align="right">0.3229338</td>
+<td align="right">1</td>
+<td align="right">38</td>
+<td align="right">6.1354664</td>
+<td align="right">0.0178141</td>
+<td align="right">0.1669643</td>
+<td align="right">1.4328414</td>
+<td align="right">0.5344231</td>
+<td align="right">0.2227499</td>
+</tr>
+<tr>
+<td align="left">Exercise</td>
+<td align="left">SUCCINIC-2</td>
+<td align="left">KO</td>
+<td align="right">-0.1315532</td>
+<td align="right">0.3150714</td>
+<td align="right">1</td>
+<td align="right">38</td>
+<td align="right">0.1743352</td>
+<td align="right">0.6786371</td>
+<td align="right">-0.7490818</td>
+<td align="right">0.4859753</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9989720</td>
+</tr>
+<tr>
+<td align="left">Exercise</td>
+<td align="left">valine</td>
+<td align="left">KO</td>
+<td align="right">0.1171038</td>
+<td align="right">0.3023087</td>
+<td align="right">1</td>
+<td align="right">38</td>
+<td align="right">0.1500517</td>
+<td align="right">0.7006472</td>
+<td align="right">-0.4754104</td>
+<td align="right">0.7096181</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9989720</td>
+</tr>
+</tbody>
+</table>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-smi">Ftests</span> %<span class="pl-k">&gt;</span>% write.csv(<span class="pl-v">file</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>../data/processed/contrastsAim1.csv<span class="pl-pds">"</span></span>, <span class="pl-v">row.names</span> <span class="pl-k">=</span> <span class="pl-c1">FALSE</span>)</pre></div>
+
+<p>Click <a href="///C://Users/chanb/Documents/Projects/GillinghamMetabolomics/figures/plotDataAim1.png">link to figure</a>.</p>
+
+<h2>
+<a id="user-content-aim-2-chow" class="anchor" href="#aim-2-chow" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Aim 2: Chow</h2>
+
+<p><strong>MCT chow versus experimental chow with triheptanoin</strong></p>
+
+<p>Estimate model.
+Specify the correlation structure using <code>cs</code>.
+Use <code>corSymm</code>, <em>general correlation matrix, with no additional structure</em>.</p>
+
+<div class="highlight highlight-source-r"><pre>rm(<span class="pl-smi">M</span>)</pre></div>
+
+<pre><code>## Warning in rm(M): object 'M' not found
+</code></pre>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-smi">fixed</span> <span class="pl-k">&lt;-</span> formula(<span class="pl-smi">logValue</span> <span class="pl-k">~</span>
+                   <span class="pl-smi">genotype</span> <span class="pl-k">+</span>
+                   <span class="pl-smi">chow</span> <span class="pl-k">+</span>
+                   <span class="pl-smi">metabolite</span> <span class="pl-k">+</span>
+                   <span class="pl-smi">genotype</span> <span class="pl-k">*</span> <span class="pl-smi">chow</span> <span class="pl-k">+</span>
+                   <span class="pl-smi">genotype</span> <span class="pl-k">*</span> <span class="pl-smi">metabolite</span> <span class="pl-k">+</span>
+                   <span class="pl-smi">chow</span> <span class="pl-k">*</span> <span class="pl-smi">metabolite</span> <span class="pl-k">+</span>
+                   <span class="pl-smi">chow</span> <span class="pl-k">*</span> <span class="pl-smi">metabolite</span> <span class="pl-k">*</span> <span class="pl-smi">genotype</span>)
+<span class="pl-smi">cs</span> <span class="pl-k">&lt;-</span>
+  corSymm(<span class="pl-v">form</span> <span class="pl-k">=</span> <span class="pl-smi">random</span>, <span class="pl-v">fixed</span> <span class="pl-k">=</span> <span class="pl-c1">FALSE</span>) %<span class="pl-k">&gt;</span>%
+  Initialize(<span class="pl-v">data</span> <span class="pl-k">=</span> <span class="pl-smi">D2</span>)
+Dim(<span class="pl-smi">cs</span>)</pre></div>
+
+<pre><code>## $N
+## [1] 645
+## 
+## $M
+## [1] 43
+## 
+## $maxLen
+## [1] 15
+## 
+## $sumLenSq
+## [1] 9675
+## 
+## $len
+## groups
+##       1101       1102       1103       1184       1185       1186 
+##         15         15         15         15         15         15 
+##       1195       1196       1197       1203 1192/1198B       1176 
+##         15         15         15         15         15         15 
+##       1177       1179       1180       1190       1191       1193 
+##         15         15         15         15         15         15 
+##       1194       1199       1200 1192A/1198       1107       1113 
+##         15         15         15         15         15         15 
+##       1114       1115       1117       1118       1119       1204 
+##         15         15         15         15         15         15 
+##       1205       1206       1120       1126       1127       1128 
+##         15         15         15         15         15         15 
+##       1142       1143       1144       1145       1146       1158 
+##         15         15         15         15         15         15 
+##       1159 
+##         15 
+## 
+## $start
+##  [1]  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22
+## [24] 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42
+</code></pre>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-smi">M2</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">D2</span> %<span class="pl-k">&gt;</span>% lme(<span class="pl-smi">fixed</span>, <span class="pl-v">data</span> <span class="pl-k">=</span> ., <span class="pl-v">random</span> <span class="pl-k">=</span> <span class="pl-smi">random</span>, <span class="pl-v">correlation</span> <span class="pl-k">=</span> <span class="pl-smi">cs</span>, <span class="pl-v">control</span> <span class="pl-k">=</span> <span class="pl-smi">ctrl</span>)
+<span class="pl-smi">M2</span> %<span class="pl-k">&gt;</span>% <span class="pl-smi">plot</span>   </pre></div>
+
+<p><a href="///C://Users/chanb/Documents/Projects/GillinghamMetabolomics/figures/lmeDiagnosticAim2-1.png" target="_blank"><img src="///C://Users/chanb/Documents/Projects/GillinghamMetabolomics/figures/lmeDiagnosticAim2-1.png" alt="plot of chunk lmeDiagnosticAim2" style="max-width:100%;"></a></p>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-smi">M2</span> %<span class="pl-k">&gt;</span>% <span class="pl-smi">ranef</span> %<span class="pl-k">&gt;</span>% <span class="pl-smi">plot</span></pre></div>
+
+<p><a href="///C://Users/chanb/Documents/Projects/GillinghamMetabolomics/figures/lmeDiagnosticAim2-2.png" target="_blank"><img src="///C://Users/chanb/Documents/Projects/GillinghamMetabolomics/figures/lmeDiagnosticAim2-2.png" alt="plot of chunk lmeDiagnosticAim2" style="max-width:100%;"></a></p>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-smi">M2</span> %<span class="pl-k">&gt;</span>% <span class="pl-smi">anova</span> %<span class="pl-k">&gt;</span>% <span class="pl-smi">kable</span></pre></div>
+
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="right">numDF</th>
+<th align="right">denDF</th>
+<th align="right">F-value</th>
+<th align="right">p-value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">(Intercept)</td>
+<td align="right">1</td>
+<td align="right">546</td>
+<td align="right">415.9494734</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr>
+<td align="left">genotype</td>
+<td align="right">1</td>
+<td align="right">39</td>
+<td align="right">3.0570448</td>
+<td align="right">0.0882563</td>
+</tr>
+<tr>
+<td align="left">chow</td>
+<td align="right">1</td>
+<td align="right">39</td>
+<td align="right">0.2409806</td>
+<td align="right">0.6262498</td>
+</tr>
+<tr>
+<td align="left">metabolite</td>
+<td align="right">14</td>
+<td align="right">546</td>
+<td align="right">119.3776751</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr>
+<td align="left">genotype:chow</td>
+<td align="right">1</td>
+<td align="right">39</td>
+<td align="right">0.1355383</td>
+<td align="right">0.7147483</td>
+</tr>
+<tr>
+<td align="left">genotype:metabolite</td>
+<td align="right">14</td>
+<td align="right">546</td>
+<td align="right">2.9765501</td>
+<td align="right">0.0002059</td>
+</tr>
+<tr>
+<td align="left">chow:metabolite</td>
+<td align="right">14</td>
+<td align="right">546</td>
+<td align="right">1.9867430</td>
+<td align="right">0.0169424</td>
+</tr>
+<tr>
+<td align="left">genotype:chow:metabolite</td>
+<td align="right">14</td>
+<td align="right">546</td>
+<td align="right">0.5476801</td>
+<td align="right">0.9044801</td>
+</tr>
+</tbody>
+</table>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-smi">M2</span> %<span class="pl-k">&gt;</span>% tidy(<span class="pl-v">effects</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>fixed<span class="pl-pds">"</span></span>) %<span class="pl-k">&gt;</span>% <span class="pl-smi">kable</span></pre></div>
+
+<table>
+<thead>
+<tr>
+<th align="left">term</th>
+<th align="right">estimate</th>
+<th align="right">std.error</th>
+<th align="right">statistic</th>
+<th align="right">p.value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">(Intercept)</td>
+<td align="right">0.2557123</td>
+<td align="right">0.1706269</td>
+<td align="right">1.4986637</td>
+<td align="right">0.1345388</td>
+</tr>
+<tr>
+<td align="left">genotypeKO</td>
+<td align="right">0.6626366</td>
+<td align="right">0.2413028</td>
+<td align="right">2.7460787</td>
+<td align="right">0.0090773</td>
+</tr>
+<tr>
+<td align="left">chowYellow (C8)</td>
+<td align="right">0.7699814</td>
+<td align="right">0.2412757</td>
+<td align="right">3.1912930</td>
+<td align="right">0.0027968</td>
+</tr>
+<tr>
+<td align="left">metabolitearginine</td>
+<td align="right">0.1236579</td>
+<td align="right">0.2397472</td>
+<td align="right">0.5157845</td>
+<td align="right">0.6062137</td>
+</tr>
+<tr>
+<td align="left">metaboliteCITRIC</td>
+<td align="right">0.0395968</td>
+<td align="right">0.2397472</td>
+<td align="right">0.1651607</td>
+<td align="right">0.8688787</td>
+</tr>
+<tr>
+<td align="left">metaboliteFUMARIC</td>
+<td align="right">-1.0066586</td>
+<td align="right">0.2397472</td>
+<td align="right">-4.1988337</td>
+<td align="right">0.0000313</td>
+</tr>
+<tr>
+<td align="left">metaboliteglutamine</td>
+<td align="right">1.7844750</td>
+<td align="right">0.2397472</td>
+<td align="right">7.4431526</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr>
+<td align="left">metaboliteisoleucine</td>
+<td align="right">-0.0276526</td>
+<td align="right">0.2397472</td>
+<td align="right">-0.1153409</td>
+<td align="right">0.9082174</td>
+</tr>
+<tr>
+<td align="left">metaboliteLACTIC</td>
+<td align="right">2.1516434</td>
+<td align="right">0.2397472</td>
+<td align="right">8.9746340</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr>
+<td align="left">metaboliteLC even AC total</td>
+<td align="right">0.4067190</td>
+<td align="right">0.2397472</td>
+<td align="right">1.6964496</td>
+<td align="right">0.0903707</td>
+</tr>
+<tr>
+<td align="left">metaboliteLC odd AC total</td>
+<td align="right">-0.5647188</td>
+<td align="right">0.2397472</td>
+<td align="right">-2.3554763</td>
+<td align="right">0.0188517</td>
+</tr>
+<tr>
+<td align="left">metaboliteleucine</td>
+<td align="right">0.0958975</td>
+<td align="right">0.2397472</td>
+<td align="right">0.3999942</td>
+<td align="right">0.6893172</td>
+</tr>
+<tr>
+<td align="left">metaboliteMALIC</td>
+<td align="right">0.7454015</td>
+<td align="right">0.2397472</td>
+<td align="right">3.1091146</td>
+<td align="right">0.0019743</td>
+</tr>
+<tr>
+<td align="left">metaboliteMCAC total</td>
+<td align="right">-0.7176324</td>
+<td align="right">0.2397472</td>
+<td align="right">-2.9932877</td>
+<td align="right">0.0028848</td>
+</tr>
+<tr>
+<td align="left">metaboliteMETHYLSUCCINIC</td>
+<td align="right">-1.4975941</td>
+<td align="right">0.2397472</td>
+<td align="right">-6.2465549</td>
+<td align="right">0.0000000</td>
+</tr>
+<tr>
+<td align="left">metaboliteSUCCINIC-2</td>
+<td align="right">0.9674087</td>
+<td align="right">0.2397472</td>
+<td align="right">4.0351197</td>
+<td align="right">0.0000624</td>
+</tr>
+<tr>
+<td align="left">metabolitevaline</td>
+<td align="right">0.1464322</td>
+<td align="right">0.2397472</td>
+<td align="right">0.6107777</td>
+<td align="right">0.5416009</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:chowYellow (C8)</td>
+<td align="right">-0.7195963</td>
+<td align="right">0.3454765</td>
+<td align="right">-2.0829096</td>
+<td align="right">0.0438641</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:metabolitearginine</td>
+<td align="right">-0.6736076</td>
+<td align="right">0.3390537</td>
+<td align="right">-1.9867281</td>
+<td align="right">0.0474519</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:metaboliteCITRIC</td>
+<td align="right">0.0088516</td>
+<td align="right">0.3390537</td>
+<td align="right">0.0261069</td>
+<td align="right">0.9791816</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:metaboliteFUMARIC</td>
+<td align="right">-0.9692841</td>
+<td align="right">0.3390537</td>
+<td align="right">-2.8587918</td>
+<td align="right">0.0044150</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:metaboliteglutamine</td>
+<td align="right">-0.7667286</td>
+<td align="right">0.3390537</td>
+<td align="right">-2.2613779</td>
+<td align="right">0.0241285</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:metaboliteisoleucine</td>
+<td align="right">-0.7247245</td>
+<td align="right">0.3390537</td>
+<td align="right">-2.1374914</td>
+<td align="right">0.0330016</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:metaboliteLACTIC</td>
+<td align="right">-0.8237407</td>
+<td align="right">0.3390537</td>
+<td align="right">-2.4295284</td>
+<td align="right">0.0154399</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:metaboliteLC even AC total</td>
+<td align="right">-0.1083540</td>
+<td align="right">0.3390537</td>
+<td align="right">-0.3195776</td>
+<td align="right">0.7494108</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:metaboliteLC odd AC total</td>
+<td align="right">0.0839471</td>
+<td align="right">0.3390537</td>
+<td align="right">0.2475924</td>
+<td align="right">0.8045429</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:metaboliteleucine</td>
+<td align="right">-0.6996743</td>
+<td align="right">0.3390537</td>
+<td align="right">-2.0636088</td>
+<td align="right">0.0395268</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:metaboliteMALIC</td>
+<td align="right">-0.7985721</td>
+<td align="right">0.3390537</td>
+<td align="right">-2.3552966</td>
+<td align="right">0.0188607</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:metaboliteMCAC total</td>
+<td align="right">-0.5409875</td>
+<td align="right">0.3390537</td>
+<td align="right">-1.5955804</td>
+<td align="right">0.1111611</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:metaboliteMETHYLSUCCINIC</td>
+<td align="right">-0.9184289</td>
+<td align="right">0.3390537</td>
+<td align="right">-2.7088003</td>
+<td align="right">0.0069646</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:metaboliteSUCCINIC-2</td>
+<td align="right">-0.7749538</td>
+<td align="right">0.3390537</td>
+<td align="right">-2.2856372</td>
+<td align="right">0.0226578</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:metabolitevaline</td>
+<td align="right">-0.7162648</td>
+<td align="right">0.3390537</td>
+<td align="right">-2.1125405</td>
+<td align="right">0.0350935</td>
+</tr>
+<tr>
+<td align="left">chowYellow (C8):metabolitearginine</td>
+<td align="right">-0.9468610</td>
+<td align="right">0.3390210</td>
+<td align="right">-2.7929271</td>
+<td align="right">0.0054066</td>
+</tr>
+<tr>
+<td align="left">chowYellow (C8):metaboliteCITRIC</td>
+<td align="right">-0.7139710</td>
+<td align="right">0.3391922</td>
+<td align="right">-2.1049159</td>
+<td align="right">0.0357549</td>
+</tr>
+<tr>
+<td align="left">chowYellow (C8):metaboliteFUMARIC</td>
+<td align="right">-0.9925098</td>
+<td align="right">0.3391791</td>
+<td align="right">-2.9262116</td>
+<td align="right">0.0035740</td>
+</tr>
+<tr>
+<td align="left">chowYellow (C8):metaboliteglutamine</td>
+<td align="right">-0.8104025</td>
+<td align="right">0.3390211</td>
+<td align="right">-2.3904194</td>
+<td align="right">0.0171671</td>
+</tr>
+<tr>
+<td align="left">chowYellow (C8):metaboliteisoleucine</td>
+<td align="right">-0.8104984</td>
+<td align="right">0.3389674</td>
+<td align="right">-2.3910805</td>
+<td align="right">0.0171365</td>
+</tr>
+<tr>
+<td align="left">chowYellow (C8):metaboliteLACTIC</td>
+<td align="right">-0.8026215</td>
+<td align="right">0.3390326</td>
+<td align="right">-2.3673874</td>
+<td align="right">0.0182618</td>
+</tr>
+<tr>
+<td align="left">chowYellow (C8):metaboliteLC even AC total</td>
+<td align="right">-0.7918304</td>
+<td align="right">0.3390009</td>
+<td align="right">-2.3357768</td>
+<td align="right">0.0198640</td>
+</tr>
+<tr>
+<td align="left">chowYellow (C8):metaboliteLC odd AC total</td>
+<td align="right">-1.0038426</td>
+<td align="right">0.3390444</td>
+<td align="right">-2.9608001</td>
+<td align="right">0.0032018</td>
+</tr>
+<tr>
+<td align="left">chowYellow (C8):metaboliteleucine</td>
+<td align="right">-0.7319926</td>
+<td align="right">0.3389926</td>
+<td align="right">-2.1593175</td>
+<td align="right">0.0312603</td>
+</tr>
+<tr>
+<td align="left">chowYellow (C8):metaboliteMALIC</td>
+<td align="right">-0.8326841</td>
+<td align="right">0.3389548</td>
+<td align="right">-2.4566229</td>
+<td align="right">0.0143351</td>
+</tr>
+<tr>
+<td align="left">chowYellow (C8):metaboliteMCAC total</td>
+<td align="right">-0.7803260</td>
+<td align="right">0.3389648</td>
+<td align="right">-2.3020859</td>
+<td align="right">0.0217057</td>
+</tr>
+<tr>
+<td align="left">chowYellow (C8):metaboliteMETHYLSUCCINIC</td>
+<td align="right">-0.2853319</td>
+<td align="right">0.3390376</td>
+<td align="right">-0.8415936</td>
+<td align="right">0.4003839</td>
+</tr>
+<tr>
+<td align="left">chowYellow (C8):metaboliteSUCCINIC-2</td>
+<td align="right">-0.7671707</td>
+<td align="right">0.3389786</td>
+<td align="right">-2.2631833</td>
+<td align="right">0.0240162</td>
+</tr>
+<tr>
+<td align="left">chowYellow (C8):metabolitevaline</td>
+<td align="right">-0.6360404</td>
+<td align="right">0.3389930</td>
+<td align="right">-1.8762643</td>
+<td align="right">0.0611522</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:chowYellow (C8):metabolitearginine</td>
+<td align="right">0.8121624</td>
+<td align="right">0.4853933</td>
+<td align="right">1.6732049</td>
+<td align="right">0.0948597</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:chowYellow (C8):metaboliteCITRIC</td>
+<td align="right">0.7135483</td>
+<td align="right">0.4855524</td>
+<td align="right">1.4695597</td>
+<td align="right">0.1422570</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:chowYellow (C8):metaboliteFUMARIC</td>
+<td align="right">1.0057104</td>
+<td align="right">0.4855114</td>
+<td align="right">2.0714457</td>
+<td align="right">0.0387863</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:chowYellow (C8):metaboliteglutamine</td>
+<td align="right">0.8248820</td>
+<td align="right">0.4854301</td>
+<td align="right">1.6992806</td>
+<td align="right">0.0898359</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:chowYellow (C8):metaboliteisoleucine</td>
+<td align="right">0.7308927</td>
+<td align="right">0.4853931</td>
+<td align="right">1.5057750</td>
+<td align="right">0.1327032</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:chowYellow (C8):metaboliteLACTIC</td>
+<td align="right">0.6278246</td>
+<td align="right">0.4854377</td>
+<td align="right">1.2933166</td>
+<td align="right">0.1964485</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:chowYellow (C8):metaboliteLC even AC total</td>
+<td align="right">0.7853468</td>
+<td align="right">0.4854179</td>
+<td align="right">1.6178777</td>
+<td align="right">0.1062665</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:chowYellow (C8):metaboliteLC odd AC total</td>
+<td align="right">0.2578189</td>
+<td align="right">0.4854388</td>
+<td align="right">0.5311048</td>
+<td align="right">0.5955621</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:chowYellow (C8):metaboliteleucine</td>
+<td align="right">0.6853448</td>
+<td align="right">0.4854044</td>
+<td align="right">1.4119048</td>
+<td align="right">0.1585477</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:chowYellow (C8):metaboliteMALIC</td>
+<td align="right">0.6476682</td>
+<td align="right">0.4853865</td>
+<td align="right">1.3343351</td>
+<td align="right">0.1826503</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:chowYellow (C8):metaboliteMCAC total</td>
+<td align="right">0.7331850</td>
+<td align="right">0.4853894</td>
+<td align="right">1.5105087</td>
+<td align="right">0.1314922</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:chowYellow (C8):metaboliteMETHYLSUCCINIC</td>
+<td align="right">0.9724115</td>
+<td align="right">0.4854458</td>
+<td align="right">2.0031311</td>
+<td align="right">0.0456570</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:chowYellow (C8):metaboliteSUCCINIC-2</td>
+<td align="right">0.6680937</td>
+<td align="right">0.4854040</td>
+<td align="right">1.3763664</td>
+<td align="right">0.1692724</td>
+</tr>
+<tr>
+<td align="left">genotypeKO:chowYellow (C8):metabolitevaline</td>
+<td align="right">0.7844518</td>
+<td align="right">0.4854076</td>
+<td align="right">1.6160682</td>
+<td align="right">0.1066572</td>
+</tr>
+</tbody>
+</table>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-smi">M2</span> %<span class="pl-k">&gt;</span>% tidy(<span class="pl-v">effects</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>fixed<span class="pl-pds">"</span></span>) %<span class="pl-k">&gt;</span>% write.csv(<span class="pl-v">file</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>../data/processed/lmeFixedCoefAim2.csv<span class="pl-pds">"</span></span>, <span class="pl-v">row.names</span> <span class="pl-k">=</span> <span class="pl-c1">FALSE</span>)</pre></div>
+
+<p>Calculate contrasts of <em>Yellow (C8) vs White (C7)</em> given metabolite and genotype.</p>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-smi">metabolites</span> <span class="pl-k">&lt;-</span> c(<span class="pl-s"><span class="pl-pds">"</span>3-HYDROXYBUTYRIC<span class="pl-pds">"</span></span>,
+                 <span class="pl-s"><span class="pl-pds">"</span>arginine<span class="pl-pds">"</span></span>,
+                 <span class="pl-s"><span class="pl-pds">"</span>CITRIC<span class="pl-pds">"</span></span>,
+                 <span class="pl-s"><span class="pl-pds">"</span>FUMARIC<span class="pl-pds">"</span></span>,
+                 <span class="pl-s"><span class="pl-pds">"</span>glutamine<span class="pl-pds">"</span></span>,
+                 <span class="pl-s"><span class="pl-pds">"</span>isoleucine<span class="pl-pds">"</span></span>,
+                 <span class="pl-s"><span class="pl-pds">"</span>LACTIC<span class="pl-pds">"</span></span>,
+                 <span class="pl-s"><span class="pl-pds">"</span>LC even AC total<span class="pl-pds">"</span></span>,
+                 <span class="pl-s"><span class="pl-pds">"</span>LC odd AC total<span class="pl-pds">"</span></span>,
+                 <span class="pl-s"><span class="pl-pds">"</span>leucine<span class="pl-pds">"</span></span>,
+                 <span class="pl-s"><span class="pl-pds">"</span>MALIC<span class="pl-pds">"</span></span>,
+                 <span class="pl-s"><span class="pl-pds">"</span>MCAC total<span class="pl-pds">"</span></span>,
+                 <span class="pl-s"><span class="pl-pds">"</span>METHYLSUCCINIC<span class="pl-pds">"</span></span>,
+                 <span class="pl-s"><span class="pl-pds">"</span>SUCCINIC-2<span class="pl-pds">"</span></span>,
+                 <span class="pl-s"><span class="pl-pds">"</span>valine<span class="pl-pds">"</span></span>)
+<span class="pl-smi">ctrl</span> <span class="pl-k">&lt;-</span> lmeControl(<span class="pl-v">opt</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>optim<span class="pl-pds">"</span></span>,
+                   <span class="pl-v">maxIter</span> <span class="pl-k">=</span> <span class="pl-c1">5000</span>, <span class="pl-v">msMaxIter</span> <span class="pl-k">=</span> <span class="pl-c1">5000</span>)
+<span class="pl-smi">Ftests</span> <span class="pl-k">&lt;-</span> runClusters(<span class="pl-smi">D2</span>, <span class="pl-smi">metabolites</span>, <span class="pl-smi">fixed</span>, <span class="pl-s"><span class="pl-pds">"</span>chow<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>Yellow (C8)<span class="pl-pds">"</span></span>, <span class="pl-smi">ctrl</span>)
+<span class="pl-smi">Ftests</span> %<span class="pl-k">&gt;</span>% <span class="pl-smi">kable</span></pre></div>
+
+<table>
+<thead>
+<tr>
+<th align="left">contrast</th>
+<th align="left">metabolite</th>
+<th align="left">genotype</th>
+<th align="right">beta</th>
+<th align="right">se</th>
+<th align="right">numDF</th>
+<th align="right">denDF</th>
+<th align="right">F.value</th>
+<th align="right">p.value</th>
+<th align="right">lowerCL</th>
+<th align="right">upperCL</th>
+<th align="right">p.adjustBon</th>
+<th align="right">p.adjustBH</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="left">Yellow (C8)</td>
+<td align="left">3-HYDROXYBUTYRIC</td>
+<td align="left">WT</td>
+<td align="right">0.8126004</td>
+<td align="right">0.1998129</td>
+<td align="right">1</td>
+<td align="right">39</td>
+<td align="right">16.5389180</td>
+<td align="right">0.0002242</td>
+<td align="right">0.4209743</td>
+<td align="right">1.2042264</td>
+<td align="right">0.0067246</td>
+<td align="right">0.0067246</td>
+</tr>
+<tr>
+<td align="left">Yellow (C8)</td>
+<td align="left">arginine</td>
+<td align="left">WT</td>
+<td align="right">-0.4911018</td>
+<td align="right">0.1880121</td>
+<td align="right">1</td>
+<td align="right">39</td>
+<td align="right">6.8229360</td>
+<td align="right">0.0127124</td>
+<td align="right">-0.8595988</td>
+<td align="right">-0.1226048</td>
+<td align="right">0.3813729</td>
+<td align="right">0.0953432</td>
+</tr>
+<tr>
+<td align="left">Yellow (C8)</td>
+<td align="left">CITRIC</td>
+<td align="left">WT</td>
+<td align="right">0.1807133</td>
+<td align="right">0.2059303</td>
+<td align="right">1</td>
+<td align="right">39</td>
+<td align="right">0.7700866</td>
+<td align="right">0.3855644</td>
+<td align="right">-0.2229027</td>
+<td align="right">0.5843292</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9689396</td>
+</tr>
+<tr>
+<td align="left">Yellow (C8)</td>
+<td align="left">FUMARIC</td>
+<td align="left">WT</td>
+<td align="right">-0.1767071</td>
+<td align="right">0.2157144</td>
+<td align="right">1</td>
+<td align="right">39</td>
+<td align="right">0.6710422</td>
+<td align="right">0.4176664</td>
+<td align="right">-0.5994995</td>
+<td align="right">0.2460853</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9689396</td>
+</tr>
+<tr>
+<td align="left">Yellow (C8)</td>
+<td align="left">glutamine</td>
+<td align="left">WT</td>
+<td align="right">-0.2260085</td>
+<td align="right">0.2151606</td>
+<td align="right">1</td>
+<td align="right">39</td>
+<td align="right">1.1033769</td>
+<td align="right">0.2999918</td>
+<td align="right">-0.6477155</td>
+<td align="right">0.1956986</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9689396</td>
+</tr>
+<tr>
+<td align="left">Yellow (C8)</td>
+<td align="left">isoleucine</td>
+<td align="left">WT</td>
+<td align="right">-0.4078165</td>
+<td align="right">0.1972463</td>
+<td align="right">1</td>
+<td align="right">39</td>
+<td align="right">4.2747599</td>
+<td align="right">0.0453630</td>
+<td align="right">-0.7944121</td>
+<td align="right">-0.0212208</td>
+<td align="right">1.0000000</td>
+<td align="right">0.2539585</td>
+</tr>
+<tr>
+<td align="left">Yellow (C8)</td>
+<td align="left">LACTIC</td>
+<td align="left">WT</td>
+<td align="right">-0.0607346</td>
+<td align="right">0.2092739</td>
+<td align="right">1</td>
+<td align="right">39</td>
+<td align="right">0.0842252</td>
+<td align="right">0.7731888</td>
+<td align="right">-0.4709040</td>
+<td align="right">0.3494348</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9717831</td>
+</tr>
+<tr>
+<td align="left">Yellow (C8)</td>
+<td align="left">LC even AC total</td>
+<td align="left">WT</td>
+<td align="right">-0.0520729</td>
+<td align="right">0.2157453</td>
+<td align="right">1</td>
+<td align="right">39</td>
+<td align="right">0.0582560</td>
+<td align="right">0.8105385</td>
+<td align="right">-0.4749258</td>
+<td align="right">0.3707801</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9717831</td>
+</tr>
+<tr>
+<td align="left">Yellow (C8)</td>
+<td align="left">LC odd AC total</td>
+<td align="left">WT</td>
+<td align="right">-0.0774215</td>
+<td align="right">0.2053708</td>
+<td align="right">1</td>
+<td align="right">39</td>
+<td align="right">0.1421168</td>
+<td align="right">0.7082292</td>
+<td align="right">-0.4799408</td>
+<td align="right">0.3250979</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9717831</td>
+</tr>
+<tr>
+<td align="left">Yellow (C8)</td>
+<td align="left">leucine</td>
+<td align="left">WT</td>
+<td align="right">-0.3145672</td>
+<td align="right">0.2175582</td>
+<td align="right">1</td>
+<td align="right">39</td>
+<td align="right">2.0906229</td>
+<td align="right">0.1561945</td>
+<td align="right">-0.7409735</td>
+<td align="right">0.1118391</td>
+<td align="right">1.0000000</td>
+<td align="right">0.6694051</td>
+</tr>
+<tr>
+<td align="left">Yellow (C8)</td>
+<td align="left">MALIC</td>
+<td align="left">WT</td>
+<td align="right">-0.0798437</td>
+<td align="right">0.2111131</td>
+<td align="right">1</td>
+<td align="right">39</td>
+<td align="right">0.1430381</td>
+<td align="right">0.7073301</td>
+<td align="right">-0.4936178</td>
+<td align="right">0.3339303</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9717831</td>
+</tr>
+<tr>
+<td align="left">Yellow (C8)</td>
+<td align="left">MCAC total</td>
+<td align="left">WT</td>
+<td align="right">-0.1843998</td>
+<td align="right">0.2047749</td>
+<td align="right">1</td>
+<td align="right">39</td>
+<td align="right">0.8108999</td>
+<td align="right">0.3733816</td>
+<td align="right">-0.5857513</td>
+<td align="right">0.2169517</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9689396</td>
+</tr>
+<tr>
+<td align="left">Yellow (C8)</td>
+<td align="left">METHYLSUCCINIC</td>
+<td align="left">WT</td>
+<td align="right">0.4407724</td>
+<td align="right">0.2187025</td>
+<td align="right">1</td>
+<td align="right">39</td>
+<td align="right">4.0618272</td>
+<td align="right">0.0507917</td>
+<td align="right">0.0121235</td>
+<td align="right">0.8694214</td>
+<td align="right">1.0000000</td>
+<td align="right">0.2539585</td>
+</tr>
+<tr>
+<td align="left">Yellow (C8)</td>
+<td align="left">SUCCINIC-2</td>
+<td align="left">WT</td>
+<td align="right">0.0039693</td>
+<td align="right">0.2123689</td>
+<td align="right">1</td>
+<td align="right">39</td>
+<td align="right">0.0003493</td>
+<td align="right">0.9851832</td>
+<td align="right">-0.4122662</td>
+<td align="right">0.4202048</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9954994</td>
+</tr>
+<tr>
+<td align="left">Yellow (C8)</td>
+<td align="left">valine</td>
+<td align="left">WT</td>
+<td align="right">0.1800784</td>
+<td align="right">0.2208843</td>
+<td align="right">1</td>
+<td align="right">39</td>
+<td align="right">0.6646511</td>
+<td align="right">0.4198738</td>
+<td align="right">-0.2528468</td>
+<td align="right">0.6130037</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9689396</td>
+</tr>
+<tr>
+<td align="left">Yellow (C8)</td>
+<td align="left">3-HYDROXYBUTYRIC</td>
+<td align="left">KO</td>
+<td align="right">0.0570570</td>
+<td align="right">0.2295619</td>
+<td align="right">1</td>
+<td align="right">39</td>
+<td align="right">0.0617758</td>
+<td align="right">0.8050151</td>
+<td align="right">-0.3928761</td>
+<td align="right">0.5069901</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9717831</td>
+</tr>
+<tr>
+<td align="left">Yellow (C8)</td>
+<td align="left">arginine</td>
+<td align="left">KO</td>
+<td align="right">-0.0870027</td>
+<td align="right">0.2313466</td>
+<td align="right">1</td>
+<td align="right">39</td>
+<td align="right">0.1414291</td>
+<td align="right">0.7089024</td>
+<td align="right">-0.5404336</td>
+<td align="right">0.3664283</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9717831</td>
+</tr>
+<tr>
+<td align="left">Yellow (C8)</td>
+<td align="left">CITRIC</td>
+<td align="left">KO</td>
+<td align="right">0.0532929</td>
+<td align="right">0.2267866</td>
+<td align="right">1</td>
+<td align="right">39</td>
+<td align="right">0.0552210</td>
+<td align="right">0.8154449</td>
+<td align="right">-0.3912007</td>
+<td align="right">0.4977865</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9717831</td>
+</tr>
+<tr>
+<td align="left">Yellow (C8)</td>
+<td align="left">FUMARIC</td>
+<td align="left">KO</td>
+<td align="right">0.0458476</td>
+<td align="right">0.2287849</td>
+<td align="right">1</td>
+<td align="right">39</td>
+<td align="right">0.0401587</td>
+<td align="right">0.8422120</td>
+<td align="right">-0.4025625</td>
+<td align="right">0.4942578</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9717831</td>
+</tr>
+<tr>
+<td align="left">Yellow (C8)</td>
+<td align="left">glutamine</td>
+<td align="left">KO</td>
+<td align="right">0.0776749</td>
+<td align="right">0.2324834</td>
+<td align="right">1</td>
+<td align="right">39</td>
+<td align="right">0.1116292</td>
+<td align="right">0.7400869</td>
+<td align="right">-0.3779841</td>
+<td align="right">0.5333340</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9717831</td>
+</tr>
+<tr>
+<td align="left">Yellow (C8)</td>
+<td align="left">isoleucine</td>
+<td align="left">KO</td>
+<td align="right">-0.0319054</td>
+<td align="right">0.2292077</td>
+<td align="right">1</td>
+<td align="right">39</td>
+<td align="right">0.0193763</td>
+<td align="right">0.8900096</td>
+<td align="right">-0.4811443</td>
+<td align="right">0.4173335</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9888995</td>
+</tr>
+<tr>
+<td align="left">Yellow (C8)</td>
+<td align="left">LACTIC</td>
+<td align="left">KO</td>
+<td align="right">-0.1257935</td>
+<td align="right">0.2296195</td>
+<td align="right">1</td>
+<td align="right">39</td>
+<td align="right">0.3001229</td>
+<td align="right">0.5869274</td>
+<td align="right">-0.5758395</td>
+<td align="right">0.3242524</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9717831</td>
+</tr>
+<tr>
+<td align="left">Yellow (C8)</td>
+<td align="left">LC even AC total</td>
+<td align="left">KO</td>
+<td align="right">0.0642604</td>
+<td align="right">0.2311493</td>
+<td align="right">1</td>
+<td align="right">39</td>
+<td align="right">0.0772861</td>
+<td align="right">0.7824780</td>
+<td align="right">-0.3887840</td>
+<td align="right">0.5173048</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9717831</td>
+</tr>
+<tr>
+<td align="left">Yellow (C8)</td>
+<td align="left">LC odd AC total</td>
+<td align="left">KO</td>
+<td align="right">-0.6974446</td>
+<td align="right">0.2282161</td>
+<td align="right">1</td>
+<td align="right">39</td>
+<td align="right">9.3395692</td>
+<td align="right">0.0040347</td>
+<td align="right">-1.1447399</td>
+<td align="right">-0.2501492</td>
+<td align="right">0.1210408</td>
+<td align="right">0.0403469</td>
+</tr>
+<tr>
+<td align="left">Yellow (C8)</td>
+<td align="left">leucine</td>
+<td align="left">KO</td>
+<td align="right">0.0070039</td>
+<td align="right">0.2298580</td>
+<td align="right">1</td>
+<td align="right">39</td>
+<td align="right">0.0009285</td>
+<td align="right">0.9758471</td>
+<td align="right">-0.4435095</td>
+<td align="right">0.4575173</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9954994</td>
+</tr>
+<tr>
+<td align="left">Yellow (C8)</td>
+<td align="left">MALIC</td>
+<td align="left">KO</td>
+<td align="right">-0.1356623</td>
+<td align="right">0.2292980</td>
+<td align="right">1</td>
+<td align="right">39</td>
+<td align="right">0.3500401</td>
+<td align="right">0.5575047</td>
+<td align="right">-0.5850782</td>
+<td align="right">0.3137536</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9717831</td>
+</tr>
+<tr>
+<td align="left">Yellow (C8)</td>
+<td align="left">MCAC total</td>
+<td align="left">KO</td>
+<td align="right">-0.0013211</td>
+<td align="right">0.2327041</td>
+<td align="right">1</td>
+<td align="right">39</td>
+<td align="right">0.0000322</td>
+<td align="right">0.9954994</td>
+<td align="right">-0.4574127</td>
+<td align="right">0.4547706</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9954994</td>
+</tr>
+<tr>
+<td align="left">Yellow (C8)</td>
+<td align="left">METHYLSUCCINIC</td>
+<td align="left">KO</td>
+<td align="right">0.7366725</td>
+<td align="right">0.2296270</td>
+<td align="right">1</td>
+<td align="right">39</td>
+<td align="right">10.2920725</td>
+<td align="right">0.0026707</td>
+<td align="right">0.2866117</td>
+<td align="right">1.1867332</td>
+<td align="right">0.0801209</td>
+<td align="right">0.0400605</td>
+</tr>
+<tr>
+<td align="left">Yellow (C8)</td>
+<td align="left">SUCCINIC-2</td>
+<td align="left">KO</td>
+<td align="right">-0.0485546</td>
+<td align="right">0.2300534</td>
+<td align="right">1</td>
+<td align="right">39</td>
+<td align="right">0.0445454</td>
+<td align="right">0.8339412</td>
+<td align="right">-0.4994510</td>
+<td align="right">0.4023418</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9717831</td>
+</tr>
+<tr>
+<td align="left">Yellow (C8)</td>
+<td align="left">valine</td>
+<td align="left">KO</td>
+<td align="right">0.2027706</td>
+<td align="right">0.2292719</td>
+<td align="right">1</td>
+<td align="right">39</td>
+<td align="right">0.7821833</td>
+<td align="right">0.3818943</td>
+<td align="right">-0.2465940</td>
+<td align="right">0.6521352</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9689396</td>
+</tr>
+</tbody>
+</table>
+
+<div class="highlight highlight-source-r"><pre><span class="pl-smi">Ftests</span> %<span class="pl-k">&gt;</span>% write.csv(<span class="pl-v">file</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>../data/processed/contrastsAim2.csv<span class="pl-pds">"</span></span>, <span class="pl-v">row.names</span> <span class="pl-k">=</span> <span class="pl-c1">FALSE</span>)</pre></div>
+
+<p>Click <a href="///C://Users/chanb/Documents/Projects/GillinghamMetabolomics/figures/plotDataAim2.png">link to figure</a>.</p>
+
+<h2>
+<a id="user-content-save" class="anchor" href="#save" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Save</h2>
+
+<p>Save <code>lme</code> objects for interactive work.</p>
+
+<div class="highlight highlight-source-r"><pre>save(<span class="pl-smi">M1</span>, <span class="pl-smi">M2</span>, <span class="pl-v">file</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>../data/processed/lmeObjects.RData<span class="pl-pds">"</span></span>)</pre></div>
+</article></body></html>
