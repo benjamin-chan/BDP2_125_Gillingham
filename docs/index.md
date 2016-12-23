@@ -1,6 +1,6 @@
 ---
 title: "Metabolomics of very long-chain aclCoA dehydrogenase knockout mice"
-date: "2016-12-22 12:53:07"
+date: "2016-12-22 15:26:59"
 author: Benjamin Chan (chanb@ohsu.edu)
 output:
   html_document:
@@ -587,11 +587,17 @@ Fixed effects for Aim 2 were chow, genotype, and metabolite.
 All 2-way and 3-way interactions between fixed effects were included in the models.
 Animal ID was the random effect.
 A general correlation structure was assumed.
-Estimates for the contrasts comparing exercise versus rest for Aim 1, and yellow C8 chow versus white C7 chow for Aim 2, for each combination of genotype and metabolite are presented
+Estimates for the contrasts comparing exercise versus rest for Aim 1, and yellow C8 chow versus white C7 chow for Aim 2, for each combination of genotype and metabolite are presented.
+P-values were adjusted to control the false discovery rate, the expected proportion of false discoveries amongst the rejected hypotheses.
 The data was analyzed using R version 3.3.2 (2016-10-31) and the `nlme` package version 3.1.128.
 
 
 ## References
+
+Benjamini, Y., and Hochberg, Y.
+(1995).
+Controlling the false discovery rate: a practical and powerful approach to multiple testing.
+*Journal of the Royal Statistical Society Series B* 57, 289–300.
 
 
 ```r
