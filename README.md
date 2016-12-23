@@ -46,17 +46,15 @@ The primary challenge of the analysis will be to reduce the data (using principl
 
 ## Outputs
 
-* [Results](data/processed/contrasts.xlsx)
+* Results: [Excel XLSX](data/processed/contrasts.xlsx)
   * Formatted versions of `data/processed/contrastsAim1.csv` and `data/processed/contrastsAim2.csv`
 * Aim 1
-  * [Figure, metabolite values](figures/plotDataAim1.png)
-  * [Contrast estimates](data/processed/contrastsAim1.csv)
+  * Figure, metabolite values: [PNG](figures/plotDataAim1.png)
+  * Contrast estimates: [CSV](data/processed/contrastsAim1.csv)
 * Aim 2
-  * [Figure, metabolite values](figures/plotDataAim2.png)
-  * [Contrast estimates](data/processed/contrastsAim2.csv)
-* Complete analysis
-  * [HTML](docs/index.html)
-  * [Markdown](docs/index.md)
+  * Figure, metabolite values: [PNG](figures/plotDataAim2.png)
+  * Contrast estimates: [CSV](data/processed/contrastsAim2.csv)
+* Complete analysis: [HTML](docs/index.html) or [Markdown](docs/index.md)
 
 
 ## Methods
