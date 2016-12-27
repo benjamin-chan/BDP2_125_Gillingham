@@ -29,15 +29,15 @@ D2 <- L2[["data"]] %>% filter(metabolite != "LCAC total") %>% mutate(metabolite 
 
 ## Check data
 
-Check the `value` and `logValue`.
+Check the `value` and `zValue`.
 
 ```{r plotDataAim1, results = "asis", fig.height = 6, fig.width = 10}
 kable(summarizeOutcome(D1))
 ggplot(D1) +
-  aes(x = logValue, y = metabolite, color = activity, fill = activity) +
+  aes(x = zValue, y = metabolite, color = activity, fill = activity) +
   geom_jitter(alpha = 1/2) +
   facet_wrap(~ genotype) +
-  scale_x_continuous("log10 scale") +
+  scale_x_continuous("Z-score of normalized values") +
   scale_y_discrete("Metabolite") +
   scale_color_brewer("Activity", palette = "Set1") +
   scale_fill_brewer("Activity", palette = "Set1") +
@@ -48,10 +48,10 @@ ggsave("../figures/plotDataAim1.png", width = 10, height = 8, units = "in")
 ```{r plotDataAim2, results = "asis", fig.height = 6, fig.width = 10}
 kable(summarizeOutcome(D2))
 ggplot(D2) +
-  aes(x = logValue, y = metabolite, color = chow, fill = chow) +
+  aes(x = zValue, y = metabolite, color = chow, fill = chow) +
   geom_jitter(alpha = 1/2) +
   facet_wrap(~ genotype) +
-  scale_x_continuous("log10 scale") +
+  scale_x_continuous("Z-score of normalized values") +
   scale_y_discrete("Metabolite") +
   scale_color_brewer("Chow", palette = "Set1") +
   scale_fill_brewer("Chow", palette = "Set1") +
