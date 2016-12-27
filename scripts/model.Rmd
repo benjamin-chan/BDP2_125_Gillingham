@@ -4,7 +4,7 @@
 ## Methods
 
 A mixed linear effects model was estimated for each aim.
-Metabolomic values were transformed to the log-10 scale.
+Metabolomic values were normalized and transformed to the Z-scale.
 Fixed effects for Aim 1 were activity, genotype, and metabolite.
 Fixed effects for Aim 2 were chow, genotype, and metabolite.
 All 2-way and 3-way interactions between fixed effects were included in the models.
@@ -37,7 +37,7 @@ Specify the correlation structure using `cs`.
 Use `corSymm`, *general correlation matrix, with no additional structure*.
 
 ```{r lmeDiagnosticAim1}
-fixed <- formula(logValue ~
+fixed <- formula(zValue ~
                    genotype +
                    activity +
                    metabolite +
@@ -99,7 +99,7 @@ Use `corSymm`, *general correlation matrix, with no additional structure*.
 
 ```{r lmeDiagnosticAim2}
 rm(M)
-fixed <- formula(logValue ~
+fixed <- formula(zValue ~
                    genotype +
                    chow +
                    metabolite +
