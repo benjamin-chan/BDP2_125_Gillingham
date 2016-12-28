@@ -3,7 +3,7 @@
 Import the data.
 Data files are locally stored.
 
-Import Aim 1: Exercise data
+Import Aim 1: Exercise data.
 
 ```{r}
 L1 <- importDataToList("../data/raw/Ultragenyx Aim 1 Z score.xlsx")
@@ -17,7 +17,6 @@ D1 <- L1[["data"]]
 Import Aim 2: Diet data.
 
 * Metabolite `LCAC total` is the sum of `LC even AC total` and `LC odd AC total`; remove `LCAC total` data
-* Exclude *fumaric* outlier
 
 ```{r}
 L2 <- importDataToList("../data/raw/Ultragenyx Aim 2 Z score.xlsx")
@@ -26,7 +25,93 @@ L2[["dim"]]
 L2[["names"]]
 L2[["head"]]
 D2 <- L2[["data"]] %>% filter(metabolite != "LCAC total") %>% mutate(metabolite = droplevels(metabolite))
-D2 <- D2 %>% filter(!(metabolite == "FUMARIC" & value > 30))
+```
+
+
+## Exclusions
+
+> From: Benjamin Chan <chanb@ohsu.edu>  
+> Date: Wednesday, December 28, 2016 at 11:30 AM  
+> To: Melanie Gillingham <gillingm@ohsu.edu>  
+> Cc: Garen Gaston <gastong@ohsu.edu>  
+> Subject: RE: Gillingham spreadsheets for stats  
+> 
+> Hi Garen,
+>  
+> Can you check these data points? The raw values look suspicious to me, like
+> they're the "floor" of the detectable range. I'm wondering if they're real or
+> if they should be excluded.
+ 
+```
+> D1 %>% filter(value < 1e-6)
+# AIM 1
+      id genotype activity    chow metabolite_type  metabolite    value  logValue     zValue  zLogValue important
+   <chr>   <fctr>   <fctr>  <fctr>          <fctr>      <fctr>    <dbl>     <dbl>      <dbl>      <dbl>     <lgl>
+1   1060       KO Exercise Regular     Amino acids     leucine 1.11e-07 -6.954677 -10.830077 -190.02270      TRUE
+2   1030       WT Exercise Regular   Organic acids PYRUVIC_P2P 1.11e-07 -6.954677  -1.413972  -13.00909      TRUE
+3   1094       WT Exercise Regular   Organic acids PYRUVIC_P2P 1.11e-07 -6.954677  -1.413972  -13.00909      TRUE
+4   1134       KO     Rest Regular   Organic acids PYRUVIC_P2P 1.11e-07 -6.954677  -1.413972  -13.00909      TRUE
+5 1204B        KO     Rest Regular   Organic acids PYRUVIC_P2P 1.11e-07 -6.954677  -1.413972  -13.00909      TRUE
+6 1205B        KO     Rest Regular   Organic acids PYRUVIC_P2P 1.11e-07 -6.954677  -1.413972  -13.00909      TRUE
+7   1014       KO Exercise Regular   Organic acids PYRUVIC_P2P 1.11e-07 -6.954677  -1.413972  -13.00909      TRUE
+8   1017       KO Exercise Regular   Organic acids PYRUVIC_P2P 1.11e-07 -6.954677  -1.413972  -13.00909      TRUE
+9   1019       KO Exercise Regular   Organic acids PYRUVIC_P2P 1.11e-07 -6.954677  -1.413972  -13.00909      TRUE
+
+> D2 %>% filter(value < 1e-6)
+# AIM 2
+     id genotype activity        chow metabolite_type       metabolite    value  logValue    zValue  zLogValue important
+  <chr>   <fctr>   <fctr>      <fctr>          <fctr>           <fctr>    <dbl>     <dbl>     <dbl>      <dbl>     <lgl>
+1  1199       WT Exercise  White (C7)   Organic acids 3-HYDROXYBUTYRIC 1.11e-07 -6.954677 -2.516025 -42.518943      TRUE
+2  1101       WT Exercise Yellow (C8)   Organic acids           CITRIC 1.11e-07 -6.954677 -2.601795  -3.013728      TRUE
+3  1194       WT Exercise  White (C7)   Organic acids           CITRIC 1.11e-07 -6.954677 -2.601795  -3.013728      TRUE
+```
+
+### Aim 1
+
+> From: Melanie Gillingham   
+> Sent: Wednesday, December 28, 2016 1:15 PM  
+> To: Benjamin Chan <chanb@ohsu.edu>  
+> Cc: Garen Gaston <gastong@ohsu.edu>  
+> Subject: Re: Gillingham spreadsheets for stats  
+> 
+> Garen and I are going over the min and max for aim 1. We both agree the low
+> pyruvic values listed below and the low leucine value are most likely
+> undetectable peaks. This could be due to peak misalignment, sample processing,
+> or a whole list of other issues and they should probably be deleted.
+> 
+> The range of log z-scores for the key metabolites in aim 1 is -14 to 9.8 which
+> seems to suggest some variability in the data.
+
+```{r}
+D1 <- D1 %>% mutate(exclude = value < 1e-6)
+message(sprintf("Excluding %d data points", D1 %>% filter(exclude) %>% tally %>% as.integer))
+D1 %>% filter(exclude) %>% kable
+D1 %>% filter(!exclude) %>% summarize(min(zLogValue), max(zLogValue))
+D1 <- D1 %>% filter(!exclude)
+```
+
+### Aim 2
+
+> From: Melanie Gillingham   
+> Sent: Wednesday, December 28, 2016 11:50 AM  
+> To: Benjamin Chan <chanb@ohsu.edu>  
+> Cc: Garen Gaston <gastong@ohsu.edu>  
+> Subject: Re: Gillingham spreadsheets for stats  
+> 
+> Garen and I are looking at the min and max right now. Yes, the 1.11e-7 is a
+> place holder for below the limit of detection --- or zero. Those values could be
+> excluded. We think the 1199 beta hydroxybutyrate is a machine error. The
+> fumeric value could also be an error.
+> 
+> For specific aim 2 the range of the key metabolites for the log z scores looks
+> like -9 to 11. That seems like a spread of values around the normal to me.
+
+```{r}
+D2 <- D2 %>% mutate(exclude = value < 1e-6 | zLogValue > 20)
+message(sprintf("Excluding %d data points", D2 %>% filter(exclude) %>% tally %>% as.integer))
+D2 %>% filter(exclude) %>% kable
+D2 %>% filter(!exclude) %>% summarize(min(zLogValue), max(zLogValue))
+D2 <- D2 %>% filter(!exclude)
 ```
 
 
