@@ -4,7 +4,7 @@
 ## Methods
 
 A mixed linear effects model was estimated for each aim.
-Metabolomic values were normalized and transformed to the Z-scale.
+Metabolomic values were log-transformed, then normalized.
 Fixed effects for Aim 1 were activity, genotype, and metabolite.
 Fixed effects for Aim 2 were chow, genotype, and metabolite.
 All 2-way and 3-way interactions between fixed effects were included in the models.
@@ -37,7 +37,7 @@ Specify the correlation structure using `cs`.
 Use `corSymm`, *general correlation matrix, with no additional structure*.
 
 ```{r lmeDiagnosticAim1}
-fixed <- formula(zValue ~
+fixed <- formula(zLogValue ~
                    genotype +
                    activity +
                    metabolite +
@@ -78,9 +78,6 @@ metabolites <- c("3-HYDROXYBUTYRIC",
                  "PYRUVIC_P2P",
                  "SUCCINIC-2",
                  "valine")
-ctrl <- lmeControl(opt = "optim",
-                   maxIter = 5000, msMaxIter = 5000,
-                   tolerance = 1e-6, niterEM = 25, msMaxEval = 200, msTol = 1e-4)
 Ftests <- runClusters(D1, metabolites, fixed, "activity", "Exercise", ctrl)
 Ftests %>% kable
 Ftests %>% write.csv(file = "../data/processed/contrastsAim1.csv", row.names = FALSE)
@@ -99,7 +96,7 @@ Use `corSymm`, *general correlation matrix, with no additional structure*.
 
 ```{r lmeDiagnosticAim2}
 rm(M)
-fixed <- formula(zValue ~
+fixed <- formula(zLogValue ~
                    genotype +
                    chow +
                    metabolite +
@@ -138,7 +135,8 @@ metabolites <- c("3-HYDROXYBUTYRIC",
                  "SUCCINIC-2",
                  "valine")
 ctrl <- lmeControl(opt = "optim",
-                   maxIter = 5000, msMaxIter = 5000)
+                   maxIter = 5000, msMaxIter = 5000,
+                   tolerance = 1e-6, niterEM = 25, msMaxEval = 200, msTol = 1e-4)
 Ftests <- runClusters(D2, metabolites, fixed, "chow", "Yellow (C8)", ctrl)
 Ftests %>% kable
 Ftests %>% write.csv(file = "../data/processed/contrastsAim2.csv", row.names = FALSE)
