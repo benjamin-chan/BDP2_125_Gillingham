@@ -1,0 +1,56 @@
+# Subanalysis
+
+Test genotype, KO vs WT, within metabolite.
+
+Model excludes design terms for `activity` and `chow`.
+
+
+## Aim 1
+
+```{r}
+fixed <- formula(zLogValue ~
+                   genotype +
+                   metabolite +
+                   genotype * metabolite)
+random <- formula(~ 1 | id)
+ctrl <- lmeControl(opt = "optim",
+                   maxIter = 500, msMaxIter = 500,
+                   tolerance = 1e-6, niterEM = 25, msMaxEval = 200, msTol = 1e-7)
+cs <-
+  corSymm(form = random, fixed = FALSE) %>%
+  Initialize(data = D1)
+Dim(cs)
+M1 <- D1 %>% lme(fixed, data = ., random = random, correlation = cs, control = ctrl)
+M1 %>% plot
+M1 %>% ranef %>% plot
+FtestsGenotype <-
+  M1 %>%
+  tidy(effects = "fixed") %>%
+  filter(grepl("^geno", term)) %>%
+  mutate(p.valueBH = p.adjust(p.value, method = "BH"),
+         sig = p.valueBH < 0.05)
+FtestsGenotype %>% kable
+FtestsGenotype %>% write.csv(file = "../data/processed/contrastsGenotypeAim1.csv",
+                             row.names = FALSE)
+```
+
+## Aim 2
+
+```{r}
+cs <-
+  corSymm(form = random, fixed = FALSE) %>%
+  Initialize(data = D2)
+Dim(cs)
+M2 <- D2 %>% lme(fixed, data = ., random = random, correlation = cs, control = ctrl)
+M2 %>% plot
+M2 %>% ranef %>% plot
+FtestsGenotype <-
+  M2 %>%
+  tidy(effects = "fixed") %>%
+  filter(grepl("^geno", term)) %>%
+  mutate(p.valueBH = p.adjust(p.value, method = "BH"),
+         sig = p.valueBH < 0.05)
+FtestsGenotype %>% kable
+FtestsGenotype %>% write.csv(file = "../data/processed/contrastsGenotypeAim2.csv",
+                             row.names = FALSE)
+```
