@@ -56,8 +56,10 @@ importDataToList <- function (f) {
 summarizeOutcome <- function (D) {
   x1 <- summary(D$value)
   x2 <- summary(D$logValue)
-  L <- data.frame(rbind(x1, x2))
-  rownames(L) <- c("nominal", "log-transform")
+  x3 <- summary(D$zValue)
+  x4 <- summary(D$zLogValue)
+  L <- data.frame(rbind(x1, x2, x3, x4))
+  rownames(L) <- c("raw", "log-transform", "normalized raw", "normalized log-transform")
   L
 }
 
