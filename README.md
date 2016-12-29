@@ -33,15 +33,28 @@ The primary challenge of the analysis will be to reduce the data (using principl
 
 ## Interpretation of analysis
 
-* Aim 1, activity: exercise vs rest
-  * None of the log-transformed metabolite values in either the wildtype or
-    knockout mice were statistically significant at $\alpha$-level 0.05
-    (controlling for the false discovery rate)
-* Aim 2, chow: yellow C8 vs white C7
-  * **3-hydroxybutyric** values were significantly **higher** in wildtype mice feed yellow C8 compared to wildtype mice fed white C7 ($\beta$ = 0.81, p = 0.007).
-    The large estimated effect is likely due to an outlying value among the wilftype mice fed white C7.
-  * **LC odd AC total** values were significantly **lower** in wildtype mice feed yellow C8 compared to wildtype mice fed white C7 ($\beta$ = -0.70, p = 0.040)
-  * **Methylsuccinic** values were significantly **higher** in wildtype mice feed yellow C8 compared to wildtype mice fed white C7 ($\beta$ = 0.74, p = 0.040)
+### Aim 1, activity: exercise vs rest
+
+* Among WT mice
+  * **3-hydroxybutyric** values were significantly **higher** in wildtype mice under exercise compared to wildtype mice at rest ($\beta$ = 3.60, p = 0.0001) 
+* Among KO mice
+  * **Leucine** values were significantly **higher** in knockout mice under exercise compared to knockout mice at rest ($\beta$ = 2.57, p = 0.0008) 
+  * **Succinic-2** values were significantly **lower** in knockout mice under exercise compared to knockout mice at rest ($\beta$ = -2.83, p = 0.0003) 
+  * **Valine** values were significantly **higher** in knockout mice under exercise compared to knockout mice at rest ($\beta$ = 2.89, p = 0.0004) 
+
+### Aim 2, chow: yellow C8 vs white C7
+
+* Among WT mice
+  * **LC odd AC total** values were significantly **lower** in wildtype mice feed yellow C8 compared to wildtype mice fed white C7 ($\beta$ = -2.54, p < 0.0001)
+  * **Methylsuccinic** values were significantly **higher** in wildtype mice feed yellow C8 compared to wildtype mice fed white C7 ($\beta$ = 2.05, p < 0.0001)
+  * **Valine** values were significantly **higher** in wildtype mice feed yellow C8 compared to wildtype mice fed white C7 ($\beta$ = 1.63, p = 0.0005)
+* Among KO mice
+  * **Lactic** values were significantly **lower** in knockout mice feed yellow C8 compared to knockout mice fed white C7 ($\beta$ = -1.46, p = 0.0076)
+  * **LC odd AC total** values were significantly **lower** in knockout mice feed yellow C8 compared to knockout mice fed white C7 ($\beta$ = -7.07, p < 0.0001)
+  * **Malic** values were significantly **lower** in knockout mice feed yellow C8 compared to knockout mice fed white C7 ($\beta$ = -2.71, p < 0.0001)
+  * **Methylsuccinic** values were significantly **higher** in knockout mice feed yellow C8 compared to knockout mice fed white C7 ($\beta$ = 3.21, p < 0.0001)
+  * **Succinic-2** values were significantly **lower** in knockout mice feed yellow C8 compared to knockout mice fed white C7 ($\beta$ = -1.32, p = 0.0173)
+  * **Valine** values were significantly **higher** in knockout mice feed yellow C8 compared to knockout mice fed white C7 ($\beta$ = 1.93, p = 0.0004)
 
 
 ## Outputs
@@ -60,7 +73,7 @@ The primary challenge of the analysis will be to reduce the data (using principl
 ## Methods
 
 A mixed linear effects model was estimated for each aim.
-Metabolomic values were transformed to the log-10 scale.
+Metabolomic values were log-transformed, then normalized.
 Fixed effects for Aim 1 were activity, genotype, and metabolite.
 Fixed effects for Aim 2 were chow, genotype, and metabolite.
 All 2-way and 3-way interactions between fixed effects were included in the models.
@@ -76,7 +89,7 @@ The data was analyzed using R version 3.3.2 (2016-10-31) and the `nlme` package 
 Benjamini, Y., and Hochberg, Y.
 (1995).
 Controlling the false discovery rate: a practical and powerful approach to multiple testing.
-*Journal of the Royal Statistical Society Series B* 57, 289â€“300.
+*Journal of the Royal Statistical Society Series B* 57, 289-300.
 
 
 ```r

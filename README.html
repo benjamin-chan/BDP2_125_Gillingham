@@ -811,25 +811,60 @@ The primary challenge of the analysis will be to reduce the data (using principl
 <h2>
 <a id="user-content-interpretation-of-analysis" class="anchor" href="#interpretation-of-analysis" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Interpretation of analysis</h2>
 
-<ul>
-<li>Aim 1, activity: exercise vs rest
+<h3>
+<a id="user-content-aim-1-activity-exercise-vs-rest" class="anchor" href="#aim-1-activity-exercise-vs-rest" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Aim 1, activity: exercise vs rest</h3>
 
 <ul>
-<li>None of the log-transformed metabolite values in either the wildtype or
-knockout mice were statistically significant at $\alpha$-level 0.05
-(controlling for the false discovery rate)</li>
+<li>Among WT mice
+
+<ul>
+<li>
+<strong>3-hydroxybutyric</strong> values were significantly <strong>higher</strong> in wildtype mice under exercise compared to wildtype mice at rest ($\beta$ = 3.60, p = 0.0001) </li>
 </ul>
 </li>
-<li>Aim 2, chow: yellow C8 vs white C7
+<li>Among KO mice
 
 <ul>
 <li>
-<strong>3-hydroxybutyric</strong> values were significantly <strong>higher</strong> in wildtype mice feed yellow C8 compared to wildtype mice fed white C7 ($\beta$ = 0.81, p = 0.007).
-The large estimated effect is likely due to an outlying value among the wilftype mice fed white C7.</li>
+<strong>Leucine</strong> values were significantly <strong>higher</strong> in knockout mice under exercise compared to knockout mice at rest ($\beta$ = 2.57, p = 0.0008) </li>
 <li>
-<strong>LC odd AC total</strong> values were significantly <strong>lower</strong> in wildtype mice feed yellow C8 compared to wildtype mice fed white C7 ($\beta$ = -0.70, p = 0.040)</li>
+<strong>Succinic-2</strong> values were significantly <strong>lower</strong> in knockout mice under exercise compared to knockout mice at rest ($\beta$ = -2.83, p = 0.0003) </li>
 <li>
-<strong>Methylsuccinic</strong> values were significantly <strong>higher</strong> in wildtype mice feed yellow C8 compared to wildtype mice fed white C7 ($\beta$ = 0.74, p = 0.040)</li>
+<strong>Valine</strong> values were significantly <strong>higher</strong> in knockout mice under exercise compared to knockout mice at rest ($\beta$ = 2.89, p = 0.0004) </li>
+</ul>
+</li>
+</ul>
+
+<h3>
+<a id="user-content-aim-2-chow-yellow-c8-vs-white-c7" class="anchor" href="#aim-2-chow-yellow-c8-vs-white-c7" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Aim 2, chow: yellow C8 vs white C7</h3>
+
+<ul>
+<li>Among WT mice
+
+<ul>
+<li>
+<strong>LC odd AC total</strong> values were significantly <strong>lower</strong> in wildtype mice feed yellow C8 compared to wildtype mice fed white C7 ($\beta$ = -2.54, p &lt; 0.0001)</li>
+<li>
+<strong>Methylsuccinic</strong> values were significantly <strong>higher</strong> in wildtype mice feed yellow C8 compared to wildtype mice fed white C7 ($\beta$ = 2.05, p &lt; 0.0001)</li>
+<li>
+<strong>Valine</strong> values were significantly <strong>higher</strong> in wildtype mice feed yellow C8 compared to wildtype mice fed white C7 ($\beta$ = 1.63, p = 0.0005)</li>
+</ul>
+</li>
+<li>Among KO mice
+
+<ul>
+<li>
+<strong>Lactic</strong> values were significantly <strong>lower</strong> in knockout mice feed yellow C8 compared to knockout mice fed white C7 ($\beta$ = -1.46, p = 0.0076)</li>
+<li>
+<strong>LC odd AC total</strong> values were significantly <strong>lower</strong> in knockout mice feed yellow C8 compared to knockout mice fed white C7 ($\beta$ = -7.07, p &lt; 0.0001)</li>
+<li>
+<strong>Malic</strong> values were significantly <strong>lower</strong> in knockout mice feed yellow C8 compared to knockout mice fed white C7 ($\beta$ = -2.71, p &lt; 0.0001)</li>
+<li>
+<strong>Methylsuccinic</strong> values were significantly <strong>higher</strong> in knockout mice feed yellow C8 compared to knockout mice fed white C7 ($\beta$ = 3.21, p &lt; 0.0001)</li>
+<li>
+<strong>Succinic-2</strong> values were significantly <strong>lower</strong> in knockout mice feed yellow C8 compared to knockout mice fed white C7 ($\beta$ = -1.32, p = 0.0173)</li>
+<li>
+<strong>Valine</strong> values were significantly <strong>higher</strong> in knockout mice feed yellow C8 compared to knockout mice fed white C7 ($\beta$ = 1.93, p = 0.0004)</li>
 </ul>
 </li>
 </ul>
@@ -871,7 +906,7 @@ The large estimated effect is likely due to an outlying value among the wilftype
 <a id="user-content-methods" class="anchor" href="#methods" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Methods</h2>
 
 <p>A mixed linear effects model was estimated for each aim.
-Metabolomic values were transformed to the log-10 scale.
+Metabolomic values were log-transformed, then normalized.
 Fixed effects for Aim 1 were activity, genotype, and metabolite.
 Fixed effects for Aim 2 were chow, genotype, and metabolite.
 All 2-way and 3-way interactions between fixed effects were included in the models.
@@ -887,7 +922,7 @@ The data was analyzed using R version 3.3.2 (2016-10-31) and the <code>nlme</cod
 <p>Benjamini, Y., and Hochberg, Y.
 (1995).
 Controlling the false discovery rate: a practical and powerful approach to multiple testing.
-<em>Journal of the Royal Statistical Society Series B</em> 57, 289â€“300.</p>
+<em>Journal of the Royal Statistical Society Series B</em> 57, 289-300.</p>
 
 <div class="highlight highlight-source-r"><pre>citation()</pre></div>
 
