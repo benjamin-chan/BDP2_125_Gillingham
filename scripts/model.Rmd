@@ -47,7 +47,8 @@ fixed <- formula(zLogValue ~
                    activity * metabolite * genotype)
 random <- formula(~ 1 | id)
 ctrl <- lmeControl(opt = "optim",
-                   maxIter = 500, msMaxIter = 500)
+                   maxIter = 500, msMaxIter = 500,
+                   tolerance = 1e-6, niterEM = 25, msMaxEval = 200, msTol = 1e-7)
 cs <-
   corSymm(form = random, fixed = FALSE) %>%
   Initialize(data = D1)
@@ -134,9 +135,6 @@ metabolites <- c("3-HYDROXYBUTYRIC",
                  "METHYLSUCCINIC",
                  "SUCCINIC-2",
                  "valine")
-ctrl <- lmeControl(opt = "optim",
-                   maxIter = 5000, msMaxIter = 5000,
-                   tolerance = 1e-6, niterEM = 25, msMaxEval = 200, msTol = 1e-4)
 Ftests <- runClusters(D2, metabolites, fixed, "chow", "Yellow (C8)", ctrl)
 Ftests %>% kable
 Ftests %>% write.csv(file = "../data/processed/contrastsAim2.csv", row.names = FALSE)
