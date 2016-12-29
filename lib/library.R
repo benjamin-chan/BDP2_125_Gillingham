@@ -103,6 +103,5 @@ runClusters <- function (df, metabolites, fixed, xvar, contrastValue, ctrl) {
   }
   stopCluster(cl)
   rbindlist(L) %>%
-    mutate(p.adjustBon = p.adjust(p.value, n = n, method = "bonferroni"),
-           p.adjustBH = p.adjust(p.value, n = n, method = "BH"))
+    mutate(p.adjustBH = p.adjust(p.value, n = n, method = "BH"))
 }
