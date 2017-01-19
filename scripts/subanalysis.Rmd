@@ -2,16 +2,44 @@
 
 Test genotype, KO vs WT, within metabolite.
 
-Model excludes design terms for `activity` and `chow`.
+We want to be able to make statements such as
+
+> metabolite X was significantly lower among the WT mice compared to the KO
+> mice fed C7 but no difference was detected in WT and KO mice fed C8
+
+using the subanalysis models.
 
 
 ## Aim 1
 
+Click [link to figure](../figures/plotDataAim1Subanalysis.svg).
+
+```{r plotDataAim1Subanalysis, results = "asis", fig.height = 6, fig.width = 10}
+kable(summarizeOutcome(D1))
+D1 %>%
+  ggplot +
+  aes(x = zLogValue, y = metabolite, color = genotype, fill = genotype) +
+  geom_jitter(alpha = 1/2) +
+  facet_wrap(~ activity) +
+  scale_x_continuous("Normalized log-transformed values") +
+  scale_y_discrete("Metabolite") +
+  scale_color_brewer("Genotype", palette = "Set2") +
+  scale_fill_brewer("Genotype", palette = "Set2") +
+  theme_bw()
+ggsave("../figures/plotDataAim1Subanalysis.svg")
+```
+
+Use same model as main analysis in [model.Rmd](model.Rmd).
+
 ```{r}
 fixed <- formula(zLogValue ~
                    genotype +
+                   activity +
                    metabolite +
-                   genotype * metabolite)
+                   genotype * activity +
+                   genotype * metabolite +
+                   activity * metabolite +
+                   activity * metabolite * genotype)
 random <- formula(~ 1 | id)
 ctrl <- lmeControl(opt = "optim",
                    maxIter = 500, msMaxIter = 500,
@@ -19,38 +47,86 @@ ctrl <- lmeControl(opt = "optim",
 cs <-
   corSymm(form = random, fixed = FALSE) %>%
   Initialize(data = D1)
-Dim(cs)
-M1 <- D1 %>% lme(fixed, data = ., random = random, correlation = cs, control = ctrl)
-M1 %>% plot
-M1 %>% ranef %>% plot
-FtestsGenotype <-
-  M1 %>%
-  tidy(effects = "fixed") %>%
-  filter(grepl("^geno", term)) %>%
-  mutate(p.valueBH = p.adjust(p.value, method = "BH"),
-         sig = p.valueBH < 0.05)
-FtestsGenotype %>% kable
-FtestsGenotype %>% write.csv(file = "../data/processed/contrastsGenotypeAim1.csv",
-                             row.names = FALSE)
 ```
+
+Calculate contrasts of *WT vs KO* given metabolite and genotype.
+
+```{r}
+metabolites <- c("3-HYDROXYBUTYRIC",
+                 "arginine",
+                 "CITRIC",  # Returns "Singularity in backsolve at level 0, block 1" error
+                 "FUMARIC",
+                 "glutamine",
+                 "isoleucine",
+                 "LACTIC",
+                 "LCAC total",  # Returns "Singularity in backsolve at level 0, block 1" error
+                 "leucine",
+                 "MALIC",
+                 "MCAC Total",
+                 "METHYLSUCCINIC",
+                 "PYRUVIC_P2P",
+                 "SUCCINIC-2",
+                 "valine")
+Ftests <- runClusters(D1, metabolites, fixed, "genotype", "WT", ctrl)
+Ftests %>% kable
+Ftests %>% write.csv(file = "../data/processed/contrastsAim1Subanalysis.csv", row.names = FALSE)
+```
+
 
 ## Aim 2
 
+Click [link to figure](../figures/plotDataAim2Subanalysis.svg).
+
+```{r plotDataAim2Subanalysis, results = "asis", fig.height = 6, fig.width = 10}
+kable(summarizeOutcome(D2))
+D2 %>%
+  ggplot +
+  aes(x = zLogValue, y = metabolite, color = genotype, fill = genotype) +
+  geom_jitter(alpha = 1/2) +
+  facet_wrap(~ chow) +
+  scale_x_continuous("Normalized log-transformed values") +
+  scale_y_discrete("Metabolite") +
+  scale_color_brewer("Genotype", palette = "Set2") +
+  scale_fill_brewer("Genotype", palette = "Set2") +
+  theme_bw()
+ggsave("../figures/plotDataAim2Subanalysis.svg")
+```
+
+Use same model as main analysis in [model.Rmd](model.Rmd).
+
 ```{r}
+fixed <- formula(zLogValue ~
+                   genotype +
+                   chow +
+                   metabolite +
+                   genotype * chow +
+                   genotype * metabolite +
+                   chow * metabolite +
+                   chow * metabolite * genotype)
 cs <-
   corSymm(form = random, fixed = FALSE) %>%
   Initialize(data = D2)
-Dim(cs)
-M2 <- D2 %>% lme(fixed, data = ., random = random, correlation = cs, control = ctrl)
-M2 %>% plot
-M2 %>% ranef %>% plot
-FtestsGenotype <-
-  M2 %>%
-  tidy(effects = "fixed") %>%
-  filter(grepl("^geno", term)) %>%
-  mutate(p.valueBH = p.adjust(p.value, method = "BH"),
-         sig = p.valueBH < 0.05)
-FtestsGenotype %>% kable
-FtestsGenotype %>% write.csv(file = "../data/processed/contrastsGenotypeAim2.csv",
-                             row.names = FALSE)
+```
+
+Calculate contrasts of *Yellow (C8) vs White (C7)* given metabolite and genotype.
+
+```{r}
+metabolites <- c("3-HYDROXYBUTYRIC",
+                 "arginine",
+                 "CITRIC",
+                 "FUMARIC",
+                 "glutamine",
+                 "isoleucine",
+                 "LACTIC",
+                 "LC even AC total",
+                 "LC odd AC total",
+                 "leucine",
+                 "MALIC",
+                 "MCAC total",
+                 "METHYLSUCCINIC",
+                 "SUCCINIC-2",
+                 "valine")
+Ftests <- runClusters(D2, metabolites, fixed, "genotype", "WT", ctrl)
+Ftests %>% kable
+Ftests %>% write.csv(file = "../data/processed/contrastsAim2Subanalysis.csv", row.names = FALSE)
 ```
