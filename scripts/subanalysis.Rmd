@@ -67,7 +67,7 @@ metabolites <- c("3-HYDROXYBUTYRIC",
                  "PYRUVIC_P2P",
                  "SUCCINIC-2",
                  "valine")
-Ftests <- runClusters(D1, metabolites, fixed, "genotype", "WT", ctrl)
+Ftests <- runClusters(D1, metabolites, fixed, "genotype", "KO", ctrl)
 Ftests %>% kable
 Ftests %>% write.csv(file = "../data/processed/contrastsAim1Subanalysis.csv", row.names = FALSE)
 ```
@@ -126,7 +126,7 @@ metabolites <- c("3-HYDROXYBUTYRIC",
                  "METHYLSUCCINIC",
                  "SUCCINIC-2",
                  "valine")
-Ftests <- runClusters(D2, metabolites, fixed, "genotype", "WT", ctrl)
+Ftests <- runClusters(D2, metabolites, fixed, "genotype", "KO", ctrl)
 Ftests %>% kable
 Ftests %>% write.csv(file = "../data/processed/contrastsAim2Subanalysis.csv", row.names = FALSE)
 ```
