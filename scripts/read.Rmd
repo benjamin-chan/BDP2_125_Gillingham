@@ -131,7 +131,7 @@ D1 %>%
   scale_color_brewer("Activity", palette = "Set1") +
   scale_fill_brewer("Activity", palette = "Set1") +
   theme_bw()
-ggsave("../figures/plotDataAim1.png", width = 10, height = 8, units = "in")
+ggsave("../figures/plotDataAim1.svg")
 ```
 
 ```{r plotDataAim2, results = "asis", fig.height = 6, fig.width = 10}
@@ -146,7 +146,7 @@ D2 %>%
   scale_color_brewer("Chow", palette = "Set1") +
   scale_fill_brewer("Chow", palette = "Set1") +
   theme_bw()
-ggsave("../figures/plotDataAim2.png", width = 10, height = 8, units = "in")
+ggsave("../figures/plotDataAim2.svg")
 ```
 
 

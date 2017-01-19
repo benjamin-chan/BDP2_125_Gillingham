@@ -15,6 +15,7 @@ library(dplyr)
 library(nlme)
 library(broom)
 library(ggplot2)
+library(svglite)
 library(knitr)
 library(doParallel)
 ```
