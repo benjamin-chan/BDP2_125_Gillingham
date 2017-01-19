@@ -1,8 +1,8 @@
 $completionDateTime
-[1] "2016-12-29 14:06:49 PST"
+[1] "2017-01-19 10:40:16 PST"
 
 $executionTime
-Time difference of 18.33705 mins
+Time difference of 28.23628 mins
 
 $sessionInfo
 R version 3.3.2 (2016-10-31)
@@ -21,13 +21,13 @@ attached base packages:
 [1] parallel  stats     graphics  grDevices utils     datasets  base     
 
 other attached packages:
- [1] data.table_1.9.6  doParallel_1.0.10 iterators_1.0.8   foreach_1.4.3    
- [5] ggplot2_2.1.0     broom_0.4.1       nlme_3.1-128      dplyr_0.5.0      
- [9] magrittr_1.5      readxl_0.1.1      rmarkdown_1.0     knitr_1.14       
-[13] checkpoint_0.3.16
+ [1] data.table_1.9.6  gdtools_0.0.7     doParallel_1.0.10 iterators_1.0.8  
+ [5] foreach_1.4.3     svglite_1.1.0     ggplot2_2.1.0     broom_0.4.1      
+ [9] nlme_3.1-128      dplyr_0.5.0       magrittr_1.5      readxl_0.1.1     
+[13] rmarkdown_1.0     knitr_1.14        checkpoint_0.3.16
 
 loaded via a namespace (and not attached):
- [1] Rcpp_0.12.7        compiler_3.3.2     formatR_1.4        RColorBrewer_1.1-2
+ [1] Rcpp_0.12.7        compiler_3.3.2     RColorBrewer_1.1-2 formatR_1.4       
  [5] plyr_1.8.4         highr_0.6          methods_3.3.2      tools_3.3.2       
  [9] digest_0.6.10      evaluate_0.9       tibble_1.2         gtable_0.2.0      
 [13] lattice_0.20-34    psych_1.6.9        DBI_0.5-1          stringr_1.1.0     

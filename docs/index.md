@@ -1,6 +1,6 @@
 ---
 title: "Metabolomics of very long-chain aclCoA dehydrogenase knockout mice"
-date: "2016-12-29 13:48:29"
+date: "2017-01-19 10:12:02"
 author: Benjamin Chan (chanb@ohsu.edu)
 output:
   html_document:
@@ -63,6 +63,7 @@ library(nlme)
 ```r
 library(broom)
 library(ggplot2)
+library(svglite)
 library(knitr)
 library(doParallel)
 ```
@@ -104,9 +105,10 @@ sessionInfo()
 ## 
 ## other attached packages:
 ##  [1] doParallel_1.0.10 iterators_1.0.8   foreach_1.4.3    
-##  [4] ggplot2_2.1.0     broom_0.4.1       nlme_3.1-128     
-##  [7] dplyr_0.5.0       magrittr_1.5      readxl_0.1.1     
-## [10] rmarkdown_1.0     knitr_1.14        checkpoint_0.3.16
+##  [4] svglite_1.1.0     ggplot2_2.1.0     broom_0.4.1      
+##  [7] nlme_3.1-128      dplyr_0.5.0       magrittr_1.5     
+## [10] readxl_0.1.1      rmarkdown_1.0     knitr_1.14       
+## [13] checkpoint_0.3.16
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] Rcpp_0.12.7      munsell_0.4.3    mnormt_1.5-4     colorspace_1.2-6
@@ -114,8 +116,8 @@ sessionInfo()
 ##  [9] tools_3.3.2      grid_3.3.2       gtable_0.2.0     psych_1.6.9     
 ## [13] DBI_0.5-1        htmltools_0.3.5  assertthat_0.1   digest_0.6.10   
 ## [17] tibble_1.2       reshape2_1.4.1   formatR_1.4      tidyr_0.6.0     
-## [21] codetools_0.2-14 evaluate_0.9     stringi_1.1.1    scales_0.4.0    
-## [25] methods_3.3.2    foreign_0.8-67
+## [21] codetools_0.2-14 evaluate_0.9     stringi_1.1.1    gdtools_0.0.7   
+## [25] scales_0.4.0     methods_3.3.2    foreign_0.8-67
 ```
 
 ```r
@@ -491,7 +493,11 @@ D1 %>%
 ![plot of chunk plotDataAim1](../figures/plotDataAim1-1.png)
 
 ```r
-ggsave("../figures/plotDataAim1.png", width = 10, height = 8, units = "in")
+ggsave("../figures/plotDataAim1.svg")
+```
+
+```
+## Saving 10 x 6 in image
 ```
 
 
@@ -524,7 +530,11 @@ D2 %>%
 ![plot of chunk plotDataAim2](../figures/plotDataAim2-1.png)
 
 ```r
-ggsave("../figures/plotDataAim2.png", width = 10, height = 8, units = "in")
+ggsave("../figures/plotDataAim2.svg")
+```
+
+```
+## Saving 10 x 6 in image
 ```
 
 
@@ -1064,7 +1074,7 @@ Ftests %>% kable
 Ftests %>% write.csv(file = "../data/processed/contrastsAim1.csv", row.names = FALSE)
 ```
 
-Click [link to figure](../figures/plotDataAim1.png).
+Click [link to figure](../figures/plotDataAim1.svg).
 
 
 ## Aim 2: Chow
@@ -1301,7 +1311,7 @@ Ftests %>% kable
 Ftests %>% write.csv(file = "../data/processed/contrastsAim2.csv", row.names = FALSE)
 ```
 
-Click [link to figure](../figures/plotDataAim2.png).
+Click [link to figure](../figures/plotDataAim2.svg).
 
 
 ## Save
@@ -1319,17 +1329,67 @@ save(M1, M2, file = "../data/processed/lmeObjects.RData")
 
 Test genotype, KO vs WT, within metabolite.
 
-Model excludes design terms for `activity` and `chow`.
+We want to be able to make statements such as
+
+> metabolite X was significantly lower among the WT mice compared to the KO
+> mice fed C7 but no difference was detected in WT and KO mice fed C8
+
+using the subanalysis models.
 
 
 ## Aim 1
+
+Click [link to figure](../figures/plotDataAim1Subanalysis.svg).
+
+
+```r
+kable(summarizeOutcome(D1))
+```
+
+
+
+|                         |       Min.| X1st.Qu.|  Median|     Mean| X3rd.Qu.|    Max.|
+|:------------------------|----------:|--------:|-------:|--------:|--------:|-------:|
+|raw                      |   0.006574|   1.2630|  3.1020| 28.84000|  12.3400| 438.700|
+|log-transform            |  -2.182000|   0.1014|  0.4917|  0.50970|   1.0910|   2.642|
+|normalized raw           |  -6.384000|  -0.9750| -0.3241|  0.01552|   0.6346|  15.100|
+|normalized log-transform | -14.430000|  -1.0640| -0.2196| -0.16020|   0.6920|   9.824|
+
+```r
+D1 %>%
+  ggplot +
+  aes(x = zLogValue, y = metabolite, color = genotype, fill = genotype) +
+  geom_jitter(alpha = 1/2) +
+  facet_wrap(~ activity) +
+  scale_x_continuous("Normalized log-transformed values") +
+  scale_y_discrete("Metabolite") +
+  scale_color_brewer("Genotype", palette = "Set2") +
+  scale_fill_brewer("Genotype", palette = "Set2") +
+  theme_bw()
+```
+
+![plot of chunk plotDataAim1Subanalysis](../figures/plotDataAim1Subanalysis-1.png)
+
+```r
+ggsave("../figures/plotDataAim1Subanalysis.svg")
+```
+
+```
+## Saving 10 x 6 in image
+```
+
+Use same model as main analysis in [model.Rmd](model.Rmd).
 
 
 ```r
 fixed <- formula(zLogValue ~
                    genotype +
+                   activity +
                    metabolite +
-                   genotype * metabolite)
+                   genotype * activity +
+                   genotype * metabolite +
+                   activity * metabolite +
+                   activity * metabolite * genotype)
 random <- formula(~ 1 | id)
 ctrl <- lmeControl(opt = "optim",
                    maxIter = 500, msMaxIter = 500,
@@ -1337,179 +1397,271 @@ ctrl <- lmeControl(opt = "optim",
 cs <-
   corSymm(form = random, fixed = FALSE) %>%
   Initialize(data = D1)
-Dim(cs)
+runClusters <- function (df, metabolites, fixed, xvar, contrastValue, ctrl) {
+  require(magrittr)
+  require(dplyr)
+  require(doParallel)
+  require(data.table)
+  activities <- levels(df$activity)
+  lookup <-
+    expand.grid(metabolites, activities, stringsAsFactors = FALSE) %>%
+    data.frame %>%
+    rename(metabolite = Var1, activity = Var2)
+  n <- nrow(lookup)
+  cl <- makeCluster(15)
+  registerDoParallel(cl)
+  L <- foreach (i = 1:n) %dopar% {
+    require(magrittr)
+    require(dplyr)
+    require(nlme)
+    dfi <-
+      df %>%
+      mutate(metabolite = relevel(metabolite, lookup$metabolite[i])) %>%
+      mutate(activity = relevel(activity, lookup$activity[i]))
+    random <- formula(~ 1 | id)
+    cs <- corSymm(form = random, fixed = FALSE) %>% Initialize(data = dfi)
+    M <- dfi %>% lme(fixed, data = ., random = random, correlation = cs, control = ctrl)
+    M %>%
+      anova(Terms = xvar) %>%
+      data.frame(contrast = contrastValue,
+                 metabolite = lookup$metabolite[i],
+                 activity = lookup$activity[i],
+                 beta = M %>% fixef %>% .[names(.) == paste0(xvar, contrastValue)],
+                 se = M %>% summary %>% .$tTable %>% data.frame %>%
+                        select(matches("Std.Error")) %>%
+                        .[row.names(.) == paste0(xvar, contrastValue), ],
+                 .) %>%
+      mutate(lowerCL = beta + qnorm(0.025) * se,
+             upperCL = beta + qnorm(0.975) * se)
+  }
+  stopCluster(cl)
+  rbindlist(L) %>%
+    mutate(p.adjustBH = p.adjust(p.value, method = "BH"),
+           sig = p.adjustBH < 0.05)
+}
 ```
 
-```
-## $N
-## [1] 613
-## 
-## $M
-## [1] 42
-## 
-## $maxLen
-## [1] 15
-## 
-## $sumLenSq
-## [1] 9013
-## 
-## $len
-## groups
-##   1170   1171   1172   1201   1202   1209   1210   1211   1212 1208B  
-##     15     15     15     15      7     15     15     15     15     15 
-##   1028   1029   1030   1033   1034   1046   1090   1091   1092   1094 
-##     15     15     14     15     15     15     15     15     15     14 
-##   1095   1134   1135   1150   1151   1163   1164 1204B  1205B  1206B  
-##     15     14     15     15     15     15     15     14     14     15 
-## 1207B    1010   1012   1014   1017   1018   1019   1060   1066   1073 
-##     15     15     15     14     14     15     14     14     15     15 
-##   1076   1077 
-##     15     15 
-## 
-## $start
-##  [1]  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22
-## [24] 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41
-```
+Calculate contrasts of *WT vs KO* given metabolite and activity.
+
 
 ```r
-M1 <- D1 %>% lme(fixed, data = ., random = random, correlation = cs, control = ctrl)
-M1 %>% plot
+metabolites <- c("3-HYDROXYBUTYRIC",
+                 "arginine",
+                 "CITRIC",  # Returns "Singularity in backsolve at level 0, block 1" error
+                 "FUMARIC",
+                 "glutamine",
+                 "isoleucine",
+                 "LACTIC",
+                 "LCAC total",  # Returns "Singularity in backsolve at level 0, block 1" error
+                 "leucine",
+                 "MALIC",
+                 "MCAC Total",
+                 "METHYLSUCCINIC",
+                 "PYRUVIC_P2P",
+                 "SUCCINIC-2",
+                 "valine")
+Ftests <- runClusters(D1, metabolites, fixed, "genotype", "KO", ctrl)
+Ftests %>% kable
 ```
 
-![plot of chunk unnamed-chunk-15](../figures/unnamed-chunk-15-1.png)
+
+
+|contrast |metabolite       |activity |       beta|        se| numDF| denDF|    F.value|   p.value|    lowerCL|    upperCL| p.adjustBH|sig   |
+|:--------|:----------------|:--------|----------:|---------:|-----:|-----:|----------:|---------:|----------:|----------:|----------:|:-----|
+|KO       |3-HYDROXYBUTYRIC |Rest     |  1.4316904| 0.6908930|     1|    38|  4.2941441| 0.0450791|  0.0775650|  2.7858159|  0.1229431|FALSE |
+|KO       |arginine         |Rest     |  0.1696864| 0.6727344|     1|    38|  0.0636219| 0.8022197| -1.1488488|  1.4882216|  0.8595211|FALSE |
+|KO       |CITRIC           |Rest     | -0.8153581| 0.6909794|     1|    38|  1.3924081| 0.2453333| -2.1696529|  0.5389367|  0.3873684|FALSE |
+|KO       |FUMARIC          |Rest     | -0.5034239| 0.6908867|     1|    38|  0.5309505| 0.4706746| -1.8575370|  0.8506891|  0.5883432|FALSE |
+|KO       |glutamine        |Rest     |  0.2303375| 0.6727521|     1|    38|  0.1172247| 0.7339508| -1.0882324|  1.5489074|  0.8155009|FALSE |
+|KO       |isoleucine       |Rest     | -0.6237337| 0.6727169|     1|    38|  0.8596741| 0.3596818| -1.9422346|  0.6947671|  0.4904751|FALSE |
+|KO       |LACTIC           |Rest     | -0.8873913| 0.6909324|     1|    38|  1.6495260| 0.2067986| -2.2415940|  0.4668114|  0.3644232|FALSE |
+|KO       |LCAC total       |Rest     |  2.1599379| 0.6727529|     1|    38| 10.3079282| 0.0026946|  0.8413664|  3.4785093|  0.0134728|TRUE  |
+|KO       |leucine          |Rest     | -1.0527945| 0.6727712|     1|    38|  2.4487949| 0.1259058| -2.3714018|  0.2658128|  0.2697982|FALSE |
+|KO       |MALIC            |Rest     | -0.7447701| 0.6910455|     1|    38|  1.1615320| 0.2879424| -2.0991945|  0.6096542|  0.4319135|FALSE |
+|KO       |MCAC Total       |Rest     | -1.3450680| 0.6727116|     1|    38|  3.9978877| 0.0527446| -2.6635586| -0.0265774|  0.1318614|FALSE |
+|KO       |METHYLSUCCINIC   |Rest     | -0.8779018| 0.6909506|     1|    38|  1.6143510| 0.2116053| -2.2321400|  0.4763364|  0.3644232|FALSE |
+|KO       |PYRUVIC_P2P      |Rest     | -1.0997612| 0.7568355|     1|    38|  2.1115135| 0.1544035| -2.5831315|  0.3836090|  0.3088070|FALSE |
+|KO       |SUCCINIC-2       |Rest     | -0.6698524| 0.6910111|     1|    38|  0.9396979| 0.3384854| -2.0242092|  0.6845044|  0.4835506|FALSE |
+|KO       |valine           |Rest     | -0.3779322| 0.6727787|     1|    38|  0.3155610| 0.5775861| -1.6965542|  0.9406898|  0.6664454|FALSE |
+|KO       |3-HYDROXYBUTYRIC |Exercise | -1.7006752| 0.5594348|     1|    38|  9.2415293| 0.0042684| -2.7971471| -0.6042032|  0.0182930|TRUE  |
+|KO       |arginine         |Exercise |  0.6496540| 0.5193904|     1|    38|  1.5645032| 0.2186539| -0.3683324|  1.6676404|  0.3644232|FALSE |
+|KO       |CITRIC           |Exercise | -1.3654471| 0.5956094|     1|    38|  5.2556525| 0.0275031| -2.5328201| -0.1980741|  0.0916771|FALSE |
+|KO       |FUMARIC          |Exercise | -1.0165798| 0.5964543|     1|    38|  2.9048833| 0.0964765| -2.1856087|  0.1524490|  0.2226382|FALSE |
+|KO       |glutamine        |Exercise | -0.0570694| 0.5790269|     1|    38|  0.0097143| 0.9220050| -1.1919413|  1.0778025|  0.9220050|FALSE |
+|KO       |isoleucine       |Exercise | -0.0912112| 0.5651815|     1|    38|  0.0260448| 0.8726460| -1.1989466|  1.0165242|  0.9027372|FALSE |
+|KO       |LACTIC           |Exercise | -1.2716066| 0.5853856|     1|    38|  4.7186909| 0.0361429| -2.4189412| -0.1242720|  0.1084287|FALSE |
+|KO       |LCAC total       |Exercise |  2.8676596| 0.5831178|     1|    38| 24.1848065| 0.0000172|  1.7247698|  4.0105495|  0.0002574|TRUE  |
+|KO       |leucine          |Exercise |  2.3741819| 0.5590251|     1|    38| 18.0370460| 0.0001348|  1.2785129|  3.4698509|  0.0013479|TRUE  |
+|KO       |MALIC            |Exercise | -1.4431221| 0.5690698|     1|    38|  6.4309481| 0.0154478| -2.5584784| -0.3277657|  0.0579292|FALSE |
+|KO       |MCAC Total       |Exercise | -2.0645323| 0.5867500|     1|    38| 12.3804708| 0.0011432| -3.2145412| -0.9145234|  0.0085743|TRUE  |
+|KO       |METHYLSUCCINIC   |Exercise | -0.3668038| 0.5976355|     1|    38|  0.3766993| 0.5430320| -1.5381479|  0.8045403|  0.6516383|FALSE |
+|KO       |PYRUVIC_P2P      |Exercise | -0.5396859| 0.6818891|     1|    38|  0.6264042| 0.4335900| -1.8761639|  0.7967922|  0.5655522|FALSE |
+|KO       |SUCCINIC-2       |Exercise | -2.9845528| 0.5604496|     1|    38| 28.3586426| 0.0000048| -4.0830138| -1.8860918|  0.0001436|TRUE  |
+|KO       |valine           |Exercise |  2.0765455| 0.6053267|     1|    38| 11.7680173| 0.0014660|  0.8901270|  3.2629640|  0.0087958|TRUE  |
 
 ```r
-M1 %>% ranef %>% plot
+Ftests %>% write.csv(file = "../data/processed/contrastsAim1Subanalysis.csv", row.names = FALSE)
 ```
 
-![plot of chunk unnamed-chunk-15](../figures/unnamed-chunk-15-2.png)
-
-```r
-FtestsGenotype <-
-  M1 %>%
-  tidy(effects = "fixed") %>%
-  filter(grepl("^geno", term)) %>%
-  mutate(p.valueBH = p.adjust(p.value, method = "BH"),
-         sig = p.valueBH < 0.05)
-FtestsGenotype %>% kable
-```
-
-
-
-|term                                |   estimate| std.error|  statistic|   p.value| p.valueBH|sig   |
-|:-----------------------------------|----------:|---------:|----------:|---------:|---------:|:-----|
-|genotypeKO                          | -0.3038725| 0.4303008| -0.7061864| 0.4841654| 0.5586524|FALSE |
-|genotypeKO:metabolitearginine       |  0.7676725| 0.5978577|  1.2840389| 0.1996759| 0.3719241|FALSE |
-|genotypeKO:metaboliteCITRIC         | -0.9003970| 0.6070310| -1.4832800| 0.1385802| 0.3464505|FALSE |
-|genotypeKO:metaboliteFUMARIC        | -0.4992164| 0.5861268| -0.8517209| 0.3947445| 0.5586524|FALSE |
-|genotypeKO:metaboliteglutamine      |  0.3953421| 0.5611719|  0.7044937| 0.4814274| 0.5586524|FALSE |
-|genotypeKO:metaboliteisoleucine     | -0.1468599| 0.5868131| -0.2502668| 0.8024757| 0.8447462|FALSE |
-|genotypeKO:metaboliteLACTIC         | -0.6954387| 0.5702291| -1.2195777| 0.2231545| 0.3719241|FALSE |
-|genotypeKO:metaboliteLCAC total     |  2.8153847| 0.5982285|  4.7062027| 0.0000032| 0.0000481|TRUE  |
-|genotypeKO:metaboliteleucine        |  0.8303182| 0.6062870|  1.3695133| 0.1714050| 0.3672964|FALSE |
-|genotypeKO:metaboliteMALIC          | -0.9468622| 0.5867153| -1.6138360| 0.1071440| 0.3464505|FALSE |
-|genotypeKO:metaboliteMCAC Total     | -1.3293899| 0.5989026| -2.2197098| 0.0268508| 0.1342539|FALSE |
-|genotypeKO:metaboliteMETHYLSUCCINIC | -0.1184633| 0.6046516| -0.1959199| 0.8447462| 0.8447462|FALSE |
-|genotypeKO:metabolitePYRUVIC_P2P    | -0.4622595| 0.6227836| -0.7422474| 0.4582584| 0.5586524|FALSE |
-|genotypeKO:metaboliteSUCCINIC-2     | -1.4816356| 0.5984782| -2.4756718| 0.0136025| 0.1020186|FALSE |
-|genotypeKO:metabolitevaline         |  0.9197889| 0.6090879|  1.5101086| 0.1315974| 0.3464505|FALSE |
-
-```r
-FtestsGenotype %>% write.csv(file = "../data/processed/contrastsGenotypeAim1.csv",
-                             row.names = FALSE)
-```
 
 ## Aim 2
 
+Click [link to figure](../figures/plotDataAim2Subanalysis.svg).
+
 
 ```r
+kable(summarizeOutcome(D2))
+```
+
+
+
+|                         |     Min.| X1st.Qu.|  Median|     Mean| X3rd.Qu.|    Max.|
+|:------------------------|--------:|--------:|-------:|--------:|--------:|-------:|
+|raw                      |  0.02303|  0.91940|  3.3490| 24.88000|  12.0700| 408.800|
+|log-transform            | -1.63800| -0.03649|  0.5249|  0.52900|   1.0820|   2.612|
+|normalized raw           | -6.59600| -0.91660| -0.3149|  0.80960|   0.6589|  56.330|
+|normalized log-transform | -9.67300| -0.98980| -0.1182|  0.02061|   0.7084|  11.980|
+
+```r
+D2 %>%
+  ggplot +
+  aes(x = zLogValue, y = metabolite, color = genotype, fill = genotype) +
+  geom_jitter(alpha = 1/2) +
+  facet_wrap(~ chow) +
+  scale_x_continuous("Normalized log-transformed values") +
+  scale_y_discrete("Metabolite") +
+  scale_color_brewer("Genotype", palette = "Set2") +
+  scale_fill_brewer("Genotype", palette = "Set2") +
+  theme_bw()
+```
+
+![plot of chunk plotDataAim2Subanalysis](../figures/plotDataAim2Subanalysis-1.png)
+
+```r
+ggsave("../figures/plotDataAim2Subanalysis.svg")
+```
+
+```
+## Saving 10 x 6 in image
+```
+
+Use same model as main analysis in [model.Rmd](model.Rmd).
+
+
+```r
+fixed <- formula(zLogValue ~
+                   genotype +
+                   chow +
+                   metabolite +
+                   genotype * chow +
+                   genotype * metabolite +
+                   chow * metabolite +
+                   chow * metabolite * genotype)
 cs <-
   corSymm(form = random, fixed = FALSE) %>%
   Initialize(data = D2)
-Dim(cs)
+runClusters <- function (df, metabolites, fixed, xvar, contrastValue, ctrl) {
+  require(magrittr)
+  require(dplyr)
+  require(doParallel)
+  require(data.table)
+  chows <- levels(df$chow)
+  lookup <-
+    expand.grid(metabolites, chows, stringsAsFactors = FALSE) %>%
+    data.frame %>%
+    rename(metabolite = Var1, chow = Var2)
+  n <- nrow(lookup)
+  cl <- makeCluster(15)
+  registerDoParallel(cl)
+  L <- foreach (i = 1:n) %dopar% {
+    require(magrittr)
+    require(dplyr)
+    require(nlme)
+    dfi <-
+      df %>%
+      mutate(metabolite = relevel(metabolite, lookup$metabolite[i])) %>%
+      mutate(chow = relevel(chow, lookup$chow[i]))
+    random <- formula(~ 1 | id)
+    cs <- corSymm(form = random, fixed = FALSE) %>% Initialize(data = dfi)
+    M <- dfi %>% lme(fixed, data = ., random = random, correlation = cs, control = ctrl)
+    M %>%
+      anova(Terms = xvar) %>%
+      data.frame(contrast = contrastValue,
+                 metabolite = lookup$metabolite[i],
+                 chow = lookup$chow[i],
+                 beta = M %>% fixef %>% .[names(.) == paste0(xvar, contrastValue)],
+                 se = M %>% summary %>% .$tTable %>% data.frame %>%
+                        select(matches("Std.Error")) %>%
+                        .[row.names(.) == paste0(xvar, contrastValue), ],
+                 .) %>%
+      mutate(lowerCL = beta + qnorm(0.025) * se,
+             upperCL = beta + qnorm(0.975) * se)
+  }
+  stopCluster(cl)
+  rbindlist(L) %>%
+    mutate(p.adjustBH = p.adjust(p.value, method = "BH"),
+           sig = p.adjustBH < 0.05)
+}
 ```
 
-```
-## $N
-## [1] 641
-## 
-## $M
-## [1] 43
-## 
-## $maxLen
-## [1] 15
-## 
-## $sumLenSq
-## [1] 9561
-## 
-## $len
-## groups
-##       1101       1102       1103       1184       1185       1186 
-##         14         15         15         15         15         15 
-##       1195       1196       1197       1203 1192/1198B       1176 
-##         15         15         15         15         15         15 
-##       1177       1179       1180       1190       1191       1193 
-##         15         15         15         15         15         15 
-##       1194       1199       1200 1192A/1198       1107       1113 
-##         14         13         15         15         15         15 
-##       1114       1115       1117       1118       1119       1204 
-##         15         15         15         15         15         15 
-##       1205       1206       1120       1126       1127       1128 
-##         15         15         15         15         15         15 
-##       1142       1143       1144       1145       1146       1158 
-##         15         15         15         15         15         15 
-##       1159 
-##         15 
-## 
-## $start
-##  [1]  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22
-## [24] 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42
-```
+Calculate contrasts of *Yellow (C8) vs White (C7)* given metabolite and chow.
+
 
 ```r
-M2 <- D2 %>% lme(fixed, data = ., random = random, correlation = cs, control = ctrl)
-M2 %>% plot
-```
-
-![plot of chunk unnamed-chunk-16](../figures/unnamed-chunk-16-1.png)
-
-```r
-M2 %>% ranef %>% plot
-```
-
-![plot of chunk unnamed-chunk-16](../figures/unnamed-chunk-16-2.png)
-
-```r
-FtestsGenotype <-
-  M2 %>%
-  tidy(effects = "fixed") %>%
-  filter(grepl("^geno", term)) %>%
-  mutate(p.valueBH = p.adjust(p.value, method = "BH"),
-         sig = p.valueBH < 0.05)
-FtestsGenotype %>% kable
+metabolites <- c("3-HYDROXYBUTYRIC",
+                 "arginine",
+                 "CITRIC",
+                 "FUMARIC",
+                 "glutamine",
+                 "isoleucine",
+                 "LACTIC",
+                 "LC even AC total",
+                 "LC odd AC total",
+                 "leucine",
+                 "MALIC",
+                 "MCAC total",
+                 "METHYLSUCCINIC",
+                 "SUCCINIC-2",
+                 "valine")
+Ftests <- runClusters(D2, metabolites, fixed, "genotype", "KO", ctrl)
+Ftests %>% kable
 ```
 
 
 
-|term                                  |   estimate| std.error|  statistic|   p.value| p.valueBH|sig   |
-|:-------------------------------------|----------:|---------:|----------:|---------:|---------:|:-----|
-|genotypeKO                            | -0.3368702| 0.3490429| -0.9651255| 0.3401404| 0.5102106|FALSE |
-|genotypeKO:metabolitearginine         |  0.3992285| 0.4526561|  0.8819687| 0.3781655| 0.5156803|FALSE |
-|genotypeKO:metaboliteCITRIC           |  0.3332981| 0.4851481|  0.6870028| 0.4923604| 0.6154505|FALSE |
-|genotypeKO:metaboliteFUMARIC          | -0.4266363| 0.4204486| -1.0147167| 0.3106714| 0.5102106|FALSE |
-|genotypeKO:metaboliteglutamine        | -0.4942971| 0.4671900| -1.0580216| 0.2904938| 0.5102106|FALSE |
-|genotypeKO:metaboliteisoleucine       | -0.4696086| 0.4606517| -1.0194440| 0.3084247| 0.5102106|FALSE |
-|genotypeKO:metaboliteLACTIC           | -2.0134524| 0.4399338| -4.5767163| 0.0000058| 0.0000174|TRUE  |
-|genotypeKO:metaboliteLC even AC total |  5.7323952| 0.4874266| 11.7605308| 0.0000000| 0.0000000|TRUE  |
-|genotypeKO:metaboliteLC odd AC total  |  5.9353007| 0.4888701| 12.1408548| 0.0000000| 0.0000000|TRUE  |
-|genotypeKO:metaboliteleucine          | -0.1758206| 0.4348997| -0.4042785| 0.6861596| 0.7917226|FALSE |
-|genotypeKO:metaboliteMALIC            | -3.2373497| 0.4663457| -6.9419525| 0.0000000| 0.0000000|TRUE  |
-|genotypeKO:metaboliteMCAC total       |  1.8134752| 0.4496543|  4.0330432| 0.0000626| 0.0001564|TRUE  |
-|genotypeKO:metaboliteMETHYLSUCCINIC   | -0.1252917| 0.4703301| -0.2663911| 0.7900344| 0.8464654|FALSE |
-|genotypeKO:metaboliteSUCCINIC-2       | -3.3633338| 0.4452044| -7.5545833| 0.0000000| 0.0000000|TRUE  |
-|genotypeKO:metabolitevaline           | -0.0511987| 0.4259131| -0.1202094| 0.9043596| 0.9043596|FALSE |
+|contrast |metabolite       |chow        |       beta|        se| numDF| denDF|     F.value|   p.value|    lowerCL|    upperCL| p.adjustBH|sig   |
+|:--------|:----------------|:-----------|----------:|---------:|-----:|-----:|-----------:|---------:|----------:|----------:|----------:|:-----|
+|KO       |3-HYDROXYBUTYRIC |White (C7)  | -0.2565878| 0.4476548|     1|    39|   0.3285379| 0.5698117| -1.1339751|  0.6207995|  0.7432327|FALSE |
+|KO       |arginine         |White (C7)  | -0.0495553| 0.4381110|     1|    39|   0.0127942| 0.9105226| -0.9082370|  0.8091264|  0.9755599|FALSE |
+|KO       |CITRIC           |White (C7)  | -0.0017554| 0.4475300|     1|    39|   0.0000154| 0.9968903| -0.8788981|  0.8753872|  0.9968903|FALSE |
+|KO       |FUMARIC          |White (C7)  | -0.6314981| 0.4484758|     1|    39|   1.9827412| 0.1670238| -1.5104945|  0.2474984|  0.2505358|FALSE |
+|KO       |glutamine        |White (C7)  | -1.3015827| 0.4383092|     1|    39|   8.8182491| 0.0050808| -2.1606529| -0.4425124|  0.0117249|TRUE  |
+|KO       |isoleucine       |White (C7)  | -0.6360783| 0.4391176|     1|    39|   2.0982613| 0.1554596| -1.4967330|  0.2245763|  0.2454626|FALSE |
+|KO       |LACTIC           |White (C7)  | -1.8453265| 0.4392846|     1|    39|  17.6463326| 0.0001496| -2.7063085| -0.9843445|  0.0004079|TRUE  |
+|KO       |LC even AC total |White (C7)  |  5.0888938| 0.4402724|     1|    39| 133.5991819| 0.0000000|  4.2259757|  5.9518120|  0.0000000|TRUE  |
+|KO       |LC odd AC total  |White (C7)  |  7.6429803| 0.4388201|     1|    39| 303.3559704| 0.0000000|  6.7829088|  8.5030518|  0.0000000|TRUE  |
+|KO       |leucine          |White (C7)  | -0.3303902| 0.4386908|     1|    39|   0.5672015| 0.4558956| -1.1902084|  0.5294279|  0.6216759|FALSE |
+|KO       |MALIC            |White (C7)  | -2.7045483| 0.4383713|     1|    39|  38.0631982| 0.0000003| -3.5637403| -1.8453564|  0.0000010|TRUE  |
+|KO       |MCAC total       |White (C7)  |  1.3085849| 0.4387649|     1|    39|   8.8948791| 0.0049104|  0.4486215|  2.1685482|  0.0117249|TRUE  |
+|KO       |METHYLSUCCINIC   |White (C7)  | -1.1202224| 0.4388209|     1|    39|   6.5167936| 0.0147131| -1.9802955| -0.2601493|  0.0275870|TRUE  |
+|KO       |SUCCINIC-2       |White (C7)  | -3.0079754| 0.4385762|     1|    39|  47.0390340| 0.0000000| -3.8675690| -2.1483818|  0.0000001|TRUE  |
+|KO       |valine           |White (C7)  | -0.5239515| 0.4393764|     1|    39|   1.4220297| 0.2402748| -1.3851134|  0.3372105|  0.3432497|FALSE |
+|KO       |3-HYDROXYBUTYRIC |Yellow (C8) | -0.5591050| 0.3837522|     1|    39|   2.1226831| 0.1531371| -1.3112454|  0.1930354|  0.2454626|FALSE |
+|KO       |arginine         |Yellow (C8) |  0.0873149| 0.3664391|     1|    39|   0.0567771| 0.8129118| -0.6308925|  0.8055224|  0.9032354|FALSE |
+|KO       |CITRIC           |Yellow (C8) |  0.0082448| 0.3923252|     1|    39|   0.0004416| 0.9833407| -0.7606984|  0.7771879|  0.9968903|FALSE |
+|KO       |FUMARIC          |Yellow (C8) | -0.7586754| 0.3775018|     1|    39|   4.0390000| 0.0514148| -1.4985653| -0.0187854|  0.0907321|FALSE |
+|KO       |glutamine        |Yellow (C8) | -0.1618837| 0.3230315|     1|    39|   0.2511403| 0.6190903| -0.7950139|  0.4712465|  0.7738628|FALSE |
+|KO       |isoleucine       |Yellow (C8) | -0.9416652| 0.3634058|     1|    39|   6.7144314| 0.0133859| -1.6539276| -0.2294028|  0.0267718|TRUE  |
+|KO       |LACTIC           |Yellow (C8) | -2.7185593| 0.3760742|     1|    39|  52.2553299| 0.0000000| -3.4556512| -1.9814675|  0.0000000|TRUE  |
+|KO       |LC even AC total |Yellow (C8) |  5.6507603| 0.3584289|     1|    39| 248.5464954| 0.0000000|  4.9482525|  6.3532682|  0.0000000|TRUE  |
+|KO       |LC odd AC total  |Yellow (C8) |  3.1159162| 0.3705236|     1|    39|  70.7195963| 0.0000000|  2.3897033|  3.8421291|  0.0000000|TRUE  |
+|KO       |leucine          |Yellow (C8) | -0.9101797| 0.3405856|     1|    39|   7.1417016| 0.0109359| -1.5777152| -0.2426442|  0.0234340|TRUE  |
+|KO       |MALIC            |Yellow (C8) | -4.4975677| 0.3909248|     1|    39| 132.3637302| 0.0000000| -5.2637662| -3.7313692|  0.0000000|TRUE  |
+|KO       |MCAC total       |Yellow (C8) |  1.6144806| 0.3697245|     1|    39|  19.0681751| 0.0000901|  0.8898338|  2.3391274|  0.0002704|TRUE  |
+|KO       |METHYLSUCCINIC   |Yellow (C8) |  0.1434339| 0.3647514|     1|    39|   0.1546358| 0.6962855| -0.5714657|  0.8583336|  0.8034064|FALSE |
+|KO       |SUCCINIC-2       |Yellow (C8) | -4.7425230| 0.3921341|     1|    39| 146.2681385| 0.0000000| -5.5110916| -3.9739543|  0.0000000|TRUE  |
+|KO       |valine           |Yellow (C8) | -0.1797613| 0.4104614|     1|    39|   0.1917996| 0.6638392| -0.9842507|  0.6247282|  0.7966070|FALSE |
 
 ```r
-FtestsGenotype %>% write.csv(file = "../data/processed/contrastsGenotypeAim2.csv",
-                             row.names = FALSE)
+Ftests %>% write.csv(file = "../data/processed/contrastsAim2Subanalysis.csv", row.names = FALSE)
 ```
