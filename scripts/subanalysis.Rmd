@@ -47,9 +47,51 @@ ctrl <- lmeControl(opt = "optim",
 cs <-
   corSymm(form = random, fixed = FALSE) %>%
   Initialize(data = D1)
+runClusters <- function (df, metabolites, fixed, xvar, contrastValue, ctrl) {
+  require(magrittr)
+  require(dplyr)
+  require(doParallel)
+  require(data.table)
+  activities <- levels(df$activity)
+  lookup <-
+    expand.grid(metabolites, activities, stringsAsFactors = FALSE) %>%
+    data.frame %>%
+    rename(metabolite = Var1, activity = Var2)
+  n <- nrow(lookup)
+  cl <- makeCluster(15)
+  registerDoParallel(cl)
+  L <- foreach (i = 1:n) %dopar% {
+    require(magrittr)
+    require(dplyr)
+    require(nlme)
+    dfi <-
+      df %>%
+      mutate(metabolite = relevel(metabolite, lookup$metabolite[i])) %>%
+      mutate(activity = relevel(activity, lookup$activity[i]))
+    random <- formula(~ 1 | id)
+    cs <- corSymm(form = random, fixed = FALSE) %>% Initialize(data = dfi)
+    M <- dfi %>% lme(fixed, data = ., random = random, correlation = cs, control = ctrl)
+    M %>%
+      anova(Terms = xvar) %>%
+      data.frame(contrast = contrastValue,
+                 metabolite = lookup$metabolite[i],
+                 activity = lookup$activity[i],
+                 beta = M %>% fixef %>% .[names(.) == paste0(xvar, contrastValue)],
+                 se = M %>% summary %>% .$tTable %>% data.frame %>%
+                        select(matches("Std.Error")) %>%
+                        .[row.names(.) == paste0(xvar, contrastValue), ],
+                 .) %>%
+      mutate(lowerCL = beta + qnorm(0.025) * se,
+             upperCL = beta + qnorm(0.975) * se)
+  }
+  stopCluster(cl)
+  rbindlist(L) %>%
+    mutate(p.adjustBH = p.adjust(p.value, method = "BH"),
+           sig = p.adjustBH < 0.05)
+}
 ```
 
-Calculate contrasts of *WT vs KO* given metabolite and genotype.
+Calculate contrasts of *WT vs KO* given metabolite and activity.
 
 ```{r}
 metabolites <- c("3-HYDROXYBUTYRIC",
@@ -106,9 +148,51 @@ fixed <- formula(zLogValue ~
 cs <-
   corSymm(form = random, fixed = FALSE) %>%
   Initialize(data = D2)
+runClusters <- function (df, metabolites, fixed, xvar, contrastValue, ctrl) {
+  require(magrittr)
+  require(dplyr)
+  require(doParallel)
+  require(data.table)
+  chows <- levels(df$chow)
+  lookup <-
+    expand.grid(metabolites, chows, stringsAsFactors = FALSE) %>%
+    data.frame %>%
+    rename(metabolite = Var1, chow = Var2)
+  n <- nrow(lookup)
+  cl <- makeCluster(15)
+  registerDoParallel(cl)
+  L <- foreach (i = 1:n) %dopar% {
+    require(magrittr)
+    require(dplyr)
+    require(nlme)
+    dfi <-
+      df %>%
+      mutate(metabolite = relevel(metabolite, lookup$metabolite[i])) %>%
+      mutate(chow = relevel(chow, lookup$chow[i]))
+    random <- formula(~ 1 | id)
+    cs <- corSymm(form = random, fixed = FALSE) %>% Initialize(data = dfi)
+    M <- dfi %>% lme(fixed, data = ., random = random, correlation = cs, control = ctrl)
+    M %>%
+      anova(Terms = xvar) %>%
+      data.frame(contrast = contrastValue,
+                 metabolite = lookup$metabolite[i],
+                 chow = lookup$chow[i],
+                 beta = M %>% fixef %>% .[names(.) == paste0(xvar, contrastValue)],
+                 se = M %>% summary %>% .$tTable %>% data.frame %>%
+                        select(matches("Std.Error")) %>%
+                        .[row.names(.) == paste0(xvar, contrastValue), ],
+                 .) %>%
+      mutate(lowerCL = beta + qnorm(0.025) * se,
+             upperCL = beta + qnorm(0.975) * se)
+  }
+  stopCluster(cl)
+  rbindlist(L) %>%
+    mutate(p.adjustBH = p.adjust(p.value, method = "BH"),
+           sig = p.adjustBH < 0.05)
+}
 ```
 
-Calculate contrasts of *Yellow (C8) vs White (C7)* given metabolite and genotype.
+Calculate contrasts of *Yellow (C8) vs White (C7)* given metabolite and chow.
 
 ```{r}
 metabolites <- c("3-HYDROXYBUTYRIC",
