@@ -12,9 +12,10 @@ L1a[["file"]]
 L1a[["dim"]]
 L1a[["names"]]
 L1a[["head"]]
+levels <- c("wtrest", "wtex", "korest", "koex")
 D1a <-
   L1a[["data"]] %>%
-  mutate(condition = factor(condition, levels = c("wtrest", "wtex", "korest", "koex")))
+  mutate(condition = factor(condition, levels = levels))
 ```
 
 Import Aim 1 Acylcarnitines.
@@ -28,7 +29,7 @@ L1b[["names"]]
 L1b[["head"]]
 D1b <-
   L1b[["data"]] %>%
-  mutate(condition = factor(condition, levels = c("wtrest", "wtex", "korest", "koex")))
+  mutate(condition = factor(condition, levels = levels))
 ```
 
 Import Aim 2 Amino Acids and TCA Cycle intermediates (Neg).
@@ -40,9 +41,10 @@ L2a[["file"]]
 L2a[["dim"]]
 L2a[["names"]]
 L2a[["head"]]
+levels <- c("wtex", "koex", "koc7", "koc8")
 D2a <-
   L2a[["data"]] %>%
-  mutate(condition = factor(condition, levels = c("wtex", "koc7", "koc8", "koex")))
+  mutate(condition = factor(condition, levels = levels))
 ```
 
 Import Aim 2 Acylcarnitines.
@@ -56,5 +58,5 @@ L2b[["names"]]
 L2b[["head"]]
 D2b <-
   L2b[["data"]] %>%
-  mutate(condition = factor(condition, levels = c("wtex", "koc7", "koc8", "koex")))
+  mutate(condition = factor(condition, levels = levels))
 ```
