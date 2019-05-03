@@ -10,7 +10,8 @@ importDataToList <- function (f, levels) {
     mutate(condition = factor(condition, levels = levels, labels = toupper(levels))) %>%
     mutate(metabolite = factor(metabolite)) %>%
     select(-c(aim, group)) %>%
-    filter(!is.na(z_value))
+    filter(!is.na(z_value)) %>%
+    filter(metabolite %in% c("CITRIC", "FUMARIC"))  # Filter for testing
   L <- list(file = f,
             file.size = file.size(f),
             file.mtime = file.mtime(f),
