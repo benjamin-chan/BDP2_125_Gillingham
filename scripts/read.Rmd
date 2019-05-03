@@ -3,28 +3,60 @@
 Import the data.
 Data files are locally stored.
 
-Import Aim 1: Exercise data.
+Import Aim 1 Amino Acids and TCA Cycle intermediates (Neg).
 
 ```{r}
-L1 <- importDataToList("../data/raw/Ultragenyx Aim 1 Z score.xlsx")
-L1[["file"]]
-L1[["dim"]]
-L1[["names"]]
-L1[["head"]]
-D1 <- L1[["data"]]
+f <- "../data/raw/Z scores Aim 1 Neg-aa.xlsx"
+L1a <- importDataToList(f)
+L1a[["file"]]
+L1a[["dim"]]
+L1a[["names"]]
+L1a[["head"]]
+D1a <-
+  L1a[["data"]] %>%
+  mutate(condition = factor(condition, levels = c("wtrest", "wtex", "korest", "koex")))
 ```
 
-Import Aim 2: Diet data.
-
-* Metabolite `LCAC total` is the sum of `LC even AC total` and `LC odd AC total`; remove `LCAC total` data
+Import Aim 1 Acylcarnitines.
 
 ```{r}
-L2 <- importDataToList("../data/raw/Ultragenyx Aim 2 Z score.xlsx")
-L2[["file"]]
-L2[["dim"]]
-L2[["names"]]
-L2[["head"]]
-D2 <- L2[["data"]] %>% filter(metabolite != "LCAC total") %>% mutate(metabolite = droplevels(metabolite))
+f <- "../data/raw/Z scores Aim 1 AC.xlsx"
+L1b <- importDataToList(f)
+L1b[["file"]]
+L1b[["dim"]]
+L1b[["names"]]
+L1b[["head"]]
+D1b <-
+  L1b[["data"]] %>%
+  mutate(condition = factor(condition, levels = c("wtrest", "wtex", "korest", "koex")))
+```
+
+Import Aim 2 Amino Acids and TCA Cycle intermediates (Neg).
+
+```{r}
+f <- "../data/raw/Z scores Aim 2 Neg-aa.xlsx"
+L2a <- importDataToList(f)
+L2a[["file"]]
+L2a[["dim"]]
+L2a[["names"]]
+L2a[["head"]]
+D2a <-
+  L2a[["data"]] %>%
+  mutate(condition = factor(condition, levels = c("wtex", "koc7", "koc8", "koex")))
+```
+
+Import Aim 2 Acylcarnitines.
+
+```{r}
+f <- "../data/raw/Z scores Aim 2 AC.xlsx"
+L2b <- importDataToList(f)
+L2b[["file"]]
+L2b[["dim"]]
+L2b[["names"]]
+L2b[["head"]]
+D2b <-
+  L2b[["data"]] %>%
+  mutate(condition = factor(condition, levels = c("wtex", "koc7", "koc8", "koex")))
 ```
 
 
@@ -41,7 +73,7 @@ D2 <- L2[["data"]] %>% filter(metabolite != "LCAC total") %>% mutate(metabolite 
 > Can you check these data points? The raw values look suspicious to me, like
 > they're the "floor" of the detectable range. I'm wondering if they're real or
 > if they should be excluded.
- 
+
 ```
 > D1 %>% filter(value < 1e-6)
 # AIM 1
