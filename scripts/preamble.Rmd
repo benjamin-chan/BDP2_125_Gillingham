@@ -3,7 +3,7 @@
 Set working directory.
 
 ```{r}
-setwd("~/Projects/GillinghamMetabolomics/scripts")
+setwd("C:/Users/Ben/Google Drive/Work/BDP2_125_Gillingham/scripts")
 ```
 
 Load libraries.
