@@ -1,5 +1,3 @@
-setwd("~/Projects/GillinghamMetabolomics/scripts")
-
 library(checkpoint)
 checkpoint("2019-04-01", use.knitr = TRUE)
 
@@ -12,17 +10,17 @@ files <- c("header.yaml",
            "read.Rmd",
            "model.Rmd",
            "subanalysis.Rmd")
-f <- file("master.Rmd", open = "w")
+    x <- readLines(sprintf("scripts/%s", files[i]))
 for (i in 1:length(files)) {
-    x <- readLines(files[i])
+    x <- readLines(sprintf("scripts/%s", files[i]))
     writeLines(x, f)
     if (i < length(files)) {writeLines("\n---\n", f)}
 }
 close(f)
 library(knitr)
 library(rmarkdown)
-opts_chunk$set(fig.path = "../figures/")
-knit("master.Rmd", output = "../docs/index.md")
+opts_chunk$set(fig.path = "figures/")
+knit("master.Rmd", output = "docs/index.md")
 # pandoc("../docs/index.md", format = "html")
 file.remove("master.Rmd")
 sink()

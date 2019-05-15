@@ -6,7 +6,7 @@ Data files are locally stored.
 Import Aim 1 Amino Acids and TCA Cycle intermediates (Neg).
 
 ```{r}
-f <- "../data/raw/Z scores Aim 1 Neg-aa.xlsx"
+f <- "data/raw/Z scores Aim 1 Neg-aa.xlsx"
 levels <- c("wtrest", "wtex", "korest", "koex")
 L1a <- importDataToList(f, levels)
 L1a[["file"]]
@@ -19,7 +19,7 @@ D1a <- L1a[["data"]]
 Import Aim 1 Acylcarnitines.
 
 ```{r}
-f <- "../data/raw/Z scores Aim 1 AC.xlsx"
+f <- "data/raw/Z scores Aim 1 AC.xlsx"
 L1b <- importDataToList(f, levels)
 L1b[["file"]]
 L1b[["dim"]]
@@ -31,7 +31,7 @@ D1b <- L1b[["data"]]
 Import Aim 2 Amino Acids and TCA Cycle intermediates (Neg).
 
 ```{r}
-f <- "../data/raw/Z scores Aim 2 Neg-aa.xlsx"
+f <- "data/raw/Z scores Aim 2 Neg-aa.xlsx"
 levels <- c("wtex", "koex", "koc7", "koc8")
 L2a <- importDataToList(f, levels)
 L2a[["file"]]
@@ -44,7 +44,7 @@ D2a <- L2a[["data"]]
 Import Aim 2 Acylcarnitines.
 
 ```{r}
-f <- "../data/raw/Z scores Aim 2 AC.xlsx"
+f <- "data/raw/Z scores Aim 2 AC.xlsx"
 L2b <- importDataToList(f, levels)
 L2b[["file"]]
 L2b[["dim"]]

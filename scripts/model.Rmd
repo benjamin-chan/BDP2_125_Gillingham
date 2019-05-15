@@ -74,7 +74,7 @@ M %>% plot()
 M %>% ranef() %>% plot()
 M %>% anova() %>% kable()
 M %>% tidy(effects = "fixed") %>% kable()
-M %>% tidy(effects = "fixed") %>% write.csv(file = "../data/processed/lmeFixedCoefAim1a.csv", row.names = FALSE)
+M %>% tidy(effects = "fixed") %>% write.csv(file = "data/processed/lmeFixedCoefAim1a.csv", row.names = FALSE)
 M1a <- M
 ```
 
@@ -84,5 +84,5 @@ M1a <- M
 Save `lme` objects for interactive work.
 
 ```{r}
-save(M1a, file = "../data/processed/lmeObjects.RData")
+save(M1a, file = "data/processed/lmeObjects.RData")
 ```
