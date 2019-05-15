@@ -1,16 +1,11 @@
 library(checkpoint)
 checkpoint("2019-04-01", use.knitr = TRUE)
 
-Sys.time0 <- Sys.time()
-
-sink("script.log")
 files <- c("header.yaml",
            "preamble.Rmd",
-           # "read.Rmd")
            "read.Rmd",
-           "model.Rmd",
-           "subanalysis.Rmd")
-    x <- readLines(sprintf("scripts/%s", files[i]))
+           "model.Rmd")
+f <- file("master.Rmd", open = "w")
 for (i in 1:length(files)) {
     x <- readLines(sprintf("scripts/%s", files[i]))
     writeLines(x, f)
@@ -20,13 +15,6 @@ close(f)
 library(knitr)
 library(rmarkdown)
 opts_chunk$set(fig.path = "figures/")
-knit("master.Rmd", output = "docs/index.md")
-# pandoc("../docs/index.md", format = "html")
+knit("master.Rmd", output = "docs/BDP2_125_Gillingham.md")
+pandoc("docs/BDP2_125_Gillingham.md", format = "html")
 file.remove("master.Rmd")
-sink()
-
-sink("session.log")
-list(completionDateTime = Sys.time(),
-     executionTime = Sys.time() - Sys.time0,
-     sessionInfo = sessionInfo())
-sink()
