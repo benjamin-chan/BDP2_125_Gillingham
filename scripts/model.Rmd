@@ -20,24 +20,6 @@ Estimates for the contrasts comparing each combination of condition and metaboli
 P-values were adjusted to control the false discovery rate, the expected proportion of false discoveries amongst the rejected hypotheses.
 The data was analyzed using `r R.Version()$version.string` and the `nlme` package version `r packageVersion("nlme")`.
 
-
-## References
-
-Benjamini, Y., and Hochberg, Y.
-(1995).
-Controlling the false discovery rate: a practical and powerful approach to multiple testing.
-*Journal of the Royal Statistical Society Series B* 57, 289–300.
-
-```{r}
-citation()
-citation("nlme")
-```
-
-
-## Aim 1
-
-**WT-rest (ref), WT-exercise, KO-rest, KO-exercise**
-
 Estimate model.
 Specify the correlation structure using `cs`.
 Use `corCompSymm`, *compound symmetry structure corresponding to a constant correlation*.
@@ -66,6 +48,26 @@ estimateModel <- function (data) {
 }
 ```
 
+**References**
+
+Benjamini, Y., and Hochberg, Y.
+(1995).
+Controlling the false discovery rate: a practical and powerful approach to multiple testing.
+*Journal of the Royal Statistical Society Series B* 57, 289–300.
+
+```{r}
+citation()
+citation("nlme")
+```
+
+
+## Aim 1
+
+* WT-rest (ref)
+* WT-exercise
+* KO-rest
+* KO-exercise
+
 ### Amino Acids and TCA Cycle intermediates (Neg)
 
 ```{r, lmeDiagnosticAim1a}
@@ -80,11 +82,61 @@ M %>% tidy(effects = "fixed") %>% write.csv(file = "data/processed/lmeFixedCoefA
 M1a <- M
 ```
 
+### Acylcarnitines
+
+```{r, lmeDiagnosticAim1b}
+t0 <- Sys.time()
+M <- estimateModel(data = D1b)
+Sys.time() - t0
+M %>% plot()
+M %>% ranef() %>% plot()
+M %>% anova() %>% kable()
+M %>% tidy(effects = "fixed") %>% kable()
+M %>% tidy(effects = "fixed") %>% write.csv(file = "data/processed/lmeFixedCoefAim1b.csv", row.names = FALSE)
+M1b <- M
+```
+
+
+## Aim 2
+
+* WT-exer (ref)
+* KO-C7
+* KO-C8
+* KO-exer
+
+### Amino Acids and TCA Cycle intermediates (Neg)
+
+```{r, lmeDiagnosticAim2a}
+t0 <- Sys.time()
+M <- estimateModel(data = D2a)
+Sys.time() - t0
+M %>% plot()
+M %>% ranef() %>% plot()
+M %>% anova() %>% kable()
+M %>% tidy(effects = "fixed") %>% kable()
+M %>% tidy(effects = "fixed") %>% write.csv(file = "data/processed/lmeFixedCoefAim2a.csv", row.names = FALSE)
+M2a <- M
+```
+
+### Acylcarnitines
+
+```{r, lmeDiagnosticAim2b}
+t0 <- Sys.time()
+M <- estimateModel(data = D2b)
+Sys.time() - t0
+M %>% plot()
+M %>% ranef() %>% plot()
+M %>% anova() %>% kable()
+M %>% tidy(effects = "fixed") %>% kable()
+M %>% tidy(effects = "fixed") %>% write.csv(file = "data/processed/lmeFixedCoefAim2b.csv", row.names = FALSE)
+M2b <- M
+```
+
 
 ## Save
 
 Save `lme` objects for interactive work.
 
 ```{r}
-save(M1a, file = "data/processed/lmeObjects.RData")
+save(M1a, M1b, M2a, M2b, file = "data/processed/lmeObjects.RData")
 ```
