@@ -69,7 +69,9 @@ estimateModel <- function (data) {
 ### Amino Acids and TCA Cycle intermediates (Neg)
 
 ```{r, lmeDiagnosticAim1a}
+t0 <- Sys.time()
 M <- estimateModel(data = D1a)
+Sys.time() - t0
 M %>% plot()
 M %>% ranef() %>% plot()
 M %>% anova() %>% kable()
