@@ -40,7 +40,7 @@ citation("nlme")
 
 Estimate model.
 Specify the correlation structure using `cs`.
-Use `corSymm`, *general correlation matrix, with no additional structure*.
+Use `corCompSymm`, *compound symmetry structure corresponding to a constant correlation*.
 
 ```{r}
 estimateModel <- function (data) {
@@ -55,7 +55,7 @@ estimateModel <- function (data) {
                      maxIter = 500, msMaxIter = 500,
                      tolerance = 1e-6, niterEM = 25, msMaxEval = 200, msTol = 1e-7)
   cs <-
-    corSymm(form = random, fixed = FALSE) %>%
+    corCompSymm(form = random, fixed = FALSE) %>%
     Initialize(data = data)
   Dim(cs)
   lme(fixed,
