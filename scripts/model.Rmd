@@ -1,16 +1,22 @@
 # Model
 
+Basic data preprocessing steps:
+
+1. Find and remove outliers using Grubbs.
+2. Standardize by Z score.
+3. Check for normality.
+4. Transform and recheck normality. We decided not to use transformed data as it did not correct the few conditions with multiple skewed groups.
+
 
 ## Methods
 
 A mixed linear effects model was estimated for each aim.
-Metabolomic values were log-transformed, then normalized.
-Fixed effects for Aim 1 were activity, genotype, and metabolite.
-Fixed effects for Aim 2 were chow, genotype, and metabolite.
-All 2-way and 3-way interactions between fixed effects were included in the models.
+Fixed effects for Aim 1 were condition (wildtype-rest (ref), wildtype-exercise, knockout-rest, knockout-exercise), and metabolite.
+Fixed effects for Aim 2 were condition (wildtype-exercise (ref), knockout-exercise, knockout-C7, knockout-C8), and metabolite.
+All 2-way interactions between fixed effects were included in the models.
 Animal ID was the random effect.
 A general correlation structure was assumed.
-Estimates for the contrasts comparing exercise versus rest for Aim 1, and yellow C8 chow versus white C7 chow for Aim 2, for each combination of genotype and metabolite are presented.
+Estimates for the contrasts comparing each combination of condition and metabolite are presented.
 P-values were adjusted to control the false discovery rate, the expected proportion of false discoveries amongst the rejected hypotheses.
 The data was analyzed using `r R.Version()$version.string` and the `nlme` package version `r packageVersion("nlme")`.
 
@@ -28,119 +34,49 @@ citation("nlme")
 ```
 
 
-## Aim 1: Exercise
+## Aim 1
 
-**Rest versus exhaustive exercise**
-
-Estimate model.
-Specify the correlation structure using `cs`.
-Use `corSymm`, *general correlation matrix, with no additional structure*.
-
-```{r lmeDiagnosticAim1}
-fixed <- formula(zLogValue ~
-                   genotype +
-                   activity +
-                   metabolite +
-                   genotype * activity +
-                   genotype * metabolite +
-                   activity * metabolite +
-                   activity * metabolite * genotype)
-random <- formula(~ 1 | id)
-ctrl <- lmeControl(opt = "optim",
-                   maxIter = 500, msMaxIter = 500,
-                   tolerance = 1e-6, niterEM = 25, msMaxEval = 200, msTol = 1e-7)
-cs <-
-  corSymm(form = random, fixed = FALSE) %>%
-  Initialize(data = D1)
-Dim(cs)
-M1 <- D1 %>% lme(fixed, data = ., random = random, correlation = cs, control = ctrl)
-M1 %>% plot
-M1 %>% ranef %>% plot
-M1 %>% anova %>% kable
-M1 %>% tidy(effects = "fixed") %>% kable
-M1 %>% tidy(effects = "fixed") %>% write.csv(file = "../data/processed/lmeFixedCoefAim1.csv", row.names = FALSE)
-```
-
-Calculate contrasts of *Exercise vs Rest* given metabolite and genotype.
-
-```{r}
-metabolites <- c("3-HYDROXYBUTYRIC",
-                 "arginine",
-                 "CITRIC",  # Returns "Singularity in backsolve at level 0, block 1" error
-                 "FUMARIC",
-                 "glutamine",
-                 "isoleucine",
-                 "LACTIC",
-                 "LCAC total",  # Returns "Singularity in backsolve at level 0, block 1" error
-                 "leucine",
-                 "MALIC",
-                 "MCAC Total",
-                 "METHYLSUCCINIC",
-                 "PYRUVIC_P2P",
-                 "SUCCINIC-2",
-                 "valine")
-Ftests <- runClusters(D1, metabolites, fixed, "activity", "Exercise", ctrl)
-Ftests %>% kable
-Ftests %>% write.csv(file = "../data/processed/contrastsAim1.csv", row.names = FALSE)
-```
-
-Click [link to figure](../figures/plotDataAim1.svg).
-
-
-## Aim 2: Chow
-
-**MCT chow versus experimental chow with triheptanoin**
+**WT-rest (ref), WT-exercise, KO-rest, KO-exercise**
 
 Estimate model.
 Specify the correlation structure using `cs`.
 Use `corSymm`, *general correlation matrix, with no additional structure*.
 
-```{r lmeDiagnosticAim2}
-rm(M)
-fixed <- formula(zLogValue ~
-                   genotype +
-                   chow +
-                   metabolite +
-                   genotype * chow +
-                   genotype * metabolite +
-                   chow * metabolite +
-                   chow * metabolite * genotype)
-cs <-
-  corSymm(form = random, fixed = FALSE) %>%
-  Initialize(data = D2)
-Dim(cs)
-M2 <- D2 %>% lme(fixed, data = ., random = random, correlation = cs, control = ctrl)
-M2 %>% plot   
-M2 %>% ranef %>% plot
-M2 %>% anova %>% kable
-M2 %>% tidy(effects = "fixed") %>% kable
-M2 %>% tidy(effects = "fixed") %>% write.csv(file = "../data/processed/lmeFixedCoefAim2.csv", row.names = FALSE)
-```
-
-Calculate contrasts of *Yellow (C8) vs White (C7)* given metabolite and genotype.
-
 ```{r}
-metabolites <- c("3-HYDROXYBUTYRIC",
-                 "arginine",
-                 "CITRIC",
-                 "FUMARIC",
-                 "glutamine",
-                 "isoleucine",
-                 "LACTIC",
-                 "LC even AC total",
-                 "LC odd AC total",
-                 "leucine",
-                 "MALIC",
-                 "MCAC total",
-                 "METHYLSUCCINIC",
-                 "SUCCINIC-2",
-                 "valine")
-Ftests <- runClusters(D2, metabolites, fixed, "chow", "Yellow (C8)", ctrl)
-Ftests %>% kable
-Ftests %>% write.csv(file = "../data/processed/contrastsAim2.csv", row.names = FALSE)
+estimateModel <- function (data) {
+  require(magrittr)
+  require(nlme)
+  fixed <- formula(z_value ~
+                     condition +
+                     metabolite +
+                     condition * metabolite)
+  random <- formula(~ 1 | id)
+  ctrl <- lmeControl(opt = "optim",
+                     maxIter = 500, msMaxIter = 500,
+                     tolerance = 1e-6, niterEM = 25, msMaxEval = 200, msTol = 1e-7)
+  cs <-
+    corSymm(form = random, fixed = FALSE) %>%
+    Initialize(data = data)
+  Dim(cs)
+  lme(fixed,
+      data = data,
+      random = random,
+      correlation = cs,
+      control = ctrl)
+}
 ```
 
-Click [link to figure](../figures/plotDataAim2.svg).
+### Amino Acids and TCA Cycle intermediates (Neg)
+
+```{r, lmeDiagnosticAim1a}
+M <- estimateModel(data = D1a)
+M %>% plot()
+M %>% ranef() %>% plot()
+M %>% anova() %>% kable()
+M %>% tidy(effects = "fixed") %>% kable()
+M %>% tidy(effects = "fixed") %>% write.csv(file = "../data/processed/lmeFixedCoefAim1a.csv", row.names = FALSE)
+M1a <- M
+```
 
 
 ## Save
@@ -148,5 +84,5 @@ Click [link to figure](../figures/plotDataAim2.svg).
 Save `lme` objects for interactive work.
 
 ```{r}
-save(M1, M2, file = "../data/processed/lmeObjects.RData")
+save(M1a, file = "../data/processed/lmeObjects.RData")
 ```
