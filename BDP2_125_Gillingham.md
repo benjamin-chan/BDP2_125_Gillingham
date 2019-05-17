@@ -1,6 +1,6 @@
 ---
 title: "Metabolomics of very long-chain aclCoA dehydrogenase knockout mice"
-date: "2019-05-15 09:43:15"
+date: "2019-05-16 20:46:19"
 author: Benjamin Chan (chanb@ohsu.edu)
 output:
   html_document:
@@ -17,14 +17,115 @@ Load libraries.
 
 ```r
 library(readxl)
+```
+
+```
+## Warning: package 'readxl' was built under R version 3.5.3
+```
+
+```r
 library(magrittr)
+```
+
+```
+## Warning: package 'magrittr' was built under R version 3.5.3
+```
+
+```r
 library(dplyr)
+```
+
+```
+## Warning: package 'dplyr' was built under R version 3.5.3
+```
+
+```
+## 
+## Attaching package: 'dplyr'
+```
+
+```
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+```
+
+```
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+```
+
+```r
 library(nlme)
+```
+
+```
+## Warning: package 'nlme' was built under R version 3.5.3
+```
+
+```
+## 
+## Attaching package: 'nlme'
+```
+
+```
+## The following object is masked from 'package:dplyr':
+## 
+##     collapse
+```
+
+```r
 library(broom)
+```
+
+```
+## Warning: package 'broom' was built under R version 3.5.3
+```
+
+```r
 library(ggplot2)
+```
+
+```
+## Warning: package 'ggplot2' was built under R version 3.5.3
+```
+
+```r
 library(svglite)
+```
+
+```
+## Warning: package 'svglite' was built under R version 3.5.3
+```
+
+```r
 library(knitr)
 library(doParallel)
+```
+
+```
+## Warning: package 'doParallel' was built under R version 3.5.3
+```
+
+```
+## Loading required package: foreach
+```
+
+```
+## Warning: package 'foreach' was built under R version 3.5.3
+```
+
+```
+## Loading required package: iterators
+```
+
+```
+## Warning: package 'iterators' was built under R version 3.5.3
+```
+
+```
+## Loading required package: parallel
 ```
 
 Reproducibility steps.
@@ -35,7 +136,7 @@ sessionInfo()
 ```
 
 ```
-## R version 3.5.3 (2019-03-11)
+## R version 3.5.1 (2018-07-02)
 ## Platform: x86_64-w64-mingw32/x64 (64-bit)
 ## Running under: Windows 10 x64 (build 17134)
 ## 
@@ -60,16 +161,15 @@ sessionInfo()
 ## [13] checkpoint_0.4.5 
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Rcpp_1.0.1       highr_0.8        cellranger_1.1.0 pillar_1.3.1    
-##  [5] compiler_3.5.3   plyr_1.8.4       tools_3.5.3      digest_0.6.18   
-##  [9] evaluate_0.13    tibble_2.1.1     gtable_0.3.0     lattice_0.20-38 
-## [13] pkgconfig_2.0.2  rlang_0.3.3      cli_1.1.0        xfun_0.5        
-## [17] withr_2.1.2      stringr_1.4.0    gdtools_0.1.8    generics_0.0.2  
-## [21] grid_3.5.3       tidyselect_0.2.5 glue_1.3.1       R6_2.4.0        
-## [25] fansi_0.4.0      purrr_0.3.2      tidyr_0.8.3      codetools_0.2-16
-## [29] backports_1.1.3  scales_1.0.0     htmltools_0.3.6  assertthat_0.2.1
-## [33] colorspace_1.4-1 utf8_1.1.4       stringi_1.4.3    lazyeval_0.2.2  
-## [37] munsell_0.5.0    crayon_1.3.4
+##  [1] Rcpp_1.0.1       cellranger_1.1.0 pillar_1.3.1     compiler_3.5.1  
+##  [5] plyr_1.8.4       tools_3.5.1      digest_0.6.18    evaluate_0.13   
+##  [9] tibble_2.1.1     gtable_0.3.0     lattice_0.20-35  pkgconfig_2.0.2 
+## [13] rlang_0.3.3      xfun_0.5         withr_2.1.2      stringr_1.4.0   
+## [17] gdtools_0.1.7    generics_0.0.2   grid_3.5.1       tidyselect_0.2.5
+## [21] glue_1.3.1       R6_2.4.0         purrr_0.3.2      tidyr_0.8.3     
+## [25] codetools_0.2-15 backports_1.1.3  scales_1.0.0     htmltools_0.3.6 
+## [29] assertthat_0.2.1 colorspace_1.4-1 stringi_1.4.3    lazyeval_0.2.2  
+## [33] munsell_0.5.0    crayon_1.3.4
 ```
 
 ```r
@@ -316,7 +416,7 @@ Animal ID was the random effect.
 A general correlation structure was assumed.
 Estimates for the contrasts comparing each combination of condition and metabolite are presented.
 P-values were adjusted to control the false discovery rate, the expected proportion of false discoveries amongst the rejected hypotheses.
-The data was analyzed using R version 3.5.3 (2019-03-11) and the `nlme` package version 3.1.137.
+The data was analyzed using R version 3.5.1 (2018-07-02) and the `nlme` package version 3.1.137.
 
 Estimate model.
 Specify the correlation structure using `cs`.
@@ -363,7 +463,7 @@ citation()
 ## 
 ## To cite R in publications use:
 ## 
-##   R Core Team (2019). R: A language and environment for
+##   R Core Team (2018). R: A language and environment for
 ##   statistical computing. R Foundation for Statistical Computing,
 ##   Vienna, Austria. URL https://www.R-project.org/.
 ## 
@@ -374,7 +474,7 @@ citation()
 ##     author = {{R Core Team}},
 ##     organization = {R Foundation for Statistical Computing},
 ##     address = {Vienna, Austria},
-##     year = {2019},
+##     year = {2018},
 ##     url = {https://www.R-project.org/},
 ##   }
 ## 
@@ -422,7 +522,7 @@ Sys.time() - t0
 ```
 
 ```
-## Time difference of 2.206895 secs
+## Time difference of 9.595944 secs
 ```
 
 ```r
@@ -570,7 +670,7 @@ Sys.time() - t0
 ```
 
 ```
-## Time difference of 0.5639758 secs
+## Time difference of 0.6244099 secs
 ```
 
 ```r
@@ -718,7 +818,7 @@ Sys.time() - t0
 ```
 
 ```
-## Time difference of 1.820019 secs
+## Time difference of 1.78132 secs
 ```
 
 ```r
@@ -866,7 +966,7 @@ Sys.time() - t0
 ```
 
 ```
-## Time difference of 0.913136 secs
+## Time difference of 0.8821671 secs
 ```
 
 ```r
