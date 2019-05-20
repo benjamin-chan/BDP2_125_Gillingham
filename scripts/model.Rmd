@@ -53,8 +53,9 @@ Sys.time() - t0
 M %>% plot()
 M %>% ranef() %>% plot()
 M %>% anova() %>% kable()
-M %>% tidy(effects = "fixed") %>% kable()
-M %>% tidy(effects = "fixed") %>% write.csv(file = "data/processed/lmeFixedCoefAim1a.csv", row.names = FALSE)
+fixef <- M %>% tidy(effects = "fixed") %>% filter(grepl("condition", term)) %>% adjustPvalue()
+fixef %>% filter(sig) %>% kable()
+fixef %>% write.csv(file = "data/processed/lmeFixedCoefAim1a.csv", row.names = FALSE)
 M1a <- M
 ```
 
@@ -67,8 +68,9 @@ Sys.time() - t0
 M %>% plot()
 M %>% ranef() %>% plot()
 M %>% anova() %>% kable()
-M %>% tidy(effects = "fixed") %>% kable()
-M %>% tidy(effects = "fixed") %>% write.csv(file = "data/processed/lmeFixedCoefAim1b.csv", row.names = FALSE)
+fixef <- M %>% tidy(effects = "fixed") %>% filter(grepl("condition", term)) %>% adjustPvalue()
+fixef %>% filter(sig) %>% kable()
+fixef %>% write.csv(file = "data/processed/lmeFixedCoefAim1b.csv", row.names = FALSE)
 M1b <- M
 ```
 
@@ -89,8 +91,9 @@ Sys.time() - t0
 M %>% plot()
 M %>% ranef() %>% plot()
 M %>% anova() %>% kable()
-M %>% tidy(effects = "fixed") %>% kable()
-M %>% tidy(effects = "fixed") %>% write.csv(file = "data/processed/lmeFixedCoefAim2a.csv", row.names = FALSE)
+fixef <- M %>% tidy(effects = "fixed") %>% filter(grepl("condition", term)) %>% adjustPvalue()
+fixef %>% filter(sig) %>% kable()
+fixef %>% write.csv(file = "data/processed/lmeFixedCoefAim2a.csv", row.names = FALSE)
 M2a <- M
 ```
 
@@ -103,8 +106,9 @@ Sys.time() - t0
 M %>% plot()
 M %>% ranef() %>% plot()
 M %>% anova() %>% kable()
-M %>% tidy(effects = "fixed") %>% kable()
-M %>% tidy(effects = "fixed") %>% write.csv(file = "data/processed/lmeFixedCoefAim2b.csv", row.names = FALSE)
+fixef <- M %>% tidy(effects = "fixed") %>% filter(grepl("condition", term)) %>% adjustPvalue()
+fixef %>% filter(sig) %>% kable()
+fixef %>% write.csv(file = "data/processed/lmeFixedCoefAim2b.csv", row.names = FALSE)
 M2b <- M
 ```
 

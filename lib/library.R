@@ -57,6 +57,15 @@ estimateModel <- function (data) {
 }
 
 
+adjustPvalue <- function (beta) {
+  require(magrittr)
+  require(dplyr)
+  beta %>%
+    mutate(p.adjustBH = p.adjust(p.value, method = "BH"),
+           sig = p.adjustBH < 0.05)
+}
+
+
 runClusters <- function (df, metabolites, fixed, xvar, contrastValue, ctrl) {
   require(magrittr)
   require(dplyr)
