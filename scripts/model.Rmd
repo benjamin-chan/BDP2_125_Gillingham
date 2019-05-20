@@ -24,30 +24,6 @@ Estimate model.
 Specify the correlation structure using `cs`.
 Use `corCompSymm`, *compound symmetry structure corresponding to a constant correlation*.
 
-```{r}
-estimateModel <- function (data) {
-  require(magrittr)
-  require(nlme)
-  fixed <- formula(z_value ~
-                     condition +
-                     metabolite +
-                     condition * metabolite)
-  random <- formula(~ 1 | id)
-  ctrl <- lmeControl(opt = "optim",
-                     maxIter = 500, msMaxIter = 500,
-                     tolerance = 1e-6, niterEM = 25, msMaxEval = 200, msTol = 1e-7)
-  cs <-
-    corCompSymm(form = random, fixed = FALSE) %>%
-    Initialize(data = data)
-  Dim(cs)
-  lme(fixed,
-      data = data,
-      random = random,
-      correlation = cs,
-      control = ctrl)
-}
-```
-
 **References**
 
 Benjamini, Y., and Hochberg, Y.
