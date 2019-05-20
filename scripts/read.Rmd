@@ -3,6 +3,8 @@
 Import the data.
 Data files are locally stored.
 
+## Aim 1-a
+
 Import Aim 1 Amino Acids and TCA Cycle intermediates (Neg).
 
 ```{r}
@@ -13,8 +15,11 @@ L1a[["file"]]
 L1a[["dim"]]
 L1a[["names"]]
 L1a[["head"]]
+L1a[["data"]] %>% pull(metabolite) %>% levels()
 D1a <- L1a[["data"]]
 ```
+
+## Aim 1-b
 
 Import Aim 1 Acylcarnitines.
 
@@ -25,8 +30,11 @@ L1b[["file"]]
 L1b[["dim"]]
 L1b[["names"]]
 L1b[["head"]]
+L1a[["data"]] %>% pull(metabolite) %>% levels()
 D1b <- L1b[["data"]]
 ```
+
+## Aim 2-a
 
 Import Aim 2 Amino Acids and TCA Cycle intermediates (Neg).
 
@@ -38,8 +46,11 @@ L2a[["file"]]
 L2a[["dim"]]
 L2a[["names"]]
 L2a[["head"]]
+L1a[["data"]] %>% pull(metabolite) %>% levels()
 D2a <- L2a[["data"]]
 ```
+
+## Aim 2-b
 
 Import Aim 2 Acylcarnitines.
 
@@ -50,5 +61,6 @@ L2b[["file"]]
 L2b[["dim"]]
 L2b[["names"]]
 L2b[["head"]]
+L1a[["data"]] %>% pull(metabolite) %>% levels()
 D2b <- L2b[["data"]]
 ```

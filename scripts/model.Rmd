@@ -68,7 +68,7 @@ citation("nlme")
 * KO-rest
 * KO-exercise
 
-### Amino Acids and TCA Cycle intermediates (Neg)
+### Aim 1-a: Amino Acids and TCA Cycle intermediates (Neg)
 
 ```{r, lmeDiagnosticAim1a}
 t0 <- Sys.time()
@@ -82,7 +82,7 @@ M %>% tidy(effects = "fixed") %>% write.csv(file = "data/processed/lmeFixedCoefA
 M1a <- M
 ```
 
-### Acylcarnitines
+### Aim 1-b: Acylcarnitines
 
 ```{r, lmeDiagnosticAim1b}
 t0 <- Sys.time()
@@ -104,7 +104,7 @@ M1b <- M
 * KO-C8
 * KO-exer
 
-### Amino Acids and TCA Cycle intermediates (Neg)
+### Aim 2-a: Amino Acids and TCA Cycle intermediates (Neg)
 
 ```{r, lmeDiagnosticAim2a}
 t0 <- Sys.time()
@@ -118,7 +118,7 @@ M %>% tidy(effects = "fixed") %>% write.csv(file = "data/processed/lmeFixedCoefA
 M2a <- M
 ```
 
-### Acylcarnitines
+### Aim 2-b: Acylcarnitines
 
 ```{r, lmeDiagnosticAim2b}
 t0 <- Sys.time()
