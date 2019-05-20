@@ -1,6 +1,6 @@
 ---
 title: "Metabolomics of very long-chain aclCoA dehydrogenase knockout mice"
-date: "2019-05-20 08:53:51"
+date: "2019-05-20 09:02:09"
 author: Benjamin Chan (chanb@ohsu.edu)
 output:
   html_document:
@@ -256,18 +256,21 @@ L1b[["head"]]
 ```
 
 ```r
-L1a[["data"]] %>% pull(metabolite) %>% levels()
+L1b[["data"]] %>% pull(metabolite) %>% levels()
 ```
 
 ```
-##  [1] "alanine + sarcosine" "arginine"            "asparagine"         
-##  [4] "Aspartic Acid"       "CITRIC"              "FUMARIC"            
-##  [7] "glutamic"            "glutamine"           "glycine"            
-## [10] "histidine"           "isoleucine"          "LACTIC"             
-## [13] "leucine"             "lysine"              "MALIC"              
-## [16] "methionine"          "METHYLSUCCINIC"      "Phenylalanine"      
-## [19] "serine"              "SUCCINIC-2"          "threonine"          
-## [22] "Tryptophan"          "Tyrosine"            "valine"
+##  [1] "2-methylbutyrylcarnitine" "3HMG"                    
+##  [3] "acetylcarnitine"          "butyrylcarnitine"        
+##  [5] "C10:1 total"              "C12"                     
+##  [7] "C14:1 total"              "C14:2 total"             
+##  [9] "C15:1 total"              "C16:1 total"             
+## [11] "C17:1 total"              "C18:1 total"             
+## [13] "C18:2 total"              "C19:1 total"             
+## [15] "carnitine"                "ethylmalonylcarnitine"   
+## [17] "isobutyrylcarnitine"      "methylsuccinylcarnitine" 
+## [19] "n-decanoylcarnitine"      "n-hexanoylcarnitine"     
+## [21] "n-octanoylcarnitine"      "propionylcarnitine"
 ```
 
 ```r
@@ -323,7 +326,7 @@ L2a[["head"]]
 ```
 
 ```r
-L1a[["data"]] %>% pull(metabolite) %>% levels()
+L2a[["data"]] %>% pull(metabolite) %>% levels()
 ```
 
 ```
@@ -389,18 +392,21 @@ L2b[["head"]]
 ```
 
 ```r
-L1a[["data"]] %>% pull(metabolite) %>% levels()
+L2b[["data"]] %>% pull(metabolite) %>% levels()
 ```
 
 ```
-##  [1] "alanine + sarcosine" "arginine"            "asparagine"         
-##  [4] "Aspartic Acid"       "CITRIC"              "FUMARIC"            
-##  [7] "glutamic"            "glutamine"           "glycine"            
-## [10] "histidine"           "isoleucine"          "LACTIC"             
-## [13] "leucine"             "lysine"              "MALIC"              
-## [16] "methionine"          "METHYLSUCCINIC"      "Phenylalanine"      
-## [19] "serine"              "SUCCINIC-2"          "threonine"          
-## [22] "Tryptophan"          "Tyrosine"            "valine"
+##  [1] "2-methylbutyrylcarnitine" "3HMG"                    
+##  [3] "acetylcarnitine"          "butyrylcarnitine"        
+##  [5] "C10:1 total"              "C12"                     
+##  [7] "C14:1 total"              "C14:2 total"             
+##  [9] "C15:1 total"              "C16:1 total"             
+## [11] "C17:1 total"              "C18:1 total"             
+## [13] "C18:2 total"              "C19:1 total"             
+## [15] "carnitine"                "ethylmalonylcarnitine"   
+## [17] "isobutyrylcarnitine"      "methylsuccinylcarnitine" 
+## [19] "n-decanoylcarnitine"      "n-hexanoylcarnitine"     
+## [21] "n-octanoylcarnitine"      "propionylcarnitine"
 ```
 
 ```r
@@ -510,7 +516,7 @@ Sys.time() - t0
 ```
 
 ```
-## Time difference of 1.838383 secs
+## Time difference of 1.89907 secs
 ```
 
 ```r
@@ -566,7 +572,7 @@ Sys.time() - t0
 ```
 
 ```
-## Time difference of 0.5564499 secs
+## Time difference of 0.5678899 secs
 ```
 
 ```r
@@ -643,7 +649,7 @@ Sys.time() - t0
 ```
 
 ```
-## Time difference of 2.119174 secs
+## Time difference of 2.139263 secs
 ```
 
 ```r
@@ -701,7 +707,7 @@ Sys.time() - t0
 ```
 
 ```
-## Time difference of 1.054226 secs
+## Time difference of 0.9592528 secs
 ```
 
 ```r
