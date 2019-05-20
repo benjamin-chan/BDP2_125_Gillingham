@@ -15,6 +15,7 @@ L1a[["file"]]
 L1a[["dim"]]
 L1a[["names"]]
 L1a[["head"]]
+L1a[["data"]] %>% pull(condition) %>% levels()
 L1a[["data"]] %>% pull(metabolite) %>% levels()
 D1a <- L1a[["data"]]
 ```
@@ -30,6 +31,7 @@ L1b[["file"]]
 L1b[["dim"]]
 L1b[["names"]]
 L1b[["head"]]
+L1b[["data"]] %>% pull(condition) %>% levels()
 L1b[["data"]] %>% pull(metabolite) %>% levels()
 D1b <- L1b[["data"]]
 ```
@@ -46,6 +48,7 @@ L2a[["file"]]
 L2a[["dim"]]
 L2a[["names"]]
 L2a[["head"]]
+L2a[["data"]] %>% pull(condition) %>% levels()
 L2a[["data"]] %>% pull(metabolite) %>% levels()
 D2a <- L2a[["data"]]
 ```
@@ -61,6 +64,7 @@ L2b[["file"]]
 L2b[["dim"]]
 L2b[["names"]]
 L2b[["head"]]
+L2b[["data"]] %>% pull(condition) %>% levels()
 L2b[["data"]] %>% pull(metabolite) %>% levels()
 D2b <- L2b[["data"]]
 ```

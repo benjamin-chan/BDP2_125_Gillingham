@@ -1,6 +1,6 @@
 ---
 title: "Metabolomics of very long-chain aclCoA dehydrogenase knockout mice"
-date: "2019-05-20 09:02:09"
+date: "2019-05-20 09:27:41"
 author: Benjamin Chan (chanb@ohsu.edu)
 output:
   html_document:
@@ -190,6 +190,14 @@ L1a[["head"]]
 ```
 
 ```r
+L1a[["data"]] %>% pull(condition) %>% levels()
+```
+
+```
+## [1] "WTREST" "WTEX"   "KOREST" "KOEX"
+```
+
+```r
 L1a[["data"]] %>% pull(metabolite) %>% levels()
 ```
 
@@ -253,6 +261,14 @@ L1b[["head"]]
 ## 4 KOEX       1017 acetylcarnitine   -2.43
 ## 5 KOEX       1018 acetylcarnitine   -2.49
 ## 6 KOEX       1019 acetylcarnitine   -1.83
+```
+
+```r
+L1b[["data"]] %>% pull(condition) %>% levels()
+```
+
+```
+## [1] "WTREST" "WTEX"   "KOREST" "KOEX"
 ```
 
 ```r
@@ -326,6 +342,14 @@ L2a[["head"]]
 ```
 
 ```r
+L2a[["data"]] %>% pull(condition) %>% levels()
+```
+
+```
+## [1] "WTEX" "KOEX" "KOC7" "KOC8"
+```
+
+```r
 L2a[["data"]] %>% pull(metabolite) %>% levels()
 ```
 
@@ -389,6 +413,14 @@ L2b[["head"]]
 ## 4 KOC7       1128 acetylcarnitine   -2.11
 ## 5 KOC7       1142 acetylcarnitine   -2.67
 ## 6 KOC7       1143 acetylcarnitine   -2.55
+```
+
+```r
+L2b[["data"]] %>% pull(condition) %>% levels()
+```
+
+```
+## [1] "WTEX" "KOEX" "KOC7" "KOC8"
 ```
 
 ```r
@@ -516,7 +548,7 @@ Sys.time() - t0
 ```
 
 ```
-## Time difference of 1.89907 secs
+## Time difference of 1.860424 secs
 ```
 
 ```r
@@ -572,7 +604,7 @@ Sys.time() - t0
 ```
 
 ```
-## Time difference of 0.5678899 secs
+## Time difference of 0.5644641 secs
 ```
 
 ```r
@@ -649,7 +681,7 @@ Sys.time() - t0
 ```
 
 ```
-## Time difference of 2.139263 secs
+## Time difference of 2.013413 secs
 ```
 
 ```r
@@ -707,7 +739,7 @@ Sys.time() - t0
 ```
 
 ```
-## Time difference of 0.9592528 secs
+## Time difference of 0.957823 secs
 ```
 
 ```r
