@@ -8,6 +8,7 @@ importDataToList <- function (f, levels) {
     D %>%
     filter(!is.na(id)) %>%
     mutate(condition = factor(condition, levels = levels, labels = toupper(levels))) %>%
+    mutate(metabolite = gsub("\\W", "", metabolite)) %>%
     mutate(metabolite = factor(metabolite)) %>%
     select(-c(aim, group)) %>%
     filter(!is.na(z_value))
