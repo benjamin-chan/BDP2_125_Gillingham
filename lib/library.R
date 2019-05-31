@@ -109,3 +109,19 @@ runClusters <- function (df, metabolites, fixed, xvar, contrastValue, ctrl) {
     mutate(p.adjustBH = p.adjust(p.value, method = "BH"),
            sig = p.adjustBH < 0.05)
 }
+
+
+testContrast <- function (nlmeObj, contrast) {
+  require(multcomp)
+  g <- glht(nlmeObj, linfct = c(contrast)) %>% summary()
+  x <- g[["test"]][["coefficients"]]
+  s <- g[["test"]][["sigma"]]
+  p <- g[["test"]][["pvalues"]][[1]]
+  result <- data.frame(contrast = contrast,
+                       coefficient = x,
+                       sigma = s,
+                       pvalue = p,
+                       stringsAsFactors = FALSE)
+  rownames(result) <- NULL
+  result
+}
