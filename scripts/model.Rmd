@@ -59,6 +59,30 @@ fixef %>% write.csv(file = "data/processed/lmeFixedCoefAim1a.csv", row.names = F
 M1a <- M
 ```
 
+```{r}
+conditions <- M %>% tidy(effects = "fixed") %>% pull(term) %>% grep("^cond", ., value = TRUE) %>% grep(":", ., invert = TRUE, value = TRUE)
+metabolites <- M %>% tidy(effects = "fixed") %>% pull(term) %>% grep("^meta", ., value = TRUE)
+contrasts <- 
+  expand.grid(condition = conditions, metabolite = metabolites) %>%
+  mutate(contrast = sprintf("%s:%s + %s = 0", condition, metabolite, condition)) %>%
+  pull(contrast)
+FTests <-
+  lapply(contrasts, FUN = testContrast, nlmeObj = M) %>%
+  unlist() %>%
+  matrix(nrow = length(contrasts), byrow = TRUE) %>%
+  data.frame(stringsAsFactors = FALSE) %>%
+  rename(contrast = X1,
+         coefficient = X2,
+         sigma = X3,
+         pvalue = X4) %>%
+  mutate(coefficient = as.numeric(coefficient),
+         sigma = as.numeric(sigma),
+         pvalue = as.numeric(pvalue)) %>%
+  rename(p.value = pvalue) %>%
+  adjustPvalue()
+FTests %>% kable(digits = 5)
+```
+
 ### Aim 1-b: Acylcarnitines
 
 ```{r, lmeDiagnosticAim1b}
