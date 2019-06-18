@@ -74,18 +74,18 @@ adjustPvalue <- function (beta) {
 }
 
 
-runClusters <- function (df, metabolites, fixed, xvar, contrastValue, ctrl) {
+runClusters <- function (df, metabolites, fixed, random, xvar, contrastValue, ctrl) {
   require(magrittr)
   require(dplyr)
   require(doParallel)
   require(data.table)
-  genotypes <- c("WT", "KO")
+  genotypes <- df %>% pull(genotype) %>% levels()
   lookup <-
     expand.grid(metabolites, genotypes, stringsAsFactors = FALSE) %>%
     data.frame %>%
     rename(metabolite = Var1, genotype = Var2)
   n <- nrow(lookup)
-  cl <- makeCluster(15)
+  cl <- makeCluster(3)
   registerDoParallel(cl)
   L <- foreach (i = 1:n) %dopar% {
     require(magrittr)
@@ -95,8 +95,7 @@ runClusters <- function (df, metabolites, fixed, xvar, contrastValue, ctrl) {
       df %>%
       mutate(metabolite = relevel(metabolite, lookup$metabolite[i])) %>%
       mutate(genotype = relevel(genotype, lookup$genotype[i]))
-    random <- formula(~ 1 | id)
-    cs <- corSymm(form = random, fixed = FALSE) %>% Initialize(data = dfi)
+    cs <- corCompSymm(form = random, fixed = FALSE) %>% Initialize(data = dfi)
     M <- dfi %>% lme(fixed, data = ., random = random, correlation = cs, control = ctrl)
     M %>%
       anova(Terms = xvar) %>%
