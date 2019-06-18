@@ -36,6 +36,20 @@ citation()
 citation("nlme")
 ```
 
+Set some constants
+
+```{r}
+fixed <- formula(z_value ~
+                   genotype +
+                   condition +
+                   metabolite +
+                   genotype * condition +
+                   genotype * metabolite +
+                   condition * metabolite +
+                   genotype * condition * metabolite)
+random <- formula(~ 1 | id)
+```
+
 
 ## Aim 1
 
@@ -48,7 +62,7 @@ citation("nlme")
 
 ```{r, lmeDiagnosticAim1a}
 t0 <- Sys.time()
-M <- estimateModel(data = D1a)
+M <- estimateModel(data = D1a, fixed, random)
 Sys.time() - t0
 M %>% plot()
 M %>% ranef() %>% plot()
@@ -87,7 +101,7 @@ FTests %>% kable(digits = 5)
 
 ```{r, lmeDiagnosticAim1b}
 t0 <- Sys.time()
-M <- estimateModel(data = D1b)
+M <- estimateModel(data = D1b, fixed, random)
 Sys.time() - t0
 M %>% plot()
 M %>% ranef() %>% plot()
@@ -110,7 +124,7 @@ M1b <- M
 
 ```{r, lmeDiagnosticAim2a}
 t0 <- Sys.time()
-M <- estimateModel(data = D2a)
+M <- estimateModel(data = D2a, fixed, random)
 Sys.time() - t0
 M %>% plot()
 M %>% ranef() %>% plot()
@@ -125,7 +139,7 @@ M2a <- M
 
 ```{r, lmeDiagnosticAim2b}
 t0 <- Sys.time()
-M <- estimateModel(data = D2b)
+M <- estimateModel(data = D2b, fixed, random)
 Sys.time() - t0
 M %>% plot()
 M %>% ranef() %>% plot()

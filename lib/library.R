@@ -47,14 +47,9 @@ summarizeOutcome <- function (D) {
 }
 
 
-estimateModel <- function (data) {
+estimateModel <- function (data, fixed, random) {
   require(magrittr)
   require(nlme)
-  fixed <- formula(z_value ~
-                     condition +
-                     metabolite +
-                     condition * metabolite)
-  random <- formula(~ 1 | id)
   ctrl <- lmeControl(opt = "optim",
                      maxIter = 500, msMaxIter = 500,
                      tolerance = 1e-6, niterEM = 25, msMaxEval = 200, msTol = 1e-7)
