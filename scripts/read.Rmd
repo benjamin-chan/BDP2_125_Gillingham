@@ -9,13 +9,13 @@ Import Aim 1 Amino Acids and TCA Cycle intermediates (Neg).
 
 ```{r}
 f <- "data/raw/Z scores Aim 1 Neg-aa.xlsx"
-levels <- c("wtrest", "wtex", "korest", "koex")
-L1a <- importDataToList(f, levels)
+L1a <- importDataToList(f)
 L1a[["file"]]
 L1a[["dim"]]
 L1a[["names"]]
 L1a[["head"]]
 L1a[["data"]] %>% pull(condition) %>% levels()
+L1a[["data"]] %>% pull(genotype) %>% levels()
 L1a[["data"]] %>% pull(metabolite) %>% levels()
 D1a <- L1a[["data"]]
 ```
@@ -26,12 +26,13 @@ Import Aim 1 Acylcarnitines.
 
 ```{r}
 f <- "data/raw/Z scores Aim 1 AC.xlsx"
-L1b <- importDataToList(f, levels)
+L1b <- importDataToList(f)
 L1b[["file"]]
 L1b[["dim"]]
 L1b[["names"]]
 L1b[["head"]]
 L1b[["data"]] %>% pull(condition) %>% levels()
+L1b[["data"]] %>% pull(genotype) %>% levels()
 L1b[["data"]] %>% pull(metabolite) %>% levels()
 D1b <- L1b[["data"]]
 ```
@@ -42,13 +43,13 @@ Import Aim 2 Amino Acids and TCA Cycle intermediates (Neg).
 
 ```{r}
 f <- "data/raw/Z scores Aim 2 Neg-aa.xlsx"
-levels <- c("wtex", "koex", "koc7", "koc8")
-L2a <- importDataToList(f, levels)
+L2a <- importDataToList(f)
 L2a[["file"]]
 L2a[["dim"]]
 L2a[["names"]]
 L2a[["head"]]
 L2a[["data"]] %>% pull(condition) %>% levels()
+L2a[["data"]] %>% pull(genotype) %>% levels()
 L2a[["data"]] %>% pull(metabolite) %>% levels()
 D2a <- L2a[["data"]]
 ```
@@ -59,12 +60,13 @@ Import Aim 2 Acylcarnitines.
 
 ```{r}
 f <- "data/raw/Z scores Aim 2 AC.xlsx"
-L2b <- importDataToList(f, levels)
+L2b <- importDataToList(f)
 L2b[["file"]]
 L2b[["dim"]]
 L2b[["names"]]
 L2b[["head"]]
 L2b[["data"]] %>% pull(condition) %>% levels()
+L2b[["data"]] %>% pull(genotype) %>% levels()
 L2b[["data"]] %>% pull(metabolite) %>% levels()
 D2b <- L2b[["data"]]
 ```

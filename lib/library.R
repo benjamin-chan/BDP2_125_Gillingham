@@ -1,4 +1,4 @@
-importDataToList <- function (f, levels) {
+importDataToList <- function (f) {
   require(readxl)
   require(magrittr)
   require(dplyr)
@@ -7,7 +7,19 @@ importDataToList <- function (f, levels) {
   D <-
     D %>%
     filter(!is.na(id)) %>%
-    mutate(condition = factor(condition, levels = levels, labels = toupper(levels))) %>%
+    mutate(genotype = case_when(grepl("wt", condition) ~ "WT",
+                                grepl("ko", condition) ~ "KO",
+                                TRUE ~ NA_character_),
+           condition = case_when(grepl("rest", condition) ~ "Rest",
+                                 grepl("c7", condition) ~ "C7",
+                                 grepl("c8", condition) ~ "C8",
+                                 grepl("ex", condition) ~ "Exercise",
+                                 TRUE ~ NA_character_)) %>%
+    mutate(genotype = factor(genotype, levels = c("WT", "KO")),
+           condition = factor(condition,
+                              levels = c("Rest", "C7", "C8", "Exercise"),
+                              labels = c("Rest", "C7", "C8", "Exercise"))) %>%
+    mutate(condition = factor(condition)) %>%
     mutate(metabolite = gsub("\\W", "", metabolite)) %>%
     mutate(metabolite = factor(metabolite)) %>%
     select(-c(aim, group)) %>%
