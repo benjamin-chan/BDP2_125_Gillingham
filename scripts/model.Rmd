@@ -48,6 +48,9 @@ fixed <- formula(z_value ~
                    condition * metabolite +
                    genotype * condition * metabolite)
 random <- formula(~ 1 | id)
+ctrl <- lmeControl(opt = "optim",
+                   maxIter = 500, msMaxIter = 500,
+                   tolerance = 1e-6, niterEM = 25, msMaxEval = 200, msTol = 1e-7)
 ```
 
 
@@ -78,8 +81,8 @@ Calculate contrasts of *Exercise vs Rest* given metabolite and genotype.
 ```{r}
 metabolites <- L1a[["data"]] %>% pull(metabolite) %>% levels()
 Ftests <- runClusters(D1a, metabolites, fixed, random, "condition", "Exercise", ctrl)
-FTests %>% kable(digits = 5)
-Ftests %>% write.csv(file = "../data/processed/contrastsAim1a.csv", row.names = FALSE)
+Ftests %>% kable(digits = 5)
+Ftests %>% write.csv(file = "data/processed/contrastsAim1a.csv", row.names = FALSE)
 ```
 
 ### Aim 1-b: Acylcarnitines
@@ -102,8 +105,8 @@ Calculate contrasts of *Exercise vs Rest* given metabolite and genotype.
 ```{r}
 metabolites <- L1b[["data"]] %>% pull(metabolite) %>% levels()
 Ftests <- runClusters(D1b, metabolites, fixed, random, "condition", "Exercise", ctrl)
-FTests %>% kable(digits = 5)
-Ftests %>% write.csv(file = "../data/processed/contrastsAim1b.csv", row.names = FALSE)
+Ftests %>% kable(digits = 5)
+Ftests %>% write.csv(file = "data/processed/contrastsAim1b.csv", row.names = FALSE)
 ```
 
 
@@ -134,8 +137,8 @@ Calculate contrasts of *C7 vs Exercise* given metabolite and genotype.
 ```{r}
 metabolites <- L2a[["data"]] %>% pull(metabolite) %>% levels()
 Ftests <- runClusters(D2a, metabolites, fixed, random, "condition", "C7", ctrl)
-FTests %>% kable(digits = 5)
-Ftests %>% write.csv(file = "../data/processed/contrastsAim2ai.csv", row.names = FALSE)
+Ftests %>% kable(digits = 5)
+Ftests %>% write.csv(file = "data/processed/contrastsAim2ai.csv", row.names = FALSE)
 ```
 
 Calculate contrasts of *C8 vs Exercise* given metabolite and genotype.
@@ -143,8 +146,8 @@ Calculate contrasts of *C8 vs Exercise* given metabolite and genotype.
 ```{r}
 metabolites <- L2a[["data"]] %>% pull(metabolite) %>% levels()
 Ftests <- runClusters(D2a, metabolites, fixed, random, "condition", "C8", ctrl)
-FTests %>% kable(digits = 5)
-Ftests %>% write.csv(file = "../data/processed/contrastsAim2aii.csv", row.names = FALSE)
+Ftests %>% kable(digits = 5)
+Ftests %>% write.csv(file = "data/processed/contrastsAim2aii.csv", row.names = FALSE)
 ```
 
 ### Aim 2-b: Acylcarnitines
@@ -167,8 +170,8 @@ Calculate contrasts of *C7 vs Exercise* given metabolite and genotype.
 ```{r}
 metabolites <- L2b[["data"]] %>% pull(metabolite) %>% levels()
 Ftests <- runClusters(D2b, metabolites, fixed, random, "condition", "C7", ctrl)
-FTests %>% kable(digits = 5)
-Ftests %>% write.csv(file = "../data/processed/contrastsAim2bi.csv", row.names = FALSE)
+Ftests %>% kable(digits = 5)
+Ftests %>% write.csv(file = "data/processed/contrastsAim2bi.csv", row.names = FALSE)
 ```
 
 Calculate contrasts of *C8 vs Exercise* given metabolite and genotype.
@@ -176,8 +179,8 @@ Calculate contrasts of *C8 vs Exercise* given metabolite and genotype.
 ```{r}
 metabolites <- L2b[["data"]] %>% pull(metabolite) %>% levels()
 Ftests <- runClusters(D2b, metabolites, fixed, random, "condition", "C8", ctrl)
-FTests %>% kable(digits = 5)
-Ftests %>% write.csv(file = "../data/processed/contrastsAim2bii.csv", row.names = FALSE)
+Ftests %>% kable(digits = 5)
+Ftests %>% write.csv(file = "data/processed/contrastsAim2bii.csv", row.names = FALSE)
 ```
 
 
