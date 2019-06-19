@@ -15,7 +15,7 @@ Fixed effects for Aim 1 were condition (wildtype-rest (ref), wildtype-exercise, 
 Fixed effects for Aim 2 were condition (wildtype-exercise (ref), knockout-exercise, knockout-C7, knockout-C8), and metabolite.
 All 2-way interactions between fixed effects were included in the models.
 Animal ID was the random effect.
-A general correlation structure was assumed.
+A compound symmetry correlation structure was assumed.
 Estimates for the contrasts comparing each combination of condition and metabolite are presented.
 P-values were adjusted to control the false discovery rate, the expected proportion of false discoveries amongst the rejected hypotheses.
 The data was analyzed using `r R.Version()$version.string` and the `nlme` package version `r packageVersion("nlme")`.
