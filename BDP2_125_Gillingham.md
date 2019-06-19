@@ -1,6 +1,6 @@
 ---
 title: "Metabolomics of very long-chain aclCoA dehydrogenase knockout mice"
-date: "2019-06-19 09:08:49"
+date: "2019-06-19 14:29:17"
 author: Benjamin Chan (chanb@ohsu.edu)
 output:
   html_document:
@@ -494,7 +494,7 @@ Fixed effects for Aim 1 were condition (wildtype-rest (ref), wildtype-exercise, 
 Fixed effects for Aim 2 were condition (wildtype-exercise (ref), knockout-exercise, knockout-C7, knockout-C8), and metabolite.
 All 2-way interactions between fixed effects were included in the models.
 Animal ID was the random effect.
-A general correlation structure was assumed.
+A compound symmetry correlation structure was assumed.
 Estimates for the contrasts comparing each combination of condition and metabolite are presented.
 P-values were adjusted to control the false discovery rate, the expected proportion of false discoveries amongst the rejected hypotheses.
 The data was analyzed using R version 3.5.3 (2019-03-11) and the `nlme` package version 3.1.137.
@@ -600,7 +600,7 @@ Sys.time() - t0
 ```
 
 ```
-## Time difference of 1.817254 secs
+## Time difference of 1.883215 secs
 ```
 
 ```r
@@ -742,7 +742,7 @@ Sys.time() - t0
 ```
 
 ```
-## Time difference of 0.5979319 secs
+## Time difference of 0.651264 secs
 ```
 
 ```r
@@ -879,7 +879,7 @@ Sys.time() - t0
 ```
 
 ```
-## Time difference of 1.860393 secs
+## Time difference of 1.864356 secs
 ```
 
 ```r
@@ -1069,7 +1069,7 @@ Sys.time() - t0
 ```
 
 ```
-## Time difference of 0.9510779 secs
+## Time difference of 0.9543409 secs
 ```
 
 ```r
