@@ -39,14 +39,6 @@ citation("nlme")
 Set some constants
 
 ```{r}
-fixed <- formula(z_value ~
-                   genotype +
-                   condition +
-                   metabolite +
-                   genotype * condition +
-                   genotype * metabolite +
-                   condition * metabolite +
-                   genotype * condition * metabolite)
 random <- formula(~ 1 | id)
 ctrl <- lmeControl(opt = "optim",
                    maxIter = 500, msMaxIter = 500,
@@ -60,6 +52,17 @@ ctrl <- lmeControl(opt = "optim",
 * WT-exercise
 * KO-rest
 * KO-exercise
+
+```{r}
+fixed <- formula(z_value ~
+                   genotype +
+                   condition +
+                   metabolite +
+                   genotype * condition +
+                   genotype * metabolite +
+                   condition * metabolite +
+                   genotype * condition * metabolite)
+```
 
 ### Aim 1-a: Amino Acids and TCA Cycle intermediates (Neg)
 
@@ -116,6 +119,15 @@ Ftests %>% write.csv(file = "data/processed/contrastsAim1b.csv", row.names = FAL
 * KO-C7
 * KO-C8
 * KO-exer
+
+```{r}
+fixed <- formula(z_value ~
+                   genotype +
+                   condition +
+                   metabolite +
+                   genotype * metabolite +
+                   condition * metabolite)
+```
 
 ### Aim 2-a: Amino Acids and TCA Cycle intermediates (Neg)
 
