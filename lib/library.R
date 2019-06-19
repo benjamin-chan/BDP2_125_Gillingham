@@ -17,8 +17,8 @@ importDataToList <- function (f) {
                                  TRUE ~ NA_character_)) %>%
     mutate(genotype = factor(genotype, levels = c("WT", "KO")),
            condition = factor(condition,
-                              levels = c("Rest", "C7", "C8", "Exercise"),
-                              labels = c("Rest", "C7", "C8", "Exercise"))) %>%
+                              levels = c("Rest", "Exercise", "C7", "C8"),
+                              labels = c("Rest", "Exercise", "C7", "C8"))) %>%
     mutate(condition = factor(condition)) %>%
     mutate(metabolite = gsub("\\W", "", metabolite)) %>%
     mutate(metabolite = factor(metabolite)) %>%
