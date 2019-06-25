@@ -74,12 +74,11 @@ adjustPvalue <- function (beta) {
 }
 
 
-runClusters <- function (df, metabolites, fixed, random, xvar, contrastValue, ctrl) {
+runClusters <- function (df, metabolites, genotypes, fixed, random, xvar, contrastValue, ctrl) {
   require(magrittr)
   require(dplyr)
   require(doParallel)
   require(data.table)
-  genotypes <- df %>% pull(genotype) %>% levels()
   lookup <-
     expand.grid(metabolites, genotypes, stringsAsFactors = FALSE) %>%
     data.frame %>%
@@ -99,6 +98,8 @@ runClusters <- function (df, metabolites, fixed, random, xvar, contrastValue, ct
     M <- dfi %>% lme(fixed, data = ., random = random, correlation = cs, control = ctrl)
     M %>%
       anova(Terms = xvar) %>%
+      data.frame() %>%
+      select(denDF) %>%
       data.frame(contrast = contrastValue,
                  metabolite = lookup$metabolite[i],
                  genotype = lookup$genotype[i],
@@ -108,7 +109,9 @@ runClusters <- function (df, metabolites, fixed, random, xvar, contrastValue, ct
                         .[row.names(.) == paste0(xvar, contrastValue), ],
                  .) %>%
       mutate(lowerCL = beta + qnorm(0.025) * se,
-             upperCL = beta + qnorm(0.975) * se)
+             upperCL = beta + qnorm(0.975) * se,
+             t = beta / se,
+             p.value = dt(t, denDF))
   }
   stopCluster(cl)
   rbindlist(L) %>%
